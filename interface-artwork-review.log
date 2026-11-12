@@ -1,0 +1,56 @@
+===== INTERFACE ARTWORK REVIEW =====
+Thu Nov 12 11:55:47 AM EST 2026
+
+===== assets/artwork/source/branding/navigation-hints.svg =====
+assets/artwork/source/branding/navigation-hints.svg: SVG Scalable Vector Graphics image
+05adc22c77353aabffe75cf3cac39510918f754aaf261b5158c2ae27a5ee2eac  assets/artwork/source/branding/navigation-hints.svg
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="34" viewBox="0 0 720 34">
+  <g fill="#8FA8CC">
+    <path d="M25 12 L25 24 L16 18 Z" />
+    <path d="M103 12 L103 24 L112 18 Z" />
+  </g>
+  <text x="30" y="23" font-family="DejaVu Sans" font-size="13" font-weight="bold" letter-spacing="1" fill="#8FA8CC">BROWSE</text>
+
+  <circle cx="633" cy="18" r="9" fill="none" stroke="#8FA8CC" stroke-width="2" />
+  <text x="633" y="22.5" text-anchor="middle" font-family="DejaVu Sans" font-size="11" font-weight="bold" fill="#8FA8CC">A</text>
+  <text x="649" y="23" font-family="DejaVu Sans" font-size="13" font-weight="bold" letter-spacing="1" fill="#8FA8CC">SELECT</text>
+
+  <rect x="254" y="8" width="56" height="19" rx="6" fill="none" stroke="#8FA8CC" stroke-width="2" />
+  <text x="282" y="21.5" text-anchor="middle" font-family="DejaVu Sans" font-size="10" font-weight="bold" fill="#8FA8CC">START</text>
+  <text x="322" y="22" text-anchor="middle" font-family="DejaVu Sans" font-size="17" font-weight="bold" fill="#8FA8CC">+</text>
+  <rect x="334" y="8" width="60" height="19" rx="6" fill="none" stroke="#8FA8CC" stroke-width="2" />
+  <text x="364" y="21.5" text-anchor="middle" font-family="DejaVu Sans" font-size="10" font-weight="bold" fill="#8FA8CC">SELECT</text>
+  <text x="406" y="23" font-family="DejaVu Sans" font-size="13" font-weight="bold" letter-spacing="1" fill="#8FA8CC">PARENT MENU</text>
+</svg>
+
+===== assets/artwork/source/branding/selected-game-hints.svg =====
+assets/artwork/source/branding/selected-game-hints.svg: SVG Scalable Vector Graphics image
+5893c802e1c061f5b421d7b3b08264473a946d41931d39ca64d40d198dc00ff3  assets/artwork/source/branding/selected-game-hints.svg
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="34" viewBox="0 0 720 34">
+  <g fill="none" stroke="#8FA8CC" stroke-width="2">
+    <circle cx="25" cy="18" r="9"/>
+    <circle cx="633" cy="18" r="9"/>
+  </g>
+  <g fill="#8FA8CC" font-family="DejaVu Sans" font-weight="bold">
+    <text x="25" y="22.5" text-anchor="middle" font-size="11">B</text>
+    <text x="41" y="23" font-size="13" letter-spacing="1">BACK</text>
+    <text x="633" y="22.5" text-anchor="middle" font-size="11">A</text>
+    <text x="649" y="23" font-size="13" letter-spacing="1">SELECT</text>
+  </g>
+</svg>
+
+===== assets/artwork/generated/kiddos-wordmark.png =====
+assets/artwork/generated/kiddos-wordmark.png: PNG image data, 500 x 92, 8-bit/color RGBA, non-interlaced
+fd1f8eacf450f1c5369b46f5f35ea308434bd225c138f8be36a2758c5aed7465  assets/artwork/generated/kiddos-wordmark.png
+
+===== assets/artwork/generated/navigation-hints.png =====
+assets/artwork/generated/navigation-hints.png: PNG image data, 720 x 34, 8-bit/color RGBA, non-interlaced
+d5dcfdd5d8d13ef243f19400a57bab240b745d6bf8ac6e89a055bcb7a222bc97  assets/artwork/generated/navigation-hints.png
+
+===== assets/artwork/generated/selected-game-hints.png =====
+assets/artwork/generated/selected-game-hints.png: PNG image data, 720 x 34, 8-bit/color RGBA, non-interlaced
+6239c0dd5f3ca529d1a6cc5914ea0ac14752c90b246ac5458f36bff617cba0b5  assets/artwork/generated/selected-game-hints.png
+
+===== ARTWORK GENERATION REFERENCES =====
+
+===== END =====
