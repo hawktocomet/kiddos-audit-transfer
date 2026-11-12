@@ -1,0 +1,325 @@
+===== DEVELOPMENT WORKFLOW DOCUMENT REVIEW =====
+Date: 2026-11-12T00:01:58-05:00
+Git commit: 0ea37a46e2ce7f1159448f8ff9c3a39aec554966
+
+
+===== CONTRIBUTING.md =====
+# Contributing to Retro KiddOS
+
+## Development principles
+
+- Treat `docs/PRODUCT_SPECIFICATION.md` as the central product baseline.
+- Keep the FunnyPlaying Retro Pixel Pocket as the sole initial product target.
+- Design handheld-first for a 720 × 720 display and physical controls.
+- The Arch Linux desktop build is a temporary development harness only.
+- Do not introduce a general desktop edition or desktop-first UX.
+- Document meaningful decisions and test results.
+- Prefer small, reviewable changes.
+- Preserve existing game files and saves.
+- Avoid destructive device operations without explicit approval.
+- Verify hardware behavior rather than relying on assumptions.
+- Preserve approved UI and interaction decisions unless a change is agreed.
+
+## Before submitting changes
+
+- Build the project.
+- Test the behavior affected by the change.
+- Test handheld behavior on actual hardware when relevant.
+- Do not treat desktop simulation as proof of handheld compatibility.
+- Update the product specification or relevant supporting documentation.
+- Record significant changes and limitations in
+  `docs/DEVELOPMENT_LOG.md`.
+
+## Scope
+
+KiddOS is a handheld product for the Retro Pixel Pocket. The desktop build
+exists to support development and testing; it is not a product edition.
+
+## License
+
+A project license has not yet been selected.
+
+===== README.md =====
+# Retro KiddOS
+
+A child-friendly gaming environment for the **FunnyPlaying Retro Pixel
+Pocket**.
+
+KiddOS is designed to make a handheld gaming device simple and safe for
+young children, with adult management controls.
+
+## Product
+
+KiddOS provides one child-facing gaming experience. Its PIN-protected
+Parent Center exists to configure and manage that experience; it is not a
+separate adult gaming mode or frontend.
+
+The interface is designed for the device's 720 × 720 display and physical
+controls.
+
+### Core goals
+
+- A simple, predictable child interface.
+- Parent-controlled game selection and visibility.
+- An artwork-driven game carousel.
+- Play, Resume, and Start Over behavior.
+- Automatic gameplay checkpoints where emulator support permits.
+- Parent-managed artwork and gameplay previews.
+- Low-battery gameplay protection.
+- Parent management of available games, features, and settings.
+- Potential future controls such as playtime limits and schedules.
+
+## Target hardware
+
+- FunnyPlaying Retro Pixel Pocket
+- Reported Rockchip RK3326
+- Reported quad-core ARM processor and 1 GB RAM
+- Reported 720 × 720 IPS display
+- Customized EmuELEC Linux
+
+Specifications and software compatibility must be verified on the actual
+device. See [Hardware](docs/HARDWARE.md).
+
+## Development
+
+Initial development takes place on Arch Linux using C++20, CMake, and SDL2.
+
+The Arch Linux build is a temporary development and testing harness. It
+simulates the handheld's logical 720 × 720 display and input during
+development. It is not a supported desktop edition or product target.
+
+The handheld implementation will be integrated with the actual Retro Pixel
+Pocket firmware after its software and hardware environment are inspected.
+
+## Project status
+
+Early development. Product requirements and architecture are being
+consolidated before hardware-specific implementation.
+
+## Documentation
+
+Start with the [Product Specification](docs/PRODUCT_SPECIFICATION.md).
+
+Additional requirements and design references:
+
+- [Project Vision](docs/PROJECT_VISION.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [UI Design](docs/UI_DESIGN.md)
+- [Input Controls](docs/INPUT_CONTROLS.md)
+- [Game Library](docs/GAME_LIBRARY.md)
+- [Save-State System](docs/SAVE_STATE_SYSTEM.md)
+- [Media Manager](docs/MEDIA_MANAGER.md)
+- [Low-Battery Protection](docs/LOW_BATTERY_PROTECTION.md)
+- [Hardware Verification](docs/HARDWARE.md)
+- [Development Log](docs/DEVELOPMENT_LOG.md)
+- [Contributing](CONTRIBUTING.md)
+- [KiddOS UI Library](docs/KIDDOS_UI_LIBRARY.md)
+- [Development Status](docs/DEVELOPMENT_STATUS.md)
+
+## License
+
+Not yet selected.
+
+===== EXISTING WORKFLOW REFERENCES =====
+./docs/ARCHITECTURE.md:22:- Parent access and PIN workflow.
+./docs/ARCHITECTURE.md:50:These are initial development choices, not a commitment to use SDL2 for
+./docs/GAME_LIBRARY.md:20:through the media-scraping workflow.
+./docs/MEDIA_MANAGER.md:3:The Media Manager is part of the parent workflow for adding a game to
+./docs/MEDIA_MANAGER.md:6:## Intended workflow
+./docs/DEVELOPMENT_LOG.md:23:  the committed SVG sources so no magenta keying artifacts remain on the
+./docs/DEVELOPMENT_LOG.md:49:- Documentation-first workflow.
+./docs/DEVELOPMENT_LOG.md:96:- Media Manager parent workflow.
+./docs/PRODUCT_SPECIFICATION.md:241:- Only games being enabled for Kid Mode enter the media-scraping workflow.
+./docs/PRODUCT_SPECIFICATION.md:272:The Media Manager is part of the parent workflow for enabling a game.
+./docs/PRODUCT_SPECIFICATION.md:274:The workflow identifies the game and platform, retrieves available media,
+./docs/PRODUCT_SPECIFICATION.md:278:Supported media workflows include:
+./docs/PRODUCT_SPECIFICATION.md:339:Before committing to device-specific implementation, inspect the actual
+./docs/KID_MODE_CAROUSEL_PROTOTYPE.md:40:The three games and their artwork are placeholders. This milestone does not
+./docs/KIDDOS_UI_LIBRARY.md:120:    screens.push(std::make_unique<HomeScreen>());
+./docs/KIDDOS_UI_LIBRARY.md:135:- `push` suspends the previous screen and enters the new screen.
+./docs/DEVELOPMENT_STATUS.md:59:## Next milestone
+./docs/reference/game-artwork-sources.md:46:eventual media-scraping workflow.
+./research/firmware/manufacturer/RetroPixel_Pocket/.github/ISSUE_TEMPLATE/bug-report--only-open-after-discord-report-.md:15:Before opening an issue, check the release notes of the version that you are using and recent commits.  Be sure to fill out the template completely, accurately, and with as much detail as possible.  Issues without sufficient detail will be rejected and closed.
+./research/firmware/manufacturer/RetroPixel_Pocket/.github/workflows/README.md:8:  - **Logic**: An 'incremental' build (no `make clean`) is run on every commit to `main`.  All *build.* directories are saved between builds.
+./research/firmware/manufacturer/RetroPixel_Pocket/.github/workflows/README.md:11:  - **Logic**: An 'incremental' build (no `make clean`) is run on every PR which is from a previous committer. 
+./research/firmware/manufacturer/RetroPixel_Pocket/.github/workflows/README.md:15:This two-runner design is to ensure that 'main' builds are not clogged up by random PR pushes, etc.  
+./research/milestones/first-visible-kid-mode/runs/20261110T192701Z-first-kid-mode-interface/REPORT.md:7:- Log: research/milestone-runs/20261110T192701Z-first-kid-mode-interface/run.log
+./research/milestones/first-visible-kid-mode/runs/20261110T192820Z-audit-existing-local-implementation/REPORT.md:7:- Log: research/milestone-runs/20261110T192820Z-audit-existing-local-implementation/run.log
+./research/milestones/first-visible-kid-mode/runs/20261110T192944Z-restore-and-validate-application-foundation/REPORT.md:7:- Log: research/milestone-runs/20261110T192944Z-restore-and-validate-application-foundation/run.log
+./research/milestones/first-visible-kid-mode/runs/20261110T193116Z-fix-includes-and-validate-sdl-application/REPORT.md:7:- Log: research/milestone-runs/20261110T193116Z-fix-includes-and-validate-sdl-application/run.log
+./research/milestones/first-visible-kid-mode/runs/20261110T193618Z-first-visible-kid-mode/REPORT.md:7:- Log: research/milestone-runs/20261110T193618Z-first-visible-kid-mode/run.log
+./research/milestones/first-visible-kid-mode/runs/20261110T193701Z-fix-carousel-build-and-validate-preview/REPORT.md:7:- Log: research/milestone-runs/20261110T193701Z-fix-carousel-build-and-validate-preview/run.log
+./research/milestones/first-visible-kid-mode/runs/20261110T193816Z-document-and-commit-first-kid-mode-carousel/REPORT.md:7:- Log: research/milestone-runs/20261110T193816Z-document-and-commit-first-kid-mode-carousel/run.log
+./research/milestones/first-visible-kid-mode/runs/20261110T231610Z-kid-mode-rounded-corner-restoration/REPORT.md:7:- Log: research/milestone-runs/20261110T231610Z-kid-mode-rounded-corner-restoration/run.log
+./research/milestones/first-visible-kid-mode/runs/20261110T232318Z-kid-mode-reference-matched-game-carousel/REPORT.md:7:- Log: research/milestone-runs/20261110T232318Z-kid-mode-reference-matched-game-carousel/run.log
+./research/milestones/first-visible-kid-mode/runs/20261110T232448Z-kid-mode-sdl-compatible-carousel-artwork/REPORT.md:7:- Log: research/milestone-runs/20261110T232448Z-kid-mode-sdl-compatible-carousel-artwork/run.log
+./research/milestones/first-visible-kid-mode/runs/20261110T232751Z-kid-mode-carousel-layering-and-game-titles/REPORT.md:7:- Log: research/milestone-runs/20261110T232751Z-kid-mode-carousel-layering-and-game-titles/run.log
+./research/milestones/game-selection-and-action-screen/runs/20261110T194220Z-game-selection-and-action-screen/REPORT.md:7:- Log: research/milestone-runs/20261110T194220Z-game-selection-and-action-screen/run.log
+./research/milestones/game-selection-and-action-screen/runs/20261110T194332Z-implement-game-selection-and-action-screen/REPORT.md:7:- Log: research/milestone-runs/20261110T194332Z-implement-game-selection-and-action-screen/run.log
+./research/milestones/game-selection-and-action-screen/runs/20261110T194411Z-validate-and-commit-game-action-screen/REPORT.md:7:- Log: research/milestone-runs/20261110T194411Z-validate-and-commit-game-action-screen/run.log
+./research/milestones/visual-fidelity-pass/runs/20261110T195331Z-visual-fidelity-pass-baseline-audit/REPORT.md:7:- Log: research/milestone-runs/20261110T195331Z-visual-fidelity-pass-baseline-audit/run.log
+./research/milestones/visual-fidelity-pass/runs/20261110T195412Z-visual-fidelity-pass-asset-inventory/REPORT.md:7:- Log: research/milestone-runs/20261110T195412Z-visual-fidelity-pass-asset-inventory/run.log
+./research/milestones/visual-fidelity-pass/runs/20261110T195450Z-visual-fidelity-pass-rendering-capabilities/REPORT.md:7:- Log: research/milestone-runs/20261110T195450Z-visual-fidelity-pass-rendering-capabilities/run.log
+./research/milestones/visual-fidelity-pass/runs/20261110T195920Z-visual-fidelity-pass-artwork-and-typography/REPORT.md:7:- Log: research/milestone-runs/20261110T195920Z-visual-fidelity-pass-artwork-and-typography/run.log
+./research/milestones/visual-fidelity-pass/runs/20261110T201009Z-visual-fidelity-pass-artwork-and-typography-retry/REPORT.md:7:- Log: research/milestone-runs/20261110T201009Z-visual-fidelity-pass-artwork-and-typography-retry/run.log
+./research/milestones/visual-fidelity-pass/runs/20261110T232051Z-kid-mode-carousel-visual-fidelity-audit/REPORT.md:7:- Log: research/milestone-runs/20261110T232051Z-kid-mode-carousel-visual-fidelity-audit/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T190943Z-add-retro-pixel-pocket-visual-reference/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T190943Z-add-retro-pixel-pocket-visual-reference/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T191353Z-inspect-home-screen-for-complete-visual-redesign/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T191353Z-inspect-home-screen-for-complete-visual-redesign/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T191658Z-redesign-kid-mode-home-screen-with-minimal-animated-car/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T191658Z-redesign-kid-mode-home-screen-with-minimal-animated-car/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T192445Z-diagnose-latest-home-screen-redesign-attempt/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T192445Z-diagnose-latest-home-screen-redesign-attempt/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T192521Z-launch-redesigned-kid-mode-home-screen-for-visual-revie/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T192521Z-launch-redesigned-kid-mode-home-screen-for-visual-revie/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T192932Z-inventory-supported-platforms-and-game-artwork-sources/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T192932Z-inventory-supported-platforms-and-game-artwork-sources/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T193438Z-create-game-artwork-reference-index-and-sample-hardware/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T193438Z-create-game-artwork-reference-index-and-sample-hardware/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T193618Z-commit-artwork-and-hardware-palette-references/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T193618Z-commit-artwork-and-hardware-palette-references/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T193703Z-inspect-pending-home-screen-redesign-changes/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T193703Z-inspect-pending-home-screen-redesign-changes/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T193748Z-trace-home-screen-integration-and-artwork-loading/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T193748Z-trace-home-screen-integration-and-artwork-loading/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T194101Z-apply-hardware-palette-and-selected-artwork-highlight/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T194101Z-apply-hardware-palette-and-selected-artwork-highlight/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T194913Z-apply-hardware-palette-and-selected-artwork-highlight/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T194913Z-apply-hardware-palette-and-selected-artwork-highlight/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T195644Z-inspect-carousel-highlight-before-removing-outline/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T195644Z-inspect-carousel-highlight-before-removing-outline/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T195746Z-replace-selected-artwork-outline-with-subtle-backlight/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T195746Z-replace-selected-artwork-outline-with-subtle-backlight/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T200133Z-use-electric-blue-background-and-remove-artwork-tile/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T200133Z-use-electric-blue-background-and-remove-artwork-tile/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T200209Z-set-actual-screen-background-to-electric-cobalt-blue/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T200209Z-set-actual-screen-background-to-electric-cobalt-blue/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T200331Z-set-sdl-clear-color-to-cobalt-blue/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T200331Z-set-sdl-clear-color-to-cobalt-blue/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T200435Z-brighten-background-to-vivid-electric-blue/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T200435Z-brighten-background-to-vivid-electric-blue/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T200559Z-tune-background-to-clear-console-blue/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T200559Z-tune-background-to-clear-console-blue/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T200700Z-restore-original-near-black-navy-background/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T200700Z-restore-original-near-black-navy-background/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T200800Z-inspect-parent-menu-hint-and-carousel-sizing/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T200800Z-inspect-parent-menu-hint-and-carousel-sizing/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T201053Z-emphasize-selected-game-and-clarify-parent-menu-shortcu/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T201053Z-emphasize-selected-game-and-clarify-parent-menu-shortcu/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T201121Z-check-svg-artwork-generation-support/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T201121Z-check-svg-artwork-generation-support/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T201211Z-enlarge-center-artwork-and-clarify-parent-menu-controls/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T201211Z-enlarge-center-artwork-and-clarify-parent-menu-controls/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T201757Z-add-both-cartridge-artwork-options/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T201757Z-add-both-cartridge-artwork-options/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T202014Z-inspect-both-cartridge-designs-for-carousel-integration/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T202014Z-inspect-both-cartridge-designs-for-carousel-integration/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T202047Z-inspect-carousel-image-loading-and-asset-build-rules/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T202047Z-inspect-carousel-image-loading-and-asset-build-rules/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T202120Z-inspect-physical-controls-for-cartridge-style-preview/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T202120Z-inspect-physical-controls-for-cartridge-style-preview/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T202238Z-locate-action-definitions-for-cartridge-preview-toggle/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T202238Z-locate-action-definitions-for-cartridge-preview-toggle/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T202302Z-inspect-cartridge-preview-integration-points/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T202302Z-inspect-cartridge-preview-integration-points/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T202343Z-add-x-button-cartridge-design-comparison/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T202343Z-add-x-button-cartridge-design-comparison/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T202409Z-verify-cartridge-toggle-behavior-and-action-mapping/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T202409Z-verify-cartridge-toggle-behavior-and-action-mapping/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T203718Z-complete-cartridge-toggle-action-mapping-coverage/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T203718Z-complete-cartridge-toggle-action-mapping-coverage/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T203742Z-test-cartridge-preview-style-cycling/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T203742Z-test-cartridge-preview-style-cycling/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T204518Z-inspect-nine-cartridge-source-sheet-layouts/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T204518Z-inspect-nine-cartridge-source-sheet-layouts/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T204608Z-inspect-cartridge-sheets-without-optional-dependencies/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T204608Z-inspect-cartridge-sheets-without-optional-dependencies/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T204650Z-extract-individual-cartridge-artwork-and-inspect-carous/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T204650Z-extract-individual-cartridge-artwork-and-inspect-carous/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T204718Z-inspect-nine-item-carousel-and-action-screen-dependenci/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T204718Z-inspect-nine-item-carousel-and-action-screen-dependenci/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T204825Z-build-nine-cartridge-three-slot-carousel-preview/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T204825Z-build-nine-cartridge-three-slot-carousel-preview/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T204905Z-fix-carousel-compile-errors-and-validate-nine-item-prev/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T204905Z-fix-carousel-compile-errors-and-validate-nine-item-prev/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T204958Z-remove-duplicate-carousel-geometry-and-validate-nine-it/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T204958Z-remove-duplicate-carousel-geometry-and-validate-nine-it/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T205434Z-inspect-current-cartridge-screen-and-navigation-impleme/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T205434Z-inspect-current-cartridge-screen-and-navigation-impleme/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T205525Z-capture-exact-local-carousel-implementation-for-safe-re/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T205525Z-capture-exact-local-carousel-implementation-for-safe-re/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T205612Z-fix-three-visible-cartridge-slots-and-validate-nine-ite/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T205612Z-fix-three-visible-cartridge-slots-and-validate-nine-ite/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T205804Z-inspect-cartridge-style-toggle-and-carousel-animation-t/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T205804Z-inspect-cartridge-style-toggle-and-carousel-animation-t/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T205848Z-inspect-keyboard-event-handling-and-carousel-navigation/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T205848Z-inspect-keyboard-event-handling-and-carousel-navigation/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T205928Z-default-to-cartridge-option-2-and-improve-carousel-anim/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T205928Z-default-to-cartridge-option-2-and-improve-carousel-anim/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T210122Z-inspect-milestone-runner-and-failed-run/REPORT.md:4:- Title: Inspect milestone runner and failed run
+./research/milestones/visual-fidelity-pass/runs/20261111T210122Z-inspect-milestone-runner-and-failed-run/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T210122Z-inspect-milestone-runner-and-failed-run/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T210201Z-inspect-current-carousel-implementation-before-version-/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T210201Z-inspect-current-carousel-implementation-before-version-/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T210317Z-implement-version-2-default-and-slower-sliding-carousel/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T210317Z-implement-version-2-default-and-slower-sliding-carousel/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T211719Z-inspect-carousel-animation-patch-boundaries/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T211719Z-inspect-carousel-animation-patch-boundaries/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T212127Z-default-option-2-and-smooth-slower-cartridge-carousel/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T212127Z-default-option-2-and-smooth-slower-cartridge-carousel/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T212221Z-update-cartridge-style-test-for-option-2-default/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T212221Z-update-cartridge-style-test-for-option-2-default/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T212257Z-align-cartridge-style-tests-with-option-2-default/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T212257Z-align-cartridge-style-tests-with-option-2-default/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T214626Z-audit-initial-four-platform-scope/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T214626Z-audit-initial-four-platform-scope/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T214804Z-inspect-four-platform-carousel-assets-and-ordering/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T214804Z-inspect-four-platform-carousel-assets-and-ordering/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T214903Z-limit-initial-kiddos-carousel-to-four-platforms/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T214903Z-limit-initial-kiddos-carousel-to-four-platforms/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T214929Z-update-carousel-tests-for-four-platform-wraparound/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T214929Z-update-carousel-tests-for-four-platform-wraparound/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T215018Z-fix-four-platform-carousel-boundary-tests/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T215018Z-fix-four-platform-carousel-boundary-tests/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T215151Z-inspect-carousel-selection-boundary-behavior/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T215151Z-inspect-carousel-selection-boundary-behavior/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T215358Z-correct-invalid-carousel-selection-test/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T215358Z-correct-invalid-carousel-selection-test/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T215435Z-audit-remaining-nine-platform-assumptions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T215435Z-audit-remaining-nine-platform-assumptions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T215507Z-inspect-four-platform-cartridge-presentation/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T215507Z-inspect-four-platform-cartridge-presentation/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T215718Z-inspect-platform-identity-integration-points/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T215718Z-inspect-platform-identity-integration-points/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T215739Z-add-initial-kiddos-platform-catalog/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T215739Z-add-initial-kiddos-platform-catalog/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T220342Z-inspect-game-box-art-replacement-assets/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T220342Z-inspect-game-box-art-replacement-assets/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T220408Z-inspect-game-cover-asset-dimensions-and-conventions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T220408Z-inspect-game-cover-asset-dimensions-and-conventions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T221318Z-download-four-prototype-game-box-covers/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T221318Z-download-four-prototype-game-box-covers/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T221345Z-inspect-carousel-box-art-integration-points/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T221345Z-inspect-carousel-box-art-integration-points/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T221359Z-inspect-carousel-box-art-integration-points/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T221359Z-inspect-carousel-box-art-integration-points/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T221420Z-inspect-cartridge-toggle-action-definitions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T221420Z-inspect-cartridge-toggle-action-definitions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T221851Z-replace-cartridge-carousel-with-four-game-covers/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T221851Z-replace-cartridge-carousel-with-four-game-covers/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T221941Z-update-carousel-background-pixel-assertion-for-box-art/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T221941Z-update-carousel-background-pixel-assertion-for-box-art/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T221954Z-launch-box-art-carousel-preview/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T221954Z-launch-box-art-carousel-preview/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T222318Z-inspect-selected-game-cover-layout/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T222318Z-inspect-selected-game-cover-layout/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T222343Z-enlarge-and-center-selected-game-cover/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T222343Z-enlarge-and-center-selected-game-cover/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T222435Z-preview-enlarged-centered-game-cover/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T222435Z-preview-enlarged-centered-game-cover/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T222651Z-match-highlight-to-enlarged-game-cover/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T222651Z-match-highlight-to-enlarged-game-cover/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T222824Z-inspect-carousel-highlight-implementation/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T222824Z-inspect-carousel-highlight-implementation/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T222909Z-remove-carousel-highlight-completely/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T222909Z-remove-carousel-highlight-completely/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T222928Z-update-carousel-structure-test-after-highlight-removal/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T222928Z-update-carousel-structure-test-after-highlight-removal/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T223105Z-explore-retro-kiddos-home-screen-branding-concepts/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T223105Z-explore-retro-kiddos-home-screen-branding-concepts/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T223218Z-inspect-retro-kiddos-branding-assets-and-home-screen-co/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T223218Z-inspect-retro-kiddos-branding-assets-and-home-screen-co/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T223504Z-inspect-current-kiddos-wordmark-and-artwork-tooling/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T223504Z-inspect-current-kiddos-wordmark-and-artwork-tooling/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T223541Z-inspect-kiddos-wordmark-source-and-rendering-support/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T223541Z-inspect-kiddos-wordmark-source-and-rendering-support/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T223615Z-capture-wordmark-rendering-and-font-environment/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T223615Z-capture-wordmark-rendering-and-font-environment/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T223747Z-create-three-retro-kiddos-branding-concepts/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T223747Z-create-three-retro-kiddos-branding-concepts/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T223941Z-explore-three-classic-gaming-branding-variations/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T223941Z-explore-three-classic-gaming-branding-variations/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T224055Z-explore-three-classic-gaming-branding-variations/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T224055Z-explore-three-classic-gaming-branding-variations/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T224213Z-refine-classic-pixel-branding-into-three-variations/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T224213Z-refine-classic-pixel-branding-into-three-variations/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T224308Z-refine-pixel-minimal-typography-and-detailing/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T224308Z-refine-pixel-minimal-typography-and-detailing/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T224358Z-preview-pixel-minimal-type-in-home-screen-header/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T224358Z-preview-pixel-minimal-type-in-home-screen-header/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T230034Z-preview-pixel-minimal-type-in-running-kiddos-applicatio/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T230034Z-preview-pixel-minimal-type-in-running-kiddos-applicatio/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T230159Z-preview-pixel-minimal-type-at-correct-header-size/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T230159Z-preview-pixel-minimal-type-at-correct-header-size/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T230528Z-inspect-approved-pixel-minimal-type-artwork-for-native-/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T230528Z-inspect-approved-pixel-minimal-type-artwork-for-native-/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T230720Z-preview-wider-pixel-minimal-type-logo-in-home-screen/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T230720Z-preview-wider-pixel-minimal-type-logo-in-home-screen/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T230747Z-preview-wider-approved-pixel-minimal-type-logo/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T230747Z-preview-wider-approved-pixel-minimal-type-logo/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T232228Z-preview-approved-pixel-minimal-type-logo-in-home-screen/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T232228Z-preview-approved-pixel-minimal-type-logo-in-home-screen/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T232814Z-use-approved-2x-pixel-minimal-type-header-artwork-at-la/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T232814Z-use-approved-2x-pixel-minimal-type-header-artwork-at-la/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T232847Z-enlarge-approved-pixel-minimal-type-header-area/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T232847Z-enlarge-approved-pixel-minimal-type-header-area/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T233416Z-locate-browse-navigation-label/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T233416Z-locate-browse-navigation-label/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T233506Z-inspect-navigation-hint-artwork-pipeline/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T233506Z-inspect-navigation-hint-artwork-pipeline/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T233528Z-change-browse-hint-to-outward-arrows/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T233528Z-change-browse-hint-to-outward-arrows/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T233632Z-correct-browse-arrow-directions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T233632Z-correct-browse-arrow-directions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T233950Z-swap-select-and-parent-menu-hint-positions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T233950Z-swap-select-and-parent-menu-hint-positions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T234014Z-swap-select-and-parent-menu-hint-positions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T234014Z-swap-select-and-parent-menu-hint-positions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T234042Z-swap-select-and-parent-menu-hint-positions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T234042Z-swap-select-and-parent-menu-hint-positions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T234122Z-swap-select-and-parent-menu-hint-positions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T234122Z-swap-select-and-parent-menu-hint-positions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T234402Z-swap-select-and-parent-menu-hint-positions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T234402Z-swap-select-and-parent-menu-hint-positions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T234507Z-swap-select-and-parent-menu-hint-positions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T234507Z-swap-select-and-parent-menu-hint-positions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T234554Z-swap-select-and-parent-menu-artwork-positions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T234554Z-swap-select-and-parent-menu-artwork-positions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T234729Z-swap-a-select-and-parent-menu-positions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T234729Z-swap-a-select-and-parent-menu-positions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T234846Z-swap-a-select-and-parent-menu-positions/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T234846Z-swap-a-select-and-parent-menu-positions/run.log
+./research/milestones/visual-fidelity-pass/runs/20261111T235134Z-center-parent-menu-hint-and-right-align-a-select/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261111T235134Z-center-parent-menu-hint-and-right-align-a-select/run.log
+./research/milestones/visual-fidelity-pass/runs/20261112T000516Z-center-parent-menu-hint-and-right-align-a-select/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261112T000516Z-center-parent-menu-hint-and-right-align-a-select/run.log
+./research/milestones/visual-fidelity-pass/runs/20261112T000609Z-place-parent-menu-center-and-a-select-right/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261112T000609Z-place-parent-menu-center-and-a-select-right/run.log
+./research/milestones/visual-fidelity-pass/runs/20261112T000908Z-put-plus-between-start-and-select/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261112T000908Z-put-plus-between-start-and-select/run.log
+./research/milestones/visual-fidelity-pass/runs/20261112T001228Z-move-browse-group-to-bottom-left/REPORT.md:8:- Log: research/milestones/visual-fidelity-pass/runs/20261112T001228Z-move-browse-group-to-bottom-left/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T010121Z-kiddos-ui-create-sdl2-foundation/REPORT.md:7:- Log: research/milestone-runs/20261111T010121Z-kiddos-ui-create-sdl2-foundation/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T010203Z-kiddos-ui-widget-hierarchy-and-layout/REPORT.md:7:- Log: research/milestone-runs/20261111T010203Z-kiddos-ui-widget-hierarchy-and-layout/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T010229Z-kiddos-ui-correct-layout-test-expectations/REPORT.md:7:- Log: research/milestone-runs/20261111T010229Z-kiddos-ui-correct-layout-test-expectations/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T010311Z-kiddos-ui-focus-and-directional-navigation/REPORT.md:7:- Log: research/milestone-runs/20261111T010311Z-kiddos-ui-focus-and-directional-navigation/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T010439Z-kiddos-ui-reusable-button-widget/REPORT.md:7:- Log: research/milestone-runs/20261111T010439Z-kiddos-ui-reusable-button-widget/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T010514Z-kiddos-ui-controller-interaction/REPORT.md:7:- Log: research/milestone-runs/20261111T010514Z-kiddos-ui-controller-interaction/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T014010Z-kiddos-ui-sdl-ttf-text-rendering/REPORT.md:7:- Log: research/milestone-runs/20261111T014010Z-kiddos-ui-sdl-ttf-text-rendering/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T014054Z-kiddos-ui-sdl-ttf-text-rendering/REPORT.md:7:- Log: research/milestone-runs/20261111T014054Z-kiddos-ui-sdl-ttf-text-rendering/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T014140Z-kiddos-ui-labeled-button-rendering/REPORT.md:7:- Log: research/milestone-runs/20261111T014140Z-kiddos-ui-labeled-button-rendering/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T014242Z-kiddos-ui-image-and-texture-support/REPORT.md:7:- Log: research/milestone-runs/20261111T014242Z-kiddos-ui-image-and-texture-support/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T014300Z-kiddos-ui-image-and-texture-support/REPORT.md:7:- Log: research/milestone-runs/20261111T014300Z-kiddos-ui-image-and-texture-support/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T014516Z-kiddos-ui-image-and-texture-support/REPORT.md:7:- Log: research/milestone-runs/20261111T014516Z-kiddos-ui-image-and-texture-support/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T014648Z-kiddos-ui-publish-image-support/REPORT.md:7:- Log: research/milestone-runs/20261111T014648Z-kiddos-ui-publish-image-support/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T014734Z-kiddos-ui-reusable-label-widget/REPORT.md:7:- Log: research/milestone-runs/20261111T014734Z-kiddos-ui-reusable-label-widget/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T014829Z-kiddos-ui-reusable-panel-widget/REPORT.md:7:- Log: research/milestone-runs/20261111T014829Z-kiddos-ui-reusable-panel-widget/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T014907Z-kiddos-ui-reusable-progress-bar/REPORT.md:7:- Log: research/milestone-runs/20261111T014907Z-kiddos-ui-reusable-progress-bar/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T014953Z-kiddos-ui-controller-toggle-widget/REPORT.md:7:- Log: research/milestone-runs/20261111T014953Z-kiddos-ui-controller-toggle-widget/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015040Z-kiddos-ui-controller-slider-widget/REPORT.md:7:- Log: research/milestone-runs/20261111T015040Z-kiddos-ui-controller-slider-widget/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015130Z-kiddos-ui-centralized-theme-system/REPORT.md:7:- Log: research/milestone-runs/20261111T015130Z-kiddos-ui-centralized-theme-system/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015226Z-kiddos-ui-slider-small-bounds-fix/REPORT.md:7:- Log: research/milestone-runs/20261111T015226Z-kiddos-ui-slider-small-bounds-fix/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015331Z-kiddos-ui-scrollable-list-widget/REPORT.md:7:- Log: research/milestone-runs/20261111T015331Z-kiddos-ui-scrollable-list-widget/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015349Z-kiddos-ui-publish-scrollable-list-view/REPORT.md:7:- Log: research/milestone-runs/20261111T015349Z-kiddos-ui-publish-scrollable-list-view/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015415Z-kiddos-ui-listview-theme-and-test-integration/REPORT.md:7:- Log: research/milestone-runs/20261111T015415Z-kiddos-ui-listview-theme-and-test-integration/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015437Z-kiddos-ui-complete-listview-integration/REPORT.md:7:- Log: research/milestone-runs/20261111T015437Z-kiddos-ui-complete-listview-integration/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015505Z-kiddos-ui-repair-listview-integration/REPORT.md:7:- Log: research/milestone-runs/20261111T015505Z-kiddos-ui-repair-listview-integration/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015532Z-kiddos-ui-finalize-listview-integration/REPORT.md:7:- Log: research/milestone-runs/20261111T015532Z-kiddos-ui-finalize-listview-integration/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015557Z-kiddos-ui-diagnose-cmake-test-nesting/REPORT.md:7:- Log: research/milestone-runs/20261111T015557Z-kiddos-ui-diagnose-cmake-test-nesting/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015613Z-kiddos-ui-fix-cmake-test-block/REPORT.md:7:- Log: research/milestone-runs/20261111T015613Z-kiddos-ui-fix-cmake-test-block/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015658Z-kiddos-ui-repair-and-complete-listview-integration/REPORT.md:7:- Log: research/milestone-runs/20261111T015658Z-kiddos-ui-repair-and-complete-listview-integration/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015806Z-kiddos-ui-reusable-checkbox-widget/REPORT.md:7:- Log: research/milestone-runs/20261111T015806Z-kiddos-ui-reusable-checkbox-widget/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015843Z-kiddos-ui-diagnose-checkbox-integration/REPORT.md:7:- Log: research/milestone-runs/20261111T015843Z-kiddos-ui-diagnose-checkbox-integration/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T015919Z-kiddos-ui-complete-checkbox-integration/REPORT.md:7:- Log: research/milestone-runs/20261111T015919Z-kiddos-ui-complete-checkbox-integration/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T020013Z-kiddos-ui-radiogroup-widget/REPORT.md:7:- Log: research/milestone-runs/20261111T020013Z-kiddos-ui-radiogroup-widget/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T020033Z-kiddos-ui-diagnose-radiogroup-build-state/REPORT.md:7:- Log: research/milestone-runs/20261111T020033Z-kiddos-ui-diagnose-radiogroup-build-state/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T020100Z-kiddos-ui-repair-radiogroup-integration/REPORT.md:7:- Log: research/milestone-runs/20261111T020100Z-kiddos-ui-repair-radiogroup-integration/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T020130Z-kiddos-ui-finish-radiogroup-integration/REPORT.md:7:- Log: research/milestone-runs/20261111T020130Z-kiddos-ui-finish-radiogroup-integration/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T020156Z-kiddos-ui-inspect-radiogroup-integration/REPORT.md:7:- Log: research/milestone-runs/20261111T020156Z-kiddos-ui-inspect-radiogroup-integration/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T020219Z-kiddos-ui-repair-radiogroup-controller-and-theme/REPORT.md:7:- Log: research/milestone-runs/20261111T020219Z-kiddos-ui-repair-radiogroup-controller-and-theme/run.log
+./research/milestones/kiddos-ui-library/runs/20261111T020242Z-kiddos-ui-fix-theme-namespace-and-rebuild-radiogroup/REPORT.md:7:- Log: research/milestone-runs/20261111T020242Z-kiddos-ui-fix-theme-namespace-and-rebuild-radiogroup/run.log
+
+===== END OF REVIEW =====
