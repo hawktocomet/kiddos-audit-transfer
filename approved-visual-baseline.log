@@ -1,0 +1,227 @@
+===== APPROVED VISUAL BASELINE =====
+Thu Nov 12 11:55:07 AM EST 2026
+
+===== APPROVED SCREEN REFERENCES =====
+--- design/reference/approved-screens/GameCarouselScreen.png ---
+design/reference/approved-screens/GameCarouselScreen.png: PNG image data, 720 x 720, 8-bit/color RGBA, non-interlaced
+d7bdd004ce6b9440ca615f29cc1c0efa531dcaf51db5d857fc302705502c9bf4  design/reference/approved-screens/GameCarouselScreen.png
+--- design/reference/approved-screens/SelectedGameScreen.png ---
+design/reference/approved-screens/SelectedGameScreen.png: PNG image data, 720 x 720, 8-bit/color RGBA, non-interlaced
+86ea1cc478cfe6926c4904e42bdad80597d6236137afbcf02bf4d882bef81ecd  design/reference/approved-screens/SelectedGameScreen.png
+
+===== SHARED SHELL IMPLEMENTATION =====
+#include "kiddos/app/shared_shell.hpp"
+
+#include <SDL_image.h>
+#include <algorithm>
+#include <cmath>
+
+namespace kiddos::app {
+namespace {
+
+constexpr SDL_Color navy{12, 22, 42, 255};
+constexpr SDL_Color blue{75, 174, 255, 255};
+constexpr SDL_Color white{235, 243, 255, 255};
+constexpr SDL_Color muted{145, 173, 207, 255};
+
+void set_color(SDL_Renderer* renderer, SDL_Color color) {
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+}
+
+} // namespace
+
+SharedShell::~SharedShell() {
+    reset();
+}
+
+bool SharedShell::initialize(SDL_Renderer* renderer) {
+    reset();
+    if (!renderer) return false;
+
+    renderer_ = renderer;
+
+    SDL_Surface* logo_surface =
+        IMG_Load("assets/artwork/generated/kiddos-wordmark.png");
+    if (logo_surface) {
+        logo_ = SDL_CreateTextureFromSurface(renderer_, logo_surface);
+        SDL_FreeSurface(logo_surface);
+    }
+
+    SDL_Surface* hints_surface =
+        IMG_Load("assets/artwork/generated/navigation-hints.png");
+    if (hints_surface) {
+        hints_ = SDL_CreateTextureFromSurface(renderer_, hints_surface);
+        SDL_FreeSurface(hints_surface);
+    }
+
+    const char* font_paths[] = {
+        "/usr/share/fonts/TTF/DejaVuSans.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/dejavu/DejaVuSans.ttf"
+    };
+
+    for (const char* path : font_paths) {
+        font_ = TTF_OpenFont(path, 20);
+        if (font_) break;
+    }
+
+    return true;
+}
+
+void SharedShell::draw_text(const char* text, int x, int y) {
+    if (!renderer_ || !font_ || !text) return;
+
+    SDL_Surface* surface = TTF_RenderUTF8_Blended(font_, text, white);
+    if (!surface) return;
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer_, surface);
+    if (texture) {
+        SDL_Rect destination{x, y, surface->w, surface->h};
+        SDL_RenderCopy(renderer_, texture, nullptr, &destination);
+        SDL_DestroyTexture(texture);
+    }
+    SDL_FreeSurface(surface);
+}
+
+void SharedShell::render_header() {
+    if (!renderer_) return;
+
+    const SDL_Color body{205, 222, 255, 220};
+    const SDL_Color waves{80, 157, 255, 220};
+    const SDL_Color charge{67, 157, 255, 240};
+
+    SDL_SetRenderDrawBlendMode(renderer_, SDL_BLENDMODE_BLEND);
+
+    // Original speaker cabinet and flared cone.
+    set_color(renderer_, body);
+    SDL_Rect cabinet{25, 33, 8, 14};
+    SDL_RenderFillRect(renderer_, &cabinet);
+
+    for (int y = 27; y <= 52; ++y) {
+        int left = 33;
+        if (y < 33) {
+            left += (33 - y) * 11 / 6;
+        } else if (y > 46) {
+            left += (y - 46) * 11 / 6;
+        }
+        SDL_RenderDrawLine(renderer_, left, y, 44, y);
+    }
+
+    // Original two curved sound waves.
+    const auto draw_arc = [&](int radius) {
+        constexpr double pi = 3.14159265358979323846;
+        const int steps = std::max(2, radius * 2);
+        SDL_Point previous{};
+        for (int step = 0; step <= steps; ++step) {
+            const double degrees = -50.0 + 100.0 * step / steps;
+            const double radians = degrees * pi / 180.0;
+            SDL_Point point{
+                47 + static_cast<int>(std::lround(radius * std::cos(radians))),
+                39 + static_cast<int>(std::lround(radius * std::sin(radians)))
+            };
+            if (step > 0) {
+                SDL_RenderDrawLine(renderer_, previous.x, previous.y,
+                                   point.x, point.y);
+            }
+            previous = point;
+        }
+    };
+    set_color(renderer_, waves);
+    draw_arc(6);
+    draw_arc(12);
+
+    // Original battery outline, terminal, and charge fill.
+    set_color(renderer_, body);
+    SDL_Rect battery{657, 27, 34, 19};
+    SDL_Rect terminal{691, 33, 4, 7};
+    SDL_RenderDrawRect(renderer_, &battery);
+    SDL_RenderFillRect(renderer_, &terminal);
+
+    set_color(renderer_, charge);
+    SDL_Rect fill{661, 31, 22, 11};
+    SDL_RenderFillRect(renderer_, &fill);
+
+    // Original wordmark dimensions and placement.
+    if (logo_) {
+        SDL_Rect destination{195, 5, 330, 61};
+        SDL_RenderCopy(renderer_, logo_, nullptr, &destination);
+    }
+}
+
+void SharedShell::render_footer(bool selected_game) {
+    if (!renderer_ || selected_game) return;
+
+    // The carousel keeps its original full-width navigation artwork.
+    if (hints_) {
+        SDL_Rect destination{0, 682, 720, 34};
+        SDL_RenderCopy(renderer_, hints_, nullptr, &destination);
+    }
+}
+
+void SharedShell::reset() noexcept {
+    if (logo_) {
+        SDL_DestroyTexture(logo_);
+        logo_ = nullptr;
+    }
+    if (hints_) {
+        SDL_DestroyTexture(hints_);
+        hints_ = nullptr;
+    }
+    if (font_) {
+        TTF_CloseFont(font_);
+        font_ = nullptr;
+    }
+    renderer_ = nullptr;
+}
+
+} // namespace kiddos::app
+
+===== SHARED INTERFACE ARTWORK REFERENCES =====
+src/app/application.cpp:129:    shell.render_header();
+src/app/application.cpp:130:    shell.render_footer(selected_game);
+src/app/selected_game_screen.cpp:52:    hints_texture_.load(
+src/app/selected_game_screen.cpp:54:        "assets/artwork/generated/selected-game-hints.png",
+src/app/selected_game_screen.cpp:58:    auto& hints = root().add<ui::Image>(&hints_texture_);
+src/app/selected_game_screen.cpp:59:    hints.set_bounds({0, 678, 720, 42});
+src/app/selected_game_screen.cpp:60:    hints.set_fit(ui::ImageFit::contain);
+src/app/selected_game_screen.cpp:61:    hints_ = &hints;
+src/app/selected_game_screen.cpp:86:    if (hints_) hints_->set_texture(nullptr);
+src/app/shared_shell.cpp:31:    SDL_Surface* logo_surface =
+src/app/shared_shell.cpp:33:    if (logo_surface) {
+src/app/shared_shell.cpp:34:        logo_ = SDL_CreateTextureFromSurface(renderer_, logo_surface);
+src/app/shared_shell.cpp:35:        SDL_FreeSurface(logo_surface);
+src/app/shared_shell.cpp:38:    SDL_Surface* hints_surface =
+src/app/shared_shell.cpp:39:        IMG_Load("assets/artwork/generated/navigation-hints.png");
+src/app/shared_shell.cpp:40:    if (hints_surface) {
+src/app/shared_shell.cpp:41:        hints_ = SDL_CreateTextureFromSurface(renderer_, hints_surface);
+src/app/shared_shell.cpp:42:        SDL_FreeSurface(hints_surface);
+src/app/shared_shell.cpp:74:void SharedShell::render_header() {
+src/app/shared_shell.cpp:98:    // Original two curved sound waves.
+src/app/shared_shell.cpp:121:    // Original battery outline, terminal, and charge fill.
+src/app/shared_shell.cpp:123:    SDL_Rect battery{657, 27, 34, 19};
+src/app/shared_shell.cpp:125:    SDL_RenderDrawRect(renderer_, &battery);
+src/app/shared_shell.cpp:133:    if (logo_) {
+src/app/shared_shell.cpp:135:        SDL_RenderCopy(renderer_, logo_, nullptr, &destination);
+src/app/shared_shell.cpp:139:void SharedShell::render_footer(bool selected_game) {
+src/app/shared_shell.cpp:143:    if (hints_) {
+src/app/shared_shell.cpp:145:        SDL_RenderCopy(renderer_, hints_, nullptr, &destination);
+src/app/shared_shell.cpp:150:    if (logo_) {
+src/app/shared_shell.cpp:151:        SDL_DestroyTexture(logo_);
+src/app/shared_shell.cpp:152:        logo_ = nullptr;
+src/app/shared_shell.cpp:154:    if (hints_) {
+src/app/shared_shell.cpp:155:        SDL_DestroyTexture(hints_);
+src/app/shared_shell.cpp:156:        hints_ = nullptr;
+include/kiddos/app/selected_game_screen.hpp:27:    ui::Texture hints_texture_;
+include/kiddos/app/selected_game_screen.hpp:28:    ui::Image* hints_ = nullptr;
+include/kiddos/app/shared_shell.hpp:17:    void render_header();
+include/kiddos/app/shared_shell.hpp:18:    void render_footer(bool selected_game);
+include/kiddos/app/shared_shell.hpp:25:    SDL_Texture* logo_ = nullptr;
+include/kiddos/app/shared_shell.hpp:26:    SDL_Texture* hints_ = nullptr;
+
+===== RELATED ARTWORK FILES =====
+assets/artwork/generated/navigation-hints.png
+assets/artwork/generated/selected-game-hints.png
+assets/artwork/source/branding/navigation-hints.svg
+assets/artwork/source/branding/selected-game-hints.svg
+
+===== END =====
