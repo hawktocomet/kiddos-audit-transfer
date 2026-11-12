@@ -1,0 +1,113 @@
+===== SOUND AND BATTERY INTERFACE AUDIT =====
+Thu Nov 12 12:17:49 PM EST 2026
+
+===== RELEVANT FILES =====
+include/kiddos/app/platform.hpp
+include/kiddos/platform/platform.hpp
+include/kiddos/platform/sdl_platform.hpp
+src/platform/sdl_platform.cpp
+tests/platform_sdl_keyboard_policy_test.cpp
+tests/platform_sdl_text_input_translator_test.cpp
+tests/platform_text_input_event_test.cpp
+tests/platform_text_input_interface_test.cpp
+
+===== HARDWARE AND SYSTEM REFERENCES =====
+include/kiddos/ui/theme.hpp:24:    Color text_muted{160, 175, 200, 255};
+src/platform/sdl_platform.cpp:344:    // Sound status: speaker and sound waves.
+src/app/shared_shell.cpp:13:constexpr SDL_Color muted{145, 173, 207, 255};
+src/app/shared_shell.cpp:98:    // Original two curved sound waves.
+src/app/shared_shell.cpp:121:    // Original battery outline, terminal, and charge fill.
+src/app/shared_shell.cpp:123:    SDL_Rect battery{657, 27, 34, 19};
+src/app/shared_shell.cpp:125:    SDL_RenderDrawRect(renderer_, &battery);
+src/ui/theme.cpp:30:    style.disabled_text = colors_.text_muted;
+src/ui/theme.cpp:74:    style.disabled_text = colors_.text_muted;
+src/ui/theme.cpp:87:    style.disabled_text = colors_.text_muted;
+src/ui/theme.cpp:100:    style.disabled_text = colors_.text_muted;
+src/ui/theme.cpp:111:    style.disabled_text = colors_.text_muted;
+src/ui/theme.cpp:123:    style.placeholder = colors_.text_muted;
+src/ui/theme.cpp:125:    style.disabled_text = colors_.text_muted;
+tests/ui_checkbox_test.cpp:9:    Checkbox checkbox("Enable sound");
+tests/ui_checkbox_test.cpp:12:    assert(checkbox.label() == "Enable sound");
+
+===== PLATFORM HEADER =====
+--- include/kiddos/app/platform.hpp ---
+     1	#pragma once
+     2	
+     3	#include <array>
+     4	#include <cstddef>
+     5	#include <string_view>
+     6	
+     7	namespace kiddos::app {
+     8	
+     9	enum class PlatformId {
+    10	    GameBoy,
+    11	    GameBoyAdvance,
+    12	    SuperNintendo,
+    13	    Arcade
+    14	};
+    15	
+    16	struct PlatformDefinition {
+    17	    PlatformId id;
+    18	    std::string_view short_name;
+    19	    std::string_view full_name;
+    20	};
+    21	
+    22	inline constexpr std::array<PlatformDefinition, 4> initial_platforms{{
+    23	    {PlatformId::GameBoy, "GB/GBC", "Game Boy / Game Boy Color"},
+    24	    {PlatformId::GameBoyAdvance, "GBA", "Game Boy Advance"},
+    25	    {PlatformId::SuperNintendo, "SNES", "Super Nintendo"},
+    26	    {PlatformId::Arcade, "Arcade", "FinalBurn Neo"}
+    27	}};
+    28	
+    29	inline constexpr std::size_t platform_count = initial_platforms.size();
+    30	
+    31	} // namespace kiddos::app
+--- include/kiddos/platform/platform.hpp ---
+     1	#pragma once
+     2	
+     3	#include "kiddos/core/action.hpp"
+     4	#include "kiddos/platform/text_input_event.hpp"
+     5	
+     6	struct SDL_Renderer;
+     7	
+     8	namespace kiddos {
+     9	
+    10	class Platform {
+    11	public:
+    12	    virtual ~Platform() = default;
+    13	
+    14	    // Non-owning access to the platform's native SDL renderer, if one
+    15	    // exists. The platform retains ownership; callers must not destroy it.
+    16	    virtual SDL_Renderer* native_renderer() const noexcept { return nullptr; }
+    17	
+    18	    virtual bool initialize() = 0;
+    19	    virtual bool poll_action(Action& action) = 0;
+    20	    virtual bool poll_text_input_event(TextInputEvent&) { return false; }
+    21	    virtual void set_text_input_active(bool) {}
+    22	    virtual void begin_frame() = 0;
+    23	    virtual void draw_carousel(int selected_index) = 0;
+    24	    virtual void draw_game_actions(int selected_index, bool has_checkpoint, int selected_action) = 0;
+    25	    virtual void present() = 0;
+    26	    virtual void shutdown() = 0;
+    27	};
+    28	
+    29	} // namespace kiddos
+
+===== GIT STATUS =====
+ M CMakeLists.txt
+ M assets/artwork/generated/navigation-hints.png
+ M assets/artwork/source/branding/navigation-hints.svg
+ M include/kiddos/app/application.hpp
+ M include/kiddos/app/home_carousel_screen.hpp
+ M src/app/application.cpp
+ M src/app/home_carousel_screen.cpp
+ M src/platform/sdl_platform.cpp
+ M tests/app_home_carousel_screen_test.cpp
+?? assets/artwork/generated/cartridges/
+?? assets/artwork/generated/selected-game-hints.png
+?? assets/artwork/source/branding/selected-game-hints.svg
+?? include/kiddos/app/selected_game_screen.hpp
+?? include/kiddos/app/shared_shell.hpp
+?? src/app/selected_game_screen.cpp
+?? src/app/shared_shell.cpp
+?? tests/app_selected_game_screen_test.cpp
