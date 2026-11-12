@@ -1,0 +1,1608 @@
+===== RETRO KIDDOS V0.1 RELEASE RESET AUDIT =====
+Wed Nov 11 11:22:01 PM EST 2026
+
+===== REPOSITORY =====
+/home/hawk/KiddOS
+main
+0ea37a4 chore: record milestone run - audit-resource-ownership-and-build-coverage
+
+===== GIT STATUS =====
+ M CMakeLists.txt
+ M include/kiddos/app/application.hpp
+ M include/kiddos/app/home_carousel_screen.hpp
+ M src/app/application.cpp
+ M src/app/home_carousel_screen.cpp
+ M src/platform/sdl_platform.cpp
+ M tests/app_home_carousel_screen_test.cpp
+?? assets/artwork/generated/cartridges/
+?? assets/artwork/generated/selected-game-hints.png
+?? assets/artwork/source/branding/selected-game-hints.svg
+?? include/kiddos/app/selected_game_screen.hpp
+?? include/kiddos/app/shared_shell.hpp
+?? src/app/selected_game_screen.cpp
+?? src/app/shared_shell.cpp
+?? tests/app_selected_game_screen_test.cpp
+
+===== UNCOMMITTED CHANGE SUMMARY =====
+ CMakeLists.txt                              |  13 +++
+ include/kiddos/app/application.hpp          |   7 +-
+ include/kiddos/app/home_carousel_screen.hpp |   6 --
+ src/app/application.cpp                     | 144 +++++++++++++--------------
+ src/app/home_carousel_screen.cpp            | 102 +------------------
+ src/platform/sdl_platform.cpp               | 145 ++++++++++++++++++++++++----
+ tests/app_home_carousel_screen_test.cpp     |  21 ++--
+ 7 files changed, 216 insertions(+), 222 deletions(-)
+
+===== RECENT HISTORY =====
+0ea37a4 (HEAD -> main, origin/main, origin/HEAD) chore: record milestone run - audit-resource-ownership-and-build-coverage
+33e46f5 chore: record milestone run - audit-shared-shell-and-screen-composition
+16a05ad chore: record milestone run - audit-legacy-rendering-and-reusable-components
+019c2ea chore: record milestone run - audit-rendering-architecture-and-screen-implementations
+bcb2fee chore: record milestone run - ui-architecture-audit-repository-inventory
+fab7cee chore: record milestone run - commit-approved-screen-reference-assets
+5bbc873 chore: record milestone run - establish-approved-screen-design-references
+5775a07 chore: record milestone run - final-one-pixel-footer-adjustment
+daea969 chore: record milestone run - fine-tune-selected-game-footer-alignment
+3b89bfe chore: record milestone run - lower-selected-game-footer-to-y680
+f90a367 chore: record milestone run - lower-selected-game-footer-another-6-pixels
+104dad5 chore: record milestone run - lower-selected-game-footer-alignment
+d884adb chore: record milestone run - correct-selected-game-ui-child-ordering-test
+bbf0433 chore: record milestone run - remove-duplicate-footer-and-verify-ui-image
+000acd3 chore: record milestone run - finish-selected-game-ui-footer-integration
+41f446b chore: record milestone run - render-selected-game-footer-through-ui-image
+1da364f chore: record milestone run - connect-selected-game-footer-to-ui-renderer
+dea25fa chore: record milestone run - fix-newline-warnings-in-original-artwork-integration
+491446b chore: record milestone run - reuse-original-carousel-a-select-artwork-in-selected-ga
+672d89c chore: record milestone run - correct-escaped-newline-literals-in-footer-integration
+
+===== TRACKED PROJECT FILES =====
+.gitignore
+CMakeLists.txt
+CONTRIBUTING.md
+README.md
+assets/artwork/generated/boxart/SOURCES.txt
+assets/artwork/generated/boxart/arcade-pac-man.png
+assets/artwork/generated/boxart/gb-tetris.png
+assets/artwork/generated/boxart/gba-mario-kart-super-circuit.png
+assets/artwork/generated/boxart/snes-super-mario-world.png
+assets/artwork/generated/carousel-car.bmp
+assets/artwork/generated/carousel-car.png
+assets/artwork/generated/carousel-mushroom.bmp
+assets/artwork/generated/carousel-mushroom.png
+assets/artwork/generated/carousel-selected.bmp
+assets/artwork/generated/carousel-star.bmp
+assets/artwork/generated/carousel-star.png
+assets/artwork/generated/carousel-title-car.png
+assets/artwork/generated/carousel-title-star.png
+assets/artwork/generated/carousel-title.bmp
+assets/artwork/generated/carousel-title.png
+assets/artwork/generated/forest.bmp
+assets/artwork/generated/kiddos-wordmark.png
+assets/artwork/generated/label-play.bmp
+assets/artwork/generated/label-resume.bmp
+assets/artwork/generated/label-start-over.bmp
+assets/artwork/generated/navigation-hints.png
+assets/artwork/generated/ocean.bmp
+assets/artwork/generated/space.bmp
+assets/artwork/source/branding/kiddos-wordmark.svg
+assets/artwork/source/branding/navigation-hints.svg
+assets/artwork/source/carousel/car.svg
+assets/artwork/source/carousel/mushroom.svg
+assets/artwork/source/carousel/selected.svg
+assets/artwork/source/carousel/star.svg
+assets/artwork/source/carousel/title-car.svg
+assets/artwork/source/carousel/title-star.svg
+assets/artwork/source/carousel/title.svg
+assets/artwork/source/cartridges/cart-option-1.png
+assets/artwork/source/cartridges/cart-option-2.png
+assets/artwork/source/forest.svg
+assets/artwork/source/ocean.svg
+assets/artwork/source/space.svg
+design/reference/README.md
+design/reference/approved-screens/GameCarouselScreen.png
+design/reference/approved-screens/SelectedGameScreen.png
+docs/ARCHITECTURE.md
+docs/DEVELOPMENT_LOG.md
+docs/DEVELOPMENT_STATUS.md
+docs/FIRMWARE_AUDIT.md
+docs/GAME_ACTION_SCREEN.md
+docs/GAME_LIBRARY.md
+docs/HARDWARE.md
+docs/INPUT_CONTROLS.md
+docs/KIDDOS_UI_LIBRARY.md
+docs/KID_MODE_CAROUSEL_PROTOTYPE.md
+docs/LOW_BATTERY_PROTECTION.md
+docs/MEDIA_MANAGER.md
+docs/PRODUCT_SPECIFICATION.md
+docs/PROJECT_VISION.md
+docs/SAVE_STATE_SYSTEM.md
+docs/UI_DESIGN.md
+docs/reference/game-artwork-sources.md
+docs/reference/retro-pixel-pocket-palette.md
+docs/reference/retro-pixel-pocket.jpg
+docs/ui-image-support.md
+docs/ui-label-support.md
+docs/ui-list-view.md
+docs/ui-panel-support.md
+docs/ui-progress-bar.md
+docs/ui-slider.md
+docs/ui-theme.md
+docs/ui-toggle.md
+include/kiddos/app/application.hpp
+include/kiddos/app/home_carousel_screen.hpp
+include/kiddos/app/platform.hpp
+include/kiddos/app/ui_action_mapping.hpp
+include/kiddos/core/action.hpp
+include/kiddos/kiddos_ui.hpp
+include/kiddos/platform/platform.hpp
+include/kiddos/platform/sdl_keyboard_policy.hpp
+include/kiddos/platform/sdl_platform.hpp
+include/kiddos/platform/sdl_text_input_translator.hpp
+include/kiddos/platform/text_input_event.hpp
+include/kiddos/ui/button.hpp
+include/kiddos/ui/checkbox.hpp
+include/kiddos/ui/color.hpp
+include/kiddos/ui/container.hpp
+include/kiddos/ui/controller.hpp
+include/kiddos/ui/element.hpp
+include/kiddos/ui/focus.hpp
+include/kiddos/ui/font.hpp
+include/kiddos/ui/geometry.hpp
+include/kiddos/ui/image.hpp
+include/kiddos/ui/label.hpp
+include/kiddos/ui/layout.hpp
+include/kiddos/ui/list_view.hpp
+include/kiddos/ui/panel.hpp
+include/kiddos/ui/progress_bar.hpp
+include/kiddos/ui/radio_group.hpp
+include/kiddos/ui/renderer.hpp
+include/kiddos/ui/screen.hpp
+include/kiddos/ui/screen_manager.hpp
+include/kiddos/ui/select.hpp
+include/kiddos/ui/slider.hpp
+include/kiddos/ui/text.hpp
+include/kiddos/ui/text_input.hpp
+include/kiddos/ui/text_input_interaction.hpp
+include/kiddos/ui/texture.hpp
+include/kiddos/ui/theme.hpp
+include/kiddos/ui/toggle.hpp
+include/kiddos/ui/ui.hpp
+research/abandoned/framework-exploration/lvgl/adapter/CMakeLists.txt
+research/abandoned/framework-exploration/lvgl/adapter/lv_conf.h
+research/abandoned/framework-exploration/lvgl/adapter/main.c
+research/abandoned/framework-exploration/lvgl/prototype/CMakeLists.txt
+research/abandoned/framework-exploration/lvgl/prototype/lv_conf.h
+research/abandoned/framework-exploration/lvgl/prototype/main.c
+research/abandoned/framework-exploration/rmlui/logs/01-inspection-20261110-184509.log
+research/abandoned/runs/20261110T233212Z-ui-framework-feasibility-codebase-audit/REPORT.md
+research/abandoned/runs/20261110T233212Z-ui-framework-feasibility-codebase-audit/run.log
+research/abandoned/runs/20261110T233347Z-ui-framework-feasibility-framework-source-audit/REPORT.md
+research/abandoned/runs/20261110T233347Z-ui-framework-feasibility-framework-source-audit/run.log
+research/abandoned/runs/20261110T234612Z-rmlui-feasibility-repository-inspection/REPORT.md
+research/abandoned/runs/20261110T234612Z-rmlui-feasibility-repository-inspection/run.log
+research/abandoned/runs/20261110T234645Z-rmlui-feasibility-graphics-backend-check/REPORT.md
+research/abandoned/runs/20261110T234645Z-rmlui-feasibility-graphics-backend-check/run.log
+research/abandoned/runs/20261110T234900Z-rmlui-feasibility-sdl-renderer-source-verification/REPORT.md
+research/abandoned/runs/20261110T234900Z-rmlui-feasibility-sdl-renderer-source-verification/run.log
+research/abandoned/runs/20261110T234949Z-lvgl-feasibility-sdl2-and-ui-capability-audit/REPORT.md
+research/abandoned/runs/20261110T234949Z-lvgl-feasibility-sdl2-and-ui-capability-audit/run.log
+research/abandoned/runs/20261110T235035Z-lvgl-feasibility-sdl-controller-bridge-and-configuratio/REPORT.md
+research/abandoned/runs/20261110T235035Z-lvgl-feasibility-sdl-controller-bridge-and-configuratio/run.log
+research/abandoned/runs/20261110T235853Z-lvgl-feasibility-isolated-sdl-prototype/REPORT.md
+research/abandoned/runs/20261110T235853Z-lvgl-feasibility-isolated-sdl-prototype/run.log
+research/abandoned/runs/20261111T000149Z-lvgl-feasibility-prototype-api-verification/REPORT.md
+research/abandoned/runs/20261111T000149Z-lvgl-feasibility-prototype-api-verification/run.log
+research/abandoned/runs/20261111T000717Z-lvgl-feasibility-isolated-sdl-prototype/REPORT.md
+research/abandoned/runs/20261111T000717Z-lvgl-feasibility-isolated-sdl-prototype/run.log
+research/abandoned/runs/20261111T001117Z-lvgl-feasibility-prototype-build-fixes/REPORT.md
+research/abandoned/runs/20261111T001117Z-lvgl-feasibility-prototype-build-fixes/run.log
+research/abandoned/runs/20261111T001230Z-lvgl-feasibility-correct-prototype-callback/REPORT.md
+research/abandoned/runs/20261111T001230Z-lvgl-feasibility-correct-prototype-callback/run.log
+research/abandoned/runs/20261111T001253Z-lvgl-feasibility-desktop-visual-runtime/REPORT.md
+research/abandoned/runs/20261111T001253Z-lvgl-feasibility-desktop-visual-runtime/run.log
+research/abandoned/runs/20261111T001329Z-lvgl-feasibility-screenshot-capture/REPORT.md
+research/abandoned/runs/20261111T001329Z-lvgl-feasibility-screenshot-capture/run.log
+research/abandoned/runs/20261111T001617Z-lvgl-feasibility-x11-visual-capture/REPORT.md
+research/abandoned/runs/20261111T001617Z-lvgl-feasibility-x11-visual-capture/run.log
+research/abandoned/runs/20261111T001649Z-lvgl-feasibility-controller-interaction-test/REPORT.md
+research/abandoned/runs/20261111T001649Z-lvgl-feasibility-controller-interaction-test/run.log
+research/abandoned/runs/20261111T001728Z-lvgl-feasibility-input-and-runtime-audit/REPORT.md
+research/abandoned/runs/20261111T001728Z-lvgl-feasibility-input-and-runtime-audit/run.log
+research/abandoned/runs/20261111T001744Z-lvgl-feasibility-prototype-interaction-completion/REPORT.md
+research/abandoned/runs/20261111T001744Z-lvgl-feasibility-prototype-interaction-completion/run.log
+research/abandoned/runs/20261111T001803Z-lvgl-feasibility-complete-controller-key-mapping/REPORT.md
+research/abandoned/runs/20261111T001803Z-lvgl-feasibility-complete-controller-key-mapping/run.log
+research/abandoned/runs/20261111T001826Z-lvgl-feasibility-target-platform-integration-audit/REPORT.md
+research/abandoned/runs/20261111T001826Z-lvgl-feasibility-target-platform-integration-audit/run.log
+research/abandoned/runs/20261111T001846Z-lvgl-feasibility-existing-sdl-renderer-adapter/REPORT.md
+research/abandoned/runs/20261111T001846Z-lvgl-feasibility-existing-sdl-renderer-adapter/run.log
+research/abandoned/runs/20261111T001911Z-lvgl-feasibility-custom-sdl-renderer-adapter-prototype/REPORT.md
+research/abandoned/runs/20261111T001911Z-lvgl-feasibility-custom-sdl-renderer-adapter-prototype/run.log
+research/abandoned/runs/20261111T001933Z-lvgl-feasibility-sdl-renderer-adapter-implementation/REPORT.md
+research/abandoned/runs/20261111T001933Z-lvgl-feasibility-sdl-renderer-adapter-implementation/run.log
+research/abandoned/runs/20261111T001950Z-lvgl-feasibility-locate-public-display-api/REPORT.md
+research/abandoned/runs/20261111T001950Z-lvgl-feasibility-locate-public-display-api/run.log
+research/abandoned/runs/20261111T002022Z-lvgl-feasibility-display-api-and-flush-contract/REPORT.md
+research/abandoned/runs/20261111T002022Z-lvgl-feasibility-display-api-and-flush-contract/run.log
+research/abandoned/runs/20261111T002218Z-lvgl-feasibility-build-custom-sdl-renderer-adapter/REPORT.md
+research/abandoned/runs/20261111T002218Z-lvgl-feasibility-build-custom-sdl-renderer-adapter/run.log
+research/abandoned/runs/20261111T002422Z-lvgl-feasibility-fix-and-build-sdl-adapter/REPORT.md
+research/abandoned/runs/20261111T002422Z-lvgl-feasibility-fix-and-build-sdl-adapter/run.log
+research/abandoned/runs/20261111T002624Z-lvgl-feasibility-run-custom-sdl-adapter/REPORT.md
+research/abandoned/runs/20261111T002624Z-lvgl-feasibility-run-custom-sdl-adapter/run.log
+research/abandoned/runs/20261111T002701Z-lvgl-feasibility-capture-adapter-on-desktop/REPORT.md
+research/abandoned/runs/20261111T002701Z-lvgl-feasibility-capture-adapter-on-desktop/run.log
+research/abandoned/runs/20261111T002726Z-lvgl-feasibility-diagnose-adapter-crash/REPORT.md
+research/abandoned/runs/20261111T002726Z-lvgl-feasibility-diagnose-adapter-crash/run.log
+research/abandoned/runs/20261111T002753Z-lvgl-feasibility-correct-custom-renderer-configuration/REPORT.md
+research/abandoned/runs/20261111T002753Z-lvgl-feasibility-correct-custom-renderer-configuration/run.log
+research/abandoned/runs/20261111T002823Z-lvgl-feasibility-resolve-renderer-configuration/REPORT.md
+research/abandoned/runs/20261111T002823Z-lvgl-feasibility-resolve-renderer-configuration/run.log
+research/abandoned/runs/20261111T002843Z-lvgl-feasibility-build-minimal-software-adapter/REPORT.md
+research/abandoned/runs/20261111T002843Z-lvgl-feasibility-build-minimal-software-adapter/run.log
+research/abandoned/runs/20261111T003213Z-lvgl-feasibility-run-custom-sdl-adapter/REPORT.md
+research/abandoned/runs/20261111T003213Z-lvgl-feasibility-run-custom-sdl-adapter/run.log
+research/abandoned/runs/20261111T003241Z-lvgl-feasibility-capture-custom-adapter-ui/REPORT.md
+research/abandoned/runs/20261111T003241Z-lvgl-feasibility-capture-custom-adapter-ui/run.log
+research/abandoned/runs/20261111T003302Z-lvgl-feasibility-inspect-controller-input-apis/REPORT.md
+research/abandoned/runs/20261111T003302Z-lvgl-feasibility-inspect-controller-input-apis/run.log
+research/abandoned/runs/20261111T003325Z-lvgl-feasibility-add-sdl-controller-navigation/REPORT.md
+research/abandoned/runs/20261111T003325Z-lvgl-feasibility-add-sdl-controller-navigation/run.log
+research/abandoned/runs/20261111T003344Z-lvgl-feasibility-fix-controller-build/REPORT.md
+research/abandoned/runs/20261111T003344Z-lvgl-feasibility-fix-controller-build/run.log
+research/abandoned/runs/20261111T003513Z-lvgl-feasibility-verify-focus-navigation/REPORT.md
+research/abandoned/runs/20261111T003513Z-lvgl-feasibility-verify-focus-navigation/run.log
+research/abandoned/runs/20261111T003537Z-lvgl-feasibility-verify-focus-navigation/REPORT.md
+research/abandoned/runs/20261111T003537Z-lvgl-feasibility-verify-focus-navigation/run.log
+research/abandoned/runs/20261111T003547Z-lvgl-feasibility-make-controller-focus-visible/REPORT.md
+research/abandoned/runs/20261111T003547Z-lvgl-feasibility-make-controller-focus-visible/run.log
+research/abandoned/runs/20261111T003723Z-lvgl-feasibility-inspect-input-test-harness/REPORT.md
+research/abandoned/runs/20261111T003723Z-lvgl-feasibility-inspect-input-test-harness/run.log
+research/abandoned/runs/20261111T003757Z-lvgl-feasibility-verify-keypad-focus-movement/REPORT.md
+research/abandoned/runs/20261111T003757Z-lvgl-feasibility-verify-keypad-focus-movement/run.log
+research/abandoned/runs/20261111T003927Z-lvgl-feasibility-diagnose-keypad-event-delivery/REPORT.md
+research/abandoned/runs/20261111T003927Z-lvgl-feasibility-diagnose-keypad-event-delivery/run.log
+research/abandoned/runs/20261111T004028Z-lvgl-feasibility-correct-keypad-press-state/REPORT.md
+research/abandoned/runs/20261111T004028Z-lvgl-feasibility-correct-keypad-press-state/run.log
+research/abandoned/runs/20261111T004155Z-lvgl-feasibility-trace-keypad-input-pipeline/REPORT.md
+research/abandoned/runs/20261111T004155Z-lvgl-feasibility-trace-keypad-input-pipeline/run.log
+research/abandoned/runs/20261111T004244Z-lvgl-feasibility-clean-keypad-test-harness/REPORT.md
+research/abandoned/runs/20261111T004244Z-lvgl-feasibility-clean-keypad-test-harness/run.log
+research/abandoned/runs/20261111T004312Z-lvgl-feasibility-verify-one-shot-focus-navigation/REPORT.md
+research/abandoned/runs/20261111T004312Z-lvgl-feasibility-verify-one-shot-focus-navigation/run.log
+research/abandoned/runs/20261111T004331Z-lvgl-feasibility-inspect-actual-input-loop/REPORT.md
+research/abandoned/runs/20261111T004331Z-lvgl-feasibility-inspect-actual-input-loop/run.log
+research/abandoned/runs/20261111T004357Z-lvgl-feasibility-verify-one-shot-focus-navigation/REPORT.md
+research/abandoned/runs/20261111T004357Z-lvgl-feasibility-verify-one-shot-focus-navigation/run.log
+research/abandoned/runs/20261111T004427Z-lvgl-feasibility-trace-keypad-polling/REPORT.md
+research/abandoned/runs/20261111T004427Z-lvgl-feasibility-trace-keypad-polling/run.log
+research/abandoned/runs/20261111T004447Z-lvgl-feasibility-verify-lvgl-tick-source/REPORT.md
+research/abandoned/runs/20261111T004447Z-lvgl-feasibility-verify-lvgl-tick-source/run.log
+research/abandoned/runs/20261111T004507Z-lvgl-feasibility-install-sdl-tick-source/REPORT.md
+research/abandoned/runs/20261111T004507Z-lvgl-feasibility-install-sdl-tick-source/run.log
+research/abandoned/runs/20261111T004552Z-lvgl-feasibility-inspect-focus-group-membership/REPORT.md
+research/abandoned/runs/20261111T004552Z-lvgl-feasibility-inspect-focus-group-membership/run.log
+research/abandoned/runs/20261111T004628Z-lvgl-feasibility-map-dpad-to-group-navigation/REPORT.md
+research/abandoned/runs/20261111T004628Z-lvgl-feasibility-map-dpad-to-group-navigation/run.log
+research/abandoned/runs/20261111T004701Z-lvgl-feasibility-measure-runtime-footprint/REPORT.md
+research/abandoned/runs/20261111T004701Z-lvgl-feasibility-measure-runtime-footprint/run.log
+research/abandoned/runs/20261111T004729Z-lvgl-feasibility-measure-runtime-memory/REPORT.md
+research/abandoned/runs/20261111T004729Z-lvgl-feasibility-measure-runtime-memory/run.log
+research/abandoned/runs/20261111T004753Z-lvgl-feasibility-inspect-minimal-build-and-integration/REPORT.md
+research/abandoned/runs/20261111T004753Z-lvgl-feasibility-inspect-minimal-build-and-integration/run.log
+research/abandoned/runs/20261111T004815Z-lvgl-feasibility-audit-minimal-configuration/REPORT.md
+research/abandoned/runs/20261111T004815Z-lvgl-feasibility-audit-minimal-configuration/run.log
+research/abandoned/runs/20261111T004839Z-lvgl-feasibility-build-minimal-widget-configuration/REPORT.md
+research/abandoned/runs/20261111T004839Z-lvgl-feasibility-build-minimal-widget-configuration/run.log
+research/abandoned/runs/20261111T004951Z-lvgl-feasibility-trace-active-configuration/REPORT.md
+research/abandoned/runs/20261111T004951Z-lvgl-feasibility-trace-active-configuration/run.log
+research/abandoned/runs/20261111T005014Z-lvgl-feasibility-enable-required-minimal-widgets/REPORT.md
+research/abandoned/runs/20261111T005014Z-lvgl-feasibility-enable-required-minimal-widgets/run.log
+research/abandoned/runs/20261111T005112Z-lvgl-feasibility-audit-target-and-build-options/REPORT.md
+research/abandoned/runs/20261111T005112Z-lvgl-feasibility-audit-target-and-build-options/run.log
+research/abandoned/runs/20261111T005200Z-lvgl-feasibility-identify-firmware-cross-compile-target/REPORT.md
+research/abandoned/runs/20261111T005200Z-lvgl-feasibility-identify-firmware-cross-compile-target/run.log
+research/abandoned/runs/20261111T005220Z-lvgl-feasibility-verify-device-architecture-and-minimal/REPORT.md
+research/abandoned/runs/20261111T005220Z-lvgl-feasibility-verify-device-architecture-and-minimal/run.log
+research/abandoned/runs/20261111T005306Z-lvgl-feasibility-locate-arm-target-toolchain/REPORT.md
+research/abandoned/runs/20261111T005306Z-lvgl-feasibility-locate-arm-target-toolchain/run.log
+research/abandoned/runs/20261111T005400Z-lvgl-feasibility-inspect-firmware-arm-toolchain-recipe/REPORT.md
+research/abandoned/runs/20261111T005400Z-lvgl-feasibility-inspect-firmware-arm-toolchain-recipe/run.log
+research/abandoned/runs/20261111T005426Z-lvgl-feasibility-inspect-toolchain-generation-and-sdl-b/REPORT.md
+research/abandoned/runs/20261111T005426Z-lvgl-feasibility-inspect-toolchain-generation-and-sdl-b/run.log
+research/abandoned/runs/20261111T005449Z-lvgl-feasibility-verify-active-rendering-engine/REPORT.md
+research/abandoned/runs/20261111T005449Z-lvgl-feasibility-verify-active-rendering-engine/run.log
+research/branding/concepts/pixel-minimal-type-header-2x.png
+research/milestones/first-visible-kid-mode/runs/20261110T192701Z-first-kid-mode-interface/REPORT.md
+research/milestones/first-visible-kid-mode/runs/20261110T192701Z-first-kid-mode-interface/run.log
+research/milestones/first-visible-kid-mode/runs/20261110T192820Z-audit-existing-local-implementation/REPORT.md
+research/milestones/first-visible-kid-mode/runs/20261110T192820Z-audit-existing-local-implementation/run.log
+research/milestones/first-visible-kid-mode/runs/20261110T192944Z-restore-and-validate-application-foundation/REPORT.md
+research/milestones/first-visible-kid-mode/runs/20261110T192944Z-restore-and-validate-application-foundation/run.log
+research/milestones/first-visible-kid-mode/runs/20261110T193116Z-fix-includes-and-validate-sdl-application/REPORT.md
+research/milestones/first-visible-kid-mode/runs/20261110T193116Z-fix-includes-and-validate-sdl-application/run.log
+research/milestones/first-visible-kid-mode/runs/20261110T193618Z-first-visible-kid-mode/REPORT.md
+research/milestones/first-visible-kid-mode/runs/20261110T193618Z-first-visible-kid-mode/run.log
+research/milestones/first-visible-kid-mode/runs/20261110T193701Z-fix-carousel-build-and-validate-preview/REPORT.md
+research/milestones/first-visible-kid-mode/runs/20261110T193701Z-fix-carousel-build-and-validate-preview/run.log
+research/milestones/first-visible-kid-mode/runs/20261110T193816Z-document-and-commit-first-kid-mode-carousel/REPORT.md
+research/milestones/first-visible-kid-mode/runs/20261110T193816Z-document-and-commit-first-kid-mode-carousel/run.log
+research/milestones/first-visible-kid-mode/runs/20261110T231610Z-kid-mode-rounded-corner-restoration/REPORT.md
+research/milestones/first-visible-kid-mode/runs/20261110T231610Z-kid-mode-rounded-corner-restoration/run.log
+research/milestones/first-visible-kid-mode/runs/20261110T232318Z-kid-mode-reference-matched-game-carousel/REPORT.md
+research/milestones/first-visible-kid-mode/runs/20261110T232318Z-kid-mode-reference-matched-game-carousel/run.log
+research/milestones/first-visible-kid-mode/runs/20261110T232448Z-kid-mode-sdl-compatible-carousel-artwork/REPORT.md
+research/milestones/first-visible-kid-mode/runs/20261110T232448Z-kid-mode-sdl-compatible-carousel-artwork/run.log
+research/milestones/first-visible-kid-mode/runs/20261110T232751Z-kid-mode-carousel-layering-and-game-titles/REPORT.md
+research/milestones/first-visible-kid-mode/runs/20261110T232751Z-kid-mode-carousel-layering-and-game-titles/run.log
+research/milestones/game-selection-and-action-screen/runs/20261110T194220Z-game-selection-and-action-screen/REPORT.md
+research/milestones/game-selection-and-action-screen/runs/20261110T194220Z-game-selection-and-action-screen/run.log
+research/milestones/game-selection-and-action-screen/runs/20261110T194332Z-implement-game-selection-and-action-screen/REPORT.md
+research/milestones/game-selection-and-action-screen/runs/20261110T194332Z-implement-game-selection-and-action-screen/run.log
+research/milestones/game-selection-and-action-screen/runs/20261110T194411Z-validate-and-commit-game-action-screen/REPORT.md
+research/milestones/game-selection-and-action-screen/runs/20261110T194411Z-validate-and-commit-game-action-screen/run.log
+research/milestones/kid-mode-reconstruction/LATEST.txt
+research/milestones/kid-mode-reconstruction/runs/20261111T040124Z-audit-kid-mode-reconstruction-baseline/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T040124Z-audit-kid-mode-reconstruction-baseline/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T040154Z-inspect-home-carousel-implementation-interfaces/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T040154Z-inspect-home-carousel-implementation-interfaces/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T040216Z-inspect-ui-rendering-and-texture-ownership/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T040216Z-inspect-ui-rendering-and-texture-ownership/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T174756Z-prepare-home-carousel-sdl-integration/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T174756Z-prepare-home-carousel-sdl-integration/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T174853Z-inspect-corrected-carousel-integration-interfaces/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T174853Z-inspect-corrected-carousel-integration-interfaces/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T174926Z-inspect-renderer-and-screen-integration-lifecycle/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T174926Z-inspect-renderer-and-screen-integration-lifecycle/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T175001Z-inspect-carousel-ui-element-construction-apis/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T175001Z-inspect-carousel-ui-element-construction-apis/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T175057Z-implement-home-carousel-screen-with-sdl-ui-library/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T175057Z-implement-home-carousel-screen-with-sdl-ui-library/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T175118Z-inspect-screen-manager-and-controller-action-integratio/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T175118Z-inspect-screen-manager-and-controller-action-integratio/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T175147Z-implement-ui-library-home-carousel-screen/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T175147Z-implement-ui-library-home-carousel-screen/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T175232Z-inspect-available-coding-agent-tooling/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T175232Z-inspect-available-coding-agent-tooling/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T175309Z-inspect-codex-noninteractive-interface/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T175309Z-inspect-codex-noninteractive-interface/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T175338Z-implement-home-carousel-screen-with-sdl-ui-library/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T175338Z-implement-home-carousel-screen-with-sdl-ui-library/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T175400Z-inspect-opencode-noninteractive-interface/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T175400Z-inspect-opencode-noninteractive-interface/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T175416Z-inspect-opencode-model-availability/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T175416Z-inspect-opencode-model-availability/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T175440Z-implement-home-carousel-screen-with-sdl-ui-library/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T175440Z-implement-home-carousel-screen-with-sdl-ui-library/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T181058Z-polish-home-carousel-presentation-and-add-missing-ui-el/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T181058Z-polish-home-carousel-presentation-and-add-missing-ui-el/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T183913Z-refine-navigation-hints-card-borders-and-game-action-ic/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T183913Z-refine-navigation-hints-card-borders-and-game-action-ic/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T185641Z-inspect-partial-visual-refinement-changes-before-direct/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T185641Z-inspect-partial-visual-refinement-changes-before-direct/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T185724Z-inspect-exact-action-icon-drawing-helpers-for-direct-re/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T185724Z-inspect-exact-action-icon-drawing-helpers-for-direct-re/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T185817Z-apply-focused-navigation-and-game-action-icon-refinemen/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T185817Z-apply-focused-navigation-and-game-action-icon-refinemen/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T190013Z-correct-navigation-arrows-and-finish-border-and-restart/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T190013Z-correct-navigation-arrows-and-finish-border-and-restart/run.log
+research/milestones/kid-mode-reconstruction/runs/20261111T190209Z-build-and-test-polished-kid-mode-home-screen/REPORT.md
+research/milestones/kid-mode-reconstruction/runs/20261111T190209Z-build-and-test-polished-kid-mode-home-screen/run.log
+research/milestones/kiddos-approved-screen-references/LATEST.txt
+research/milestones/kiddos-approved-screen-references/runs/20261112T034339Z-establish-approved-screen-design-references/REPORT.md
+research/milestones/kiddos-approved-screen-references/runs/20261112T034339Z-establish-approved-screen-design-references/run.log
+research/milestones/kiddos-approved-screen-references/runs/20261112T034438Z-commit-approved-screen-reference-assets/REPORT.md
+research/milestones/kiddos-approved-screen-references/runs/20261112T034438Z-commit-approved-screen-reference-assets/run.log
+research/milestones/kiddos-carousel-test-investigation/LATEST.txt
+research/milestones/kiddos-carousel-test-investigation/runs/20261112T011248Z-investigate-existing-carousel-test-failure/REPORT.md
+research/milestones/kiddos-carousel-test-investigation/runs/20261112T011248Z-investigate-existing-carousel-test-failure/run.log
+research/milestones/kiddos-larger-wordmark/LATEST.txt
+research/milestones/kiddos-larger-wordmark/runs/20261112T023043Z-increase-home-screen-kiddos-wordmark-size-while-keeping/REPORT.md
+research/milestones/kiddos-larger-wordmark/runs/20261112T023043Z-increase-home-screen-kiddos-wordmark-size-while-keeping/run.log
+research/milestones/kiddos-selected-game-artwork-review/LATEST.txt
+research/milestones/kiddos-selected-game-artwork-review/runs/20261112T012432Z-review-selected-game-artwork-and-implementation-test-co/REPORT.md
+research/milestones/kiddos-selected-game-artwork-review/runs/20261112T012432Z-review-selected-game-artwork-and-implementation-test-co/run.log
+research/milestones/kiddos-selected-game-audit/LATEST.txt
+research/milestones/kiddos-selected-game-audit/runs/20261112T011147Z-selected-game-screen-discovery-and-design-audit/REPORT.md
+research/milestones/kiddos-selected-game-audit/runs/20261112T011147Z-selected-game-screen-discovery-and-design-audit/run.log
+research/milestones/kiddos-selected-game-controls-test-fix/LATEST.txt
+research/milestones/kiddos-selected-game-controls-test-fix/runs/20261112T023452Z-update-selected-game-test-for-the-play-only-button-labe/REPORT.md
+research/milestones/kiddos-selected-game-controls-test-fix/runs/20261112T023452Z-update-selected-game-test-for-the-play-only-button-labe/run.log
+research/milestones/kiddos-selected-game-controls/LATEST.txt
+research/milestones/kiddos-selected-game-controls/runs/20261112T023433Z-set-selected-game-play-button-and-controller-hint-posit/REPORT.md
+research/milestones/kiddos-selected-game-controls/runs/20261112T023433Z-set-selected-game-play-button-and-controller-hint-posit/run.log
+research/milestones/kiddos-selected-game-design/LATEST.txt
+research/milestones/kiddos-selected-game-design/runs/20261112T011415Z-selected-game-screen-implementation-audit/REPORT.md
+research/milestones/kiddos-selected-game-design/runs/20261112T011415Z-selected-game-screen-implementation-audit/run.log
+research/milestones/kiddos-selected-game-fix/LATEST.txt
+research/milestones/kiddos-selected-game-fix/runs/20261112T012832Z-fix-selected-game-screen-label-declaration-and-verify-b/REPORT.md
+research/milestones/kiddos-selected-game-fix/runs/20261112T012832Z-fix-selected-game-screen-label-declaration-and-verify-b/run.log
+research/milestones/kiddos-selected-game-footer-alignment-2/LATEST.txt
+research/milestones/kiddos-selected-game-footer-alignment-2/runs/20261112T033330Z-lower-selected-game-footer-another-6-pixels/REPORT.md
+research/milestones/kiddos-selected-game-footer-alignment-2/runs/20261112T033330Z-lower-selected-game-footer-another-6-pixels/run.log
+research/milestones/kiddos-selected-game-footer-alignment-3/LATEST.txt
+research/milestones/kiddos-selected-game-footer-alignment-3/runs/20261112T033406Z-lower-selected-game-footer-to-y680/REPORT.md
+research/milestones/kiddos-selected-game-footer-alignment-3/runs/20261112T033406Z-lower-selected-game-footer-to-y680/run.log
+research/milestones/kiddos-selected-game-footer-alignment-4/LATEST.txt
+research/milestones/kiddos-selected-game-footer-alignment-4/runs/20261112T033444Z-fine-tune-selected-game-footer-alignment/REPORT.md
+research/milestones/kiddos-selected-game-footer-alignment-4/runs/20261112T033444Z-fine-tune-selected-game-footer-alignment/run.log
+research/milestones/kiddos-selected-game-footer-alignment-5/LATEST.txt
+research/milestones/kiddos-selected-game-footer-alignment-5/runs/20261112T033532Z-final-one-pixel-footer-adjustment/REPORT.md
+research/milestones/kiddos-selected-game-footer-alignment-5/runs/20261112T033532Z-final-one-pixel-footer-adjustment/run.log
+research/milestones/kiddos-selected-game-footer-alignment/LATEST.txt
+research/milestones/kiddos-selected-game-footer-alignment/runs/20261112T033240Z-lower-selected-game-footer-alignment/REPORT.md
+research/milestones/kiddos-selected-game-footer-alignment/runs/20261112T033240Z-lower-selected-game-footer-alignment/run.log
+research/milestones/kiddos-selected-game-footer-artwork/LATEST.txt
+research/milestones/kiddos-selected-game-footer-artwork/runs/20261112T025152Z-create-matching-selected-game-controller-footer-artwork/REPORT.md
+research/milestones/kiddos-selected-game-footer-artwork/runs/20261112T025152Z-create-matching-selected-game-controller-footer-artwork/run.log
+research/milestones/kiddos-selected-game-footer-cleanup/LATEST.txt
+research/milestones/kiddos-selected-game-footer-cleanup/runs/20261112T023340Z-remove-duplicate-play-hint-from-selected-game-footer/REPORT.md
+research/milestones/kiddos-selected-game-footer-cleanup/runs/20261112T023340Z-remove-duplicate-play-hint-from-selected-game-footer/run.log
+research/milestones/kiddos-selected-game-footer-exact-match/LATEST.txt
+research/milestones/kiddos-selected-game-footer-exact-match/runs/20261112T025916Z-reuse-original-carousel-a-select-artwork-in-selected-ga/REPORT.md
+research/milestones/kiddos-selected-game-footer-exact-match/runs/20261112T025916Z-reuse-original-carousel-a-select-artwork-in-selected-ga/run.log
+research/milestones/kiddos-selected-game-footer-integration/LATEST.txt
+research/milestones/kiddos-selected-game-footer-integration/runs/20261112T025222Z-use-matching-artwork-for-selected-game-footer/REPORT.md
+research/milestones/kiddos-selected-game-footer-integration/runs/20261112T025222Z-use-matching-artwork-for-selected-game-footer/run.log
+research/milestones/kiddos-selected-game-footer-integration/runs/20261112T025337Z-render-matching-controller-hints-on-selected-game-scree/REPORT.md
+research/milestones/kiddos-selected-game-footer-integration/runs/20261112T025337Z-render-matching-controller-hints-on-selected-game-scree/run.log
+research/milestones/kiddos-selected-game-footer-match/LATEST.txt
+research/milestones/kiddos-selected-game-footer-match/runs/20261112T024833Z-match-selected-game-footer-to-carousel-controller-hint-/REPORT.md
+research/milestones/kiddos-selected-game-footer-match/runs/20261112T024833Z-match-selected-game-footer-to-carousel-controller-hint-/run.log
+research/milestones/kiddos-selected-game-footer-style-audit/LATEST.txt
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/REPORT.md
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/REPORT.md
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log
+research/milestones/kiddos-selected-game-footer-warning-fix-2/LATEST.txt
+research/milestones/kiddos-selected-game-footer-warning-fix-2/runs/20261112T025507Z-correct-escaped-newline-literals-in-footer-integration/REPORT.md
+research/milestones/kiddos-selected-game-footer-warning-fix-2/runs/20261112T025507Z-correct-escaped-newline-literals-in-footer-integration/run.log
+research/milestones/kiddos-selected-game-footer-warning-fix-3/LATEST.txt
+research/milestones/kiddos-selected-game-footer-warning-fix-3/runs/20261112T032538Z-fix-newline-warnings-in-original-artwork-integration/REPORT.md
+research/milestones/kiddos-selected-game-footer-warning-fix-3/runs/20261112T032538Z-fix-newline-warnings-in-original-artwork-integration/run.log
+research/milestones/kiddos-selected-game-footer-warning-fix/LATEST.txt
+research/milestones/kiddos-selected-game-footer-warning-fix/runs/20261112T025412Z-fix-footer-integration-compiler-warnings/REPORT.md
+research/milestones/kiddos-selected-game-footer-warning-fix/runs/20261112T025412Z-fix-footer-integration-compiler-warnings/run.log
+research/milestones/kiddos-selected-game-integration-audit/LATEST.txt
+research/milestones/kiddos-selected-game-integration-audit/runs/20261112T012908Z-audit-selected-game-integration-points-and-screen-navig/REPORT.md
+research/milestones/kiddos-selected-game-integration-audit/runs/20261112T012908Z-audit-selected-game-integration-points-and-screen-navig/run.log
+research/milestones/kiddos-selected-game-integration/LATEST.txt
+research/milestones/kiddos-selected-game-integration/runs/20261112T012949Z-connect-selected-game-screen-to-carousel-navigation/REPORT.md
+research/milestones/kiddos-selected-game-integration/runs/20261112T012949Z-connect-selected-game-screen-to-carousel-navigation/run.log
+research/milestones/kiddos-selected-game-preparation/LATEST.txt
+research/milestones/kiddos-selected-game-preparation/runs/20261112T011509Z-prepare-selected-game-screen-implementation/REPORT.md
+research/milestones/kiddos-selected-game-preparation/runs/20261112T011509Z-prepare-selected-game-screen-implementation/run.log
+research/milestones/kiddos-selected-game-review/LATEST.txt
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/REPORT.md
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log
+research/milestones/kiddos-selected-game-runtime/LATEST.txt
+research/milestones/kiddos-selected-game-runtime/runs/20261112T013108Z-runtime-check-carousel-and-selected-game-navigation/REPORT.md
+research/milestones/kiddos-selected-game-runtime/runs/20261112T013108Z-runtime-check-carousel-and-selected-game-navigation/run.log
+research/milestones/kiddos-selected-game-screen/LATEST.txt
+research/milestones/kiddos-selected-game-screen/runs/20261112T012326Z-implement-the-selected-game-screen/REPORT.md
+research/milestones/kiddos-selected-game-screen/runs/20261112T012326Z-implement-the-selected-game-screen/run.log
+research/milestones/kiddos-selected-game-screen/runs/20261112T012548Z-implement-the-selected-game-screen-using-the-existing-u/REPORT.md
+research/milestones/kiddos-selected-game-screen/runs/20261112T012548Z-implement-the-selected-game-screen-using-the-existing-u/run.log
+research/milestones/kiddos-selected-game-ui-footer-cleanup/LATEST.txt
+research/milestones/kiddos-selected-game-ui-footer-cleanup/runs/20261112T033015Z-remove-duplicate-footer-and-verify-ui-image/REPORT.md
+research/milestones/kiddos-selected-game-ui-footer-cleanup/runs/20261112T033015Z-remove-duplicate-footer-and-verify-ui-image/run.log
+research/milestones/kiddos-selected-game-ui-footer-test-fix/LATEST.txt
+research/milestones/kiddos-selected-game-ui-footer-test-fix/runs/20261112T033040Z-correct-selected-game-ui-child-ordering-test/REPORT.md
+research/milestones/kiddos-selected-game-ui-footer-test-fix/runs/20261112T033040Z-correct-selected-game-ui-child-ordering-test/run.log
+research/milestones/kiddos-selected-game-ui-footer/LATEST.txt
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032754Z-connect-selected-game-footer-to-ui-renderer/REPORT.md
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032754Z-connect-selected-game-footer-to-ui-renderer/run.log
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032855Z-render-selected-game-footer-through-ui-image/REPORT.md
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032855Z-render-selected-game-footer-through-ui-image/run.log
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032950Z-finish-selected-game-ui-footer-integration/REPORT.md
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032950Z-finish-selected-game-ui-footer-integration/run.log
+research/milestones/kiddos-selected-game-verification/LATEST.txt
+research/milestones/kiddos-selected-game-verification/runs/20261112T012811Z-verify-selected-game-screen-implementation-and-build-st/REPORT.md
+research/milestones/kiddos-selected-game-verification/runs/20261112T012811Z-verify-selected-game-screen-implementation-and-build-st/run.log
+research/milestones/kiddos-shared-shell-audit/LATEST.txt
+research/milestones/kiddos-shared-shell-audit/runs/20261112T013450Z-inspect-ui-apis-for-persistent-shared-header-and-footer/REPORT.md
+research/milestones/kiddos-shared-shell-audit/runs/20261112T013450Z-inspect-ui-apis-for-persistent-shared-header-and-footer/run.log
+research/milestones/kiddos-shared-shell-build/LATEST.txt
+research/milestones/kiddos-shared-shell-build/runs/20261112T021409Z-implement-application-level-persistent-header-and-foote/REPORT.md
+research/milestones/kiddos-shared-shell-build/runs/20261112T021409Z-implement-application-level-persistent-header-and-foote/run.log
+research/milestones/kiddos-shared-shell-implementation-review/LATEST.txt
+research/milestones/kiddos-shared-shell-implementation-review/runs/20261112T013537Z-inspect-application-rendering-and-assets-before-shared-/REPORT.md
+research/milestones/kiddos-shared-shell-implementation-review/runs/20261112T013537Z-inspect-application-rendering-and-assets-before-shared-/run.log
+research/milestones/kiddos-shared-shell-implementation/LATEST.txt
+research/milestones/kiddos-shared-shell-implementation/runs/20261112T013614Z-implement-persistent-kiddos-header-and-footer-across-sc/REPORT.md
+research/milestones/kiddos-shared-shell-implementation/runs/20261112T013614Z-implement-persistent-kiddos-header-and-footer-across-sc/run.log
+research/milestones/kiddos-shared-shell-implementation/runs/20261112T015634Z-implement-application-level-persistent-kiddos-shell/REPORT.md
+research/milestones/kiddos-shared-shell-implementation/runs/20261112T015634Z-implement-application-level-persistent-kiddos-shell/run.log
+research/milestones/kiddos-shell-layout-cleanup-audit/LATEST.txt
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/REPORT.md
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log
+research/milestones/kiddos-shell-layout-cleanup/LATEST.txt
+research/milestones/kiddos-shell-layout-cleanup/runs/20261112T021611Z-remove-duplicate-screen-chrome-and-fit-content-inside-s/REPORT.md
+research/milestones/kiddos-shell-layout-cleanup/runs/20261112T021611Z-remove-duplicate-screen-chrome-and-fit-content-inside-s/run.log
+research/milestones/kiddos-shell-layout-test-fix/LATEST.txt
+research/milestones/kiddos-shell-layout-test-fix/runs/20261112T021649Z-update-carousel-tests-for-shared-shell-ownership/REPORT.md
+research/milestones/kiddos-shell-layout-test-fix/runs/20261112T021649Z-update-carousel-tests-for-shared-shell-ownership/run.log
+research/milestones/kiddos-shell-layout-test-fix/runs/20261112T021710Z-align-carousel-tests-with-shared-shell-layout/REPORT.md
+research/milestones/kiddos-shell-layout-test-fix/runs/20261112T021710Z-align-carousel-tests-with-shared-shell-layout/run.log
+research/milestones/kiddos-shell-restore-original-style/LATEST.txt
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/REPORT.md
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022808Z-restore-original-carousel-wordmark-status-indicators-an/REPORT.md
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022808Z-restore-original-carousel-wordmark-status-indicators-an/run.log
+research/milestones/kiddos-shell-style-assets-audit/LATEST.txt
+research/milestones/kiddos-shell-style-assets-audit/runs/20261112T022609Z-verify-original-carousel-header-and-footer-assets-for-s/REPORT.md
+research/milestones/kiddos-shell-style-assets-audit/runs/20261112T022609Z-verify-original-carousel-header-and-footer-assets-for-s/run.log
+research/milestones/kiddos-shell-style-regression-audit/LATEST.txt
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/REPORT.md
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log
+research/milestones/kiddos-shell-visual-capture/LATEST.txt
+research/milestones/kiddos-shell-visual-capture/kiddos-desktop-screenshot.png
+research/milestones/kiddos-shell-visual-capture/runs/20261112T021803Z-inspect-available-application-launch-and-screenshot-cap/REPORT.md
+research/milestones/kiddos-shell-visual-capture/runs/20261112T021803Z-inspect-available-application-launch-and-screenshot-cap/run.log
+research/milestones/kiddos-shell-visual-capture/runs/20261112T021851Z-inspect-previous-desktop-preview-procedure/REPORT.md
+research/milestones/kiddos-shell-visual-capture/runs/20261112T021851Z-inspect-previous-desktop-preview-procedure/run.log
+research/milestones/kiddos-shell-visual-capture/runs/20261112T021928Z-inspect-sdl-window-dimensions-and-application-lifecycle/REPORT.md
+research/milestones/kiddos-shell-visual-capture/runs/20261112T021928Z-inspect-sdl-window-dimensions-and-application-lifecycle/run.log
+research/milestones/kiddos-shell-visual-capture/runs/20261112T022009Z-launch-kiddos-and-capture-the-rendered-carousel/REPORT.md
+research/milestones/kiddos-shell-visual-capture/runs/20261112T022009Z-launch-kiddos-and-capture-the-rendered-carousel/run.log
+research/milestones/kiddos-shell-visual-capture/runs/20261112T022042Z-capture-carousel-preview-and-record-image-metadata/REPORT.md
+research/milestones/kiddos-shell-visual-capture/runs/20261112T022042Z-capture-carousel-preview-and-record-image-metadata/run.log
+research/milestones/kiddos-shell-visual-capture/runs/20261112T022103Z-capture-kiddos-preview-through-x11-compatibility/REPORT.md
+research/milestones/kiddos-shell-visual-capture/runs/20261112T022103Z-capture-kiddos-preview-through-x11-compatibility/run.log
+research/milestones/kiddos-shell-visual-capture/runs/20261112T022347Z-add-desktop-screenshot-for-visual-review/REPORT.md
+research/milestones/kiddos-shell-visual-capture/runs/20261112T022347Z-add-desktop-screenshot-for-visual-review/run.log
+research/milestones/kiddos-shell-visual-review/LATEST.txt
+research/milestones/kiddos-shell-visual-review/runs/20261112T021727Z-inspect-shared-shell-and-menu-rendering-integration/REPORT.md
+research/milestones/kiddos-shell-visual-review/runs/20261112T021727Z-inspect-shared-shell-and-menu-rendering-integration/run.log
+research/milestones/kiddos-ttf-lifecycle/LATEST.txt
+research/milestones/kiddos-ttf-lifecycle/runs/20261112T021038Z-initialize-and-shut-down-sdl-ttf-with-the-application-l/REPORT.md
+research/milestones/kiddos-ttf-lifecycle/runs/20261112T021038Z-initialize-and-shut-down-sdl-ttf-with-the-application-l/run.log
+research/milestones/kiddos-ui-library/LATEST.txt
+research/milestones/kiddos-ui-library/runs/20261111T010121Z-kiddos-ui-create-sdl2-foundation/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T010121Z-kiddos-ui-create-sdl2-foundation/run.log
+research/milestones/kiddos-ui-library/runs/20261111T010203Z-kiddos-ui-widget-hierarchy-and-layout/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T010203Z-kiddos-ui-widget-hierarchy-and-layout/run.log
+research/milestones/kiddos-ui-library/runs/20261111T010229Z-kiddos-ui-correct-layout-test-expectations/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T010229Z-kiddos-ui-correct-layout-test-expectations/run.log
+research/milestones/kiddos-ui-library/runs/20261111T010311Z-kiddos-ui-focus-and-directional-navigation/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T010311Z-kiddos-ui-focus-and-directional-navigation/run.log
+research/milestones/kiddos-ui-library/runs/20261111T010439Z-kiddos-ui-reusable-button-widget/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T010439Z-kiddos-ui-reusable-button-widget/run.log
+research/milestones/kiddos-ui-library/runs/20261111T010514Z-kiddos-ui-controller-interaction/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T010514Z-kiddos-ui-controller-interaction/run.log
+research/milestones/kiddos-ui-library/runs/20261111T014010Z-kiddos-ui-sdl-ttf-text-rendering/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T014010Z-kiddos-ui-sdl-ttf-text-rendering/run.log
+research/milestones/kiddos-ui-library/runs/20261111T014054Z-kiddos-ui-sdl-ttf-text-rendering/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T014054Z-kiddos-ui-sdl-ttf-text-rendering/run.log
+research/milestones/kiddos-ui-library/runs/20261111T014140Z-kiddos-ui-labeled-button-rendering/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T014140Z-kiddos-ui-labeled-button-rendering/run.log
+research/milestones/kiddos-ui-library/runs/20261111T014242Z-kiddos-ui-image-and-texture-support/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T014242Z-kiddos-ui-image-and-texture-support/run.log
+research/milestones/kiddos-ui-library/runs/20261111T014300Z-kiddos-ui-image-and-texture-support/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T014300Z-kiddos-ui-image-and-texture-support/run.log
+research/milestones/kiddos-ui-library/runs/20261111T014516Z-kiddos-ui-image-and-texture-support/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T014516Z-kiddos-ui-image-and-texture-support/run.log
+research/milestones/kiddos-ui-library/runs/20261111T014648Z-kiddos-ui-publish-image-support/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T014648Z-kiddos-ui-publish-image-support/run.log
+research/milestones/kiddos-ui-library/runs/20261111T014734Z-kiddos-ui-reusable-label-widget/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T014734Z-kiddos-ui-reusable-label-widget/run.log
+research/milestones/kiddos-ui-library/runs/20261111T014829Z-kiddos-ui-reusable-panel-widget/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T014829Z-kiddos-ui-reusable-panel-widget/run.log
+research/milestones/kiddos-ui-library/runs/20261111T014907Z-kiddos-ui-reusable-progress-bar/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T014907Z-kiddos-ui-reusable-progress-bar/run.log
+research/milestones/kiddos-ui-library/runs/20261111T014953Z-kiddos-ui-controller-toggle-widget/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T014953Z-kiddos-ui-controller-toggle-widget/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015040Z-kiddos-ui-controller-slider-widget/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015040Z-kiddos-ui-controller-slider-widget/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015130Z-kiddos-ui-centralized-theme-system/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015130Z-kiddos-ui-centralized-theme-system/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015226Z-kiddos-ui-slider-small-bounds-fix/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015226Z-kiddos-ui-slider-small-bounds-fix/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015331Z-kiddos-ui-scrollable-list-widget/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015331Z-kiddos-ui-scrollable-list-widget/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015349Z-kiddos-ui-publish-scrollable-list-view/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015349Z-kiddos-ui-publish-scrollable-list-view/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015415Z-kiddos-ui-listview-theme-and-test-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015415Z-kiddos-ui-listview-theme-and-test-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015437Z-kiddos-ui-complete-listview-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015437Z-kiddos-ui-complete-listview-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015505Z-kiddos-ui-repair-listview-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015505Z-kiddos-ui-repair-listview-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015532Z-kiddos-ui-finalize-listview-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015532Z-kiddos-ui-finalize-listview-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015557Z-kiddos-ui-diagnose-cmake-test-nesting/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015557Z-kiddos-ui-diagnose-cmake-test-nesting/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015613Z-kiddos-ui-fix-cmake-test-block/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015613Z-kiddos-ui-fix-cmake-test-block/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015658Z-kiddos-ui-repair-and-complete-listview-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015658Z-kiddos-ui-repair-and-complete-listview-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015806Z-kiddos-ui-reusable-checkbox-widget/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015806Z-kiddos-ui-reusable-checkbox-widget/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015843Z-kiddos-ui-diagnose-checkbox-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015843Z-kiddos-ui-diagnose-checkbox-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T015919Z-kiddos-ui-complete-checkbox-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T015919Z-kiddos-ui-complete-checkbox-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020013Z-kiddos-ui-radiogroup-widget/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020013Z-kiddos-ui-radiogroup-widget/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020033Z-kiddos-ui-diagnose-radiogroup-build-state/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020033Z-kiddos-ui-diagnose-radiogroup-build-state/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020100Z-kiddos-ui-repair-radiogroup-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020100Z-kiddos-ui-repair-radiogroup-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020130Z-kiddos-ui-finish-radiogroup-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020130Z-kiddos-ui-finish-radiogroup-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020156Z-kiddos-ui-inspect-radiogroup-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020156Z-kiddos-ui-inspect-radiogroup-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020219Z-kiddos-ui-repair-radiogroup-controller-and-theme/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020219Z-kiddos-ui-repair-radiogroup-controller-and-theme/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020242Z-kiddos-ui-fix-theme-namespace-and-rebuild-radiogroup/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020242Z-kiddos-ui-fix-theme-namespace-and-rebuild-radiogroup/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020303Z-kiddos-ui-diagnose-radiogroup-selection-test/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020303Z-kiddos-ui-diagnose-radiogroup-selection-test/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020322Z-kiddos-ui-reset-radiogroup-selection-on-options-change/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020322Z-kiddos-ui-reset-radiogroup-selection-on-options-change/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020423Z-kiddos-ui-add-select-widget/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020423Z-kiddos-ui-add-select-widget/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020507Z-kiddos-ui-implement-select-widget/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020507Z-kiddos-ui-implement-select-widget/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020538Z-kiddos-ui-inspect-textinput-integration-points/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020538Z-kiddos-ui-inspect-textinput-integration-points/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020602Z-kiddos-ui-locate-sdl-text-input-event-handling/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020602Z-kiddos-ui-locate-sdl-text-input-event-handling/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020647Z-kiddos-ui-implement-textinput-widget/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020647Z-kiddos-ui-implement-textinput-widget/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020722Z-kiddos-ui-register-and-test-textinput/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020722Z-kiddos-ui-register-and-test-textinput/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020750Z-kiddos-ui-correct-textinput-cursor-test/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020750Z-kiddos-ui-correct-textinput-cursor-test/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020813Z-kiddos-ui-inspect-platform-input-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020813Z-kiddos-ui-inspect-platform-input-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020833Z-kiddos-ui-inspect-textinput-integration-boundaries/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020833Z-kiddos-ui-inspect-textinput-integration-boundaries/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020854Z-kiddos-ui-add-textinput-interaction-adapter/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020854Z-kiddos-ui-add-textinput-interaction-adapter/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020923Z-kiddos-ui-implement-textinput-interaction-adapter/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020923Z-kiddos-ui-implement-textinput-interaction-adapter/run.log
+research/milestones/kiddos-ui-library/runs/20261111T020949Z-kiddos-ui-inspect-sdl-lifecycle-integration/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T020949Z-kiddos-ui-inspect-sdl-lifecycle-integration/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021040Z-kiddos-ui-inspect-platform-event-contract/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021040Z-kiddos-ui-inspect-platform-event-contract/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021059Z-kiddos-ui-define-platform-text-events/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021059Z-kiddos-ui-define-platform-text-events/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021116Z-kiddos-ui-register-platform-text-event-test/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021116Z-kiddos-ui-register-platform-text-event-test/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021131Z-kiddos-ui-register-platform-text-event-test/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021131Z-kiddos-ui-register-platform-text-event-test/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021152Z-kiddos-ui-add-sdl-text-event-translation/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021152Z-kiddos-ui-add-sdl-text-event-translation/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021211Z-kiddos-ui-audit-sdl-event-queue-ownership/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021211Z-kiddos-ui-audit-sdl-event-queue-ownership/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021234Z-kiddos-ui-unify-sdl-event-dispatch/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021234Z-kiddos-ui-unify-sdl-event-dispatch/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021303Z-kiddos-ui-make-sdl-keyboard-dispatch-text-aware/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021303Z-kiddos-ui-make-sdl-keyboard-dispatch-text-aware/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021328Z-kiddos-ui-inspect-sdl-keyboard-repeat-and-test-setup/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021328Z-kiddos-ui-inspect-sdl-keyboard-repeat-and-test-setup/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021404Z-kiddos-ui-test-sdl-text-editing-repeat-policy/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021404Z-kiddos-ui-test-sdl-text-editing-repeat-policy/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021441Z-kiddos-ui-audit-platform-interface-consumers/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021441Z-kiddos-ui-audit-platform-interface-consumers/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021458Z-kiddos-ui-expose-text-input-through-platform-interface/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021458Z-kiddos-ui-expose-text-input-through-platform-interface/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021517Z-kiddos-ui-test-optional-platform-text-input-contract/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021517Z-kiddos-ui-test-optional-platform-text-input-contract/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021535Z-kiddos-ui-prepare-headless-sdl-event-pump-tests/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021535Z-kiddos-ui-prepare-headless-sdl-event-pump-tests/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021555Z-kiddos-ui-extract-sdl-input-event-dispatcher/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021555Z-kiddos-ui-extract-sdl-input-event-dispatcher/run.log
+research/milestones/kiddos-ui-library/runs/20261111T021632Z-kiddos-ui-extract-sdl-text-event-translator/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T021632Z-kiddos-ui-extract-sdl-text-event-translator/run.log
+research/milestones/kiddos-ui-library/runs/20261111T024024Z-kiddos-ui-test-sdl-text-input-event-queue/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T024024Z-kiddos-ui-test-sdl-text-input-event-queue/run.log
+research/milestones/kiddos-ui-library/runs/20261111T024038Z-kiddos-ui-diagnose-sdl-event-queue-test-crash/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T024038Z-kiddos-ui-diagnose-sdl-event-queue-test-crash/run.log
+research/milestones/kiddos-ui-library/runs/20261111T024053Z-kiddos-ui-identify-sdl-event-initialization-crash/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T024053Z-kiddos-ui-identify-sdl-event-initialization-crash/run.log
+research/milestones/kiddos-ui-library/runs/20261111T024114Z-kiddos-ui-inspect-sdl2-compatibility-runtime/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T024114Z-kiddos-ui-inspect-sdl2-compatibility-runtime/run.log
+research/milestones/kiddos-ui-library/runs/20261111T024142Z-kiddos-ui-isolate-sdl-compatibility-initialization/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T024142Z-kiddos-ui-isolate-sdl-compatibility-initialization/run.log
+research/milestones/kiddos-ui-library/runs/20261111T024201Z-kiddos-ui-isolate-sdl-event-queue-operations/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T024201Z-kiddos-ui-isolate-sdl-event-queue-operations/run.log
+research/milestones/kiddos-ui-library/runs/20261111T024219Z-kiddos-ui-use-sdl-peepevents-for-queue-tests/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T024219Z-kiddos-ui-use-sdl-peepevents-for-queue-tests/run.log
+research/milestones/kiddos-ui-library/runs/20261111T024237Z-kiddos-ui-diagnose-sdl-queued-event-retrieval/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T024237Z-kiddos-ui-diagnose-sdl-queued-event-retrieval/run.log
+research/milestones/kiddos-ui-library/runs/20261111T024334Z-kiddos-ui-stabilize-sdl-text-translator-tests/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T024334Z-kiddos-ui-stabilize-sdl-text-translator-tests/run.log
+research/milestones/kiddos-ui-library/runs/20261111T024534Z-kiddos-ui-capture-end-to-end-implementation-baseline/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T024534Z-kiddos-ui-capture-end-to-end-implementation-baseline/run.log
+research/milestones/kiddos-ui-library/runs/20261111T035034Z-audit-application-ui-integration-baseline/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T035034Z-audit-application-ui-integration-baseline/run.log
+research/milestones/kiddos-ui-library/runs/20261111T051637Z-add-image-opacity-and-rounded-panel-support/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261111T051637Z-add-image-opacity-and-rounded-panel-support/run.log
+research/milestones/kiddos-ui-library/runs/20261112T035529Z-ui-architecture-audit-repository-inventory/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261112T035529Z-ui-architecture-audit-repository-inventory/run.log
+research/milestones/kiddos-ui-library/runs/20261112T035601Z-audit-rendering-architecture-and-screen-implementations/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261112T035601Z-audit-rendering-architecture-and-screen-implementations/run.log
+research/milestones/kiddos-ui-library/runs/20261112T035647Z-audit-legacy-rendering-and-reusable-components/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261112T035647Z-audit-legacy-rendering-and-reusable-components/run.log
+research/milestones/kiddos-ui-library/runs/20261112T035740Z-audit-shared-shell-and-screen-composition/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261112T035740Z-audit-shared-shell-and-screen-composition/run.log
+research/milestones/kiddos-ui-library/runs/20261112T035811Z-audit-resource-ownership-and-build-coverage/REPORT.md
+research/milestones/kiddos-ui-library/runs/20261112T035811Z-audit-resource-ownership-and-build-coverage/run.log
+research/milestones/kiddos-visual-regression-audit/LATEST.txt
+research/milestones/kiddos-visual-regression-audit/runs/20261112T013258Z-audit-missing-selected-game-and-carousel-visual-element/REPORT.md
+research/milestones/kiddos-visual-regression-audit/runs/20261112T013258Z-audit-missing-selected-game-and-carousel-visual-element/run.log
+research/milestones/kiddos-visual-regression-audit/runs/20261112T015542Z-audit-missing-selected-game-and-carousel-visual-element/REPORT.md
+research/milestones/kiddos-visual-regression-audit/runs/20261112T015542Z-audit-missing-selected-game-and-carousel-visual-element/run.log
+research/milestones/kiddos-wordmark-size-adjustment/LATEST.txt
+research/milestones/kiddos-wordmark-size-adjustment/runs/20261112T023142Z-slightly-enlarge-the-home-screen-wordmark-again/REPORT.md
+research/milestones/kiddos-wordmark-size-adjustment/runs/20261112T023142Z-slightly-enlarge-the-home-screen-wordmark-again/run.log
+research/milestones/visual-fidelity-pass/LATEST.txt
+research/milestones/visual-fidelity-pass/runs/20261110T195331Z-visual-fidelity-pass-baseline-audit/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261110T195331Z-visual-fidelity-pass-baseline-audit/run.log
+research/milestones/visual-fidelity-pass/runs/20261110T195412Z-visual-fidelity-pass-asset-inventory/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261110T195412Z-visual-fidelity-pass-asset-inventory/run.log
+research/milestones/visual-fidelity-pass/runs/20261110T195450Z-visual-fidelity-pass-rendering-capabilities/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261110T195450Z-visual-fidelity-pass-rendering-capabilities/run.log
+research/milestones/visual-fidelity-pass/runs/20261110T195920Z-visual-fidelity-pass-artwork-and-typography/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261110T195920Z-visual-fidelity-pass-artwork-and-typography/run.log
+research/milestones/visual-fidelity-pass/runs/20261110T201009Z-visual-fidelity-pass-artwork-and-typography-retry/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261110T201009Z-visual-fidelity-pass-artwork-and-typography-retry/run.log
+research/milestones/visual-fidelity-pass/runs/20261110T232051Z-kid-mode-carousel-visual-fidelity-audit/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261110T232051Z-kid-mode-carousel-visual-fidelity-audit/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T190943Z-add-retro-pixel-pocket-visual-reference/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T190943Z-add-retro-pixel-pocket-visual-reference/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T191353Z-inspect-home-screen-for-complete-visual-redesign/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T191353Z-inspect-home-screen-for-complete-visual-redesign/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T191658Z-redesign-kid-mode-home-screen-with-minimal-animated-car/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T191658Z-redesign-kid-mode-home-screen-with-minimal-animated-car/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T192445Z-diagnose-latest-home-screen-redesign-attempt/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T192445Z-diagnose-latest-home-screen-redesign-attempt/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T192521Z-launch-redesigned-kid-mode-home-screen-for-visual-revie/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T192521Z-launch-redesigned-kid-mode-home-screen-for-visual-revie/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T192932Z-inventory-supported-platforms-and-game-artwork-sources/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T192932Z-inventory-supported-platforms-and-game-artwork-sources/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T193438Z-create-game-artwork-reference-index-and-sample-hardware/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T193438Z-create-game-artwork-reference-index-and-sample-hardware/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T193618Z-commit-artwork-and-hardware-palette-references/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T193618Z-commit-artwork-and-hardware-palette-references/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T193703Z-inspect-pending-home-screen-redesign-changes/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T193703Z-inspect-pending-home-screen-redesign-changes/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T193748Z-trace-home-screen-integration-and-artwork-loading/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T193748Z-trace-home-screen-integration-and-artwork-loading/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T194101Z-apply-hardware-palette-and-selected-artwork-highlight/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T194101Z-apply-hardware-palette-and-selected-artwork-highlight/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T194913Z-apply-hardware-palette-and-selected-artwork-highlight/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T194913Z-apply-hardware-palette-and-selected-artwork-highlight/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T195644Z-inspect-carousel-highlight-before-removing-outline/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T195644Z-inspect-carousel-highlight-before-removing-outline/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T195746Z-replace-selected-artwork-outline-with-subtle-backlight/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T195746Z-replace-selected-artwork-outline-with-subtle-backlight/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T200133Z-use-electric-blue-background-and-remove-artwork-tile/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T200133Z-use-electric-blue-background-and-remove-artwork-tile/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T200209Z-set-actual-screen-background-to-electric-cobalt-blue/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T200209Z-set-actual-screen-background-to-electric-cobalt-blue/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T200331Z-set-sdl-clear-color-to-cobalt-blue/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T200331Z-set-sdl-clear-color-to-cobalt-blue/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T200435Z-brighten-background-to-vivid-electric-blue/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T200435Z-brighten-background-to-vivid-electric-blue/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T200559Z-tune-background-to-clear-console-blue/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T200559Z-tune-background-to-clear-console-blue/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T200700Z-restore-original-near-black-navy-background/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T200700Z-restore-original-near-black-navy-background/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T200800Z-inspect-parent-menu-hint-and-carousel-sizing/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T200800Z-inspect-parent-menu-hint-and-carousel-sizing/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T201053Z-emphasize-selected-game-and-clarify-parent-menu-shortcu/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T201053Z-emphasize-selected-game-and-clarify-parent-menu-shortcu/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T201121Z-check-svg-artwork-generation-support/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T201121Z-check-svg-artwork-generation-support/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T201211Z-enlarge-center-artwork-and-clarify-parent-menu-controls/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T201211Z-enlarge-center-artwork-and-clarify-parent-menu-controls/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T201757Z-add-both-cartridge-artwork-options/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T201757Z-add-both-cartridge-artwork-options/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T202014Z-inspect-both-cartridge-designs-for-carousel-integration/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T202014Z-inspect-both-cartridge-designs-for-carousel-integration/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T202047Z-inspect-carousel-image-loading-and-asset-build-rules/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T202047Z-inspect-carousel-image-loading-and-asset-build-rules/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T202120Z-inspect-physical-controls-for-cartridge-style-preview/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T202120Z-inspect-physical-controls-for-cartridge-style-preview/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T202238Z-locate-action-definitions-for-cartridge-preview-toggle/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T202238Z-locate-action-definitions-for-cartridge-preview-toggle/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T202302Z-inspect-cartridge-preview-integration-points/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T202302Z-inspect-cartridge-preview-integration-points/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T202343Z-add-x-button-cartridge-design-comparison/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T202343Z-add-x-button-cartridge-design-comparison/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T202409Z-verify-cartridge-toggle-behavior-and-action-mapping/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T202409Z-verify-cartridge-toggle-behavior-and-action-mapping/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T203718Z-complete-cartridge-toggle-action-mapping-coverage/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T203718Z-complete-cartridge-toggle-action-mapping-coverage/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T203742Z-test-cartridge-preview-style-cycling/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T203742Z-test-cartridge-preview-style-cycling/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T204518Z-inspect-nine-cartridge-source-sheet-layouts/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T204518Z-inspect-nine-cartridge-source-sheet-layouts/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T204608Z-inspect-cartridge-sheets-without-optional-dependencies/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T204608Z-inspect-cartridge-sheets-without-optional-dependencies/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T204650Z-extract-individual-cartridge-artwork-and-inspect-carous/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T204650Z-extract-individual-cartridge-artwork-and-inspect-carous/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T204718Z-inspect-nine-item-carousel-and-action-screen-dependenci/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T204718Z-inspect-nine-item-carousel-and-action-screen-dependenci/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T204825Z-build-nine-cartridge-three-slot-carousel-preview/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T204825Z-build-nine-cartridge-three-slot-carousel-preview/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T204905Z-fix-carousel-compile-errors-and-validate-nine-item-prev/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T204905Z-fix-carousel-compile-errors-and-validate-nine-item-prev/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T204958Z-remove-duplicate-carousel-geometry-and-validate-nine-it/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T204958Z-remove-duplicate-carousel-geometry-and-validate-nine-it/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T205434Z-inspect-current-cartridge-screen-and-navigation-impleme/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T205434Z-inspect-current-cartridge-screen-and-navigation-impleme/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T205525Z-capture-exact-local-carousel-implementation-for-safe-re/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T205525Z-capture-exact-local-carousel-implementation-for-safe-re/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T205612Z-fix-three-visible-cartridge-slots-and-validate-nine-ite/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T205612Z-fix-three-visible-cartridge-slots-and-validate-nine-ite/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T205804Z-inspect-cartridge-style-toggle-and-carousel-animation-t/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T205804Z-inspect-cartridge-style-toggle-and-carousel-animation-t/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T205848Z-inspect-keyboard-event-handling-and-carousel-navigation/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T205848Z-inspect-keyboard-event-handling-and-carousel-navigation/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T205928Z-default-to-cartridge-option-2-and-improve-carousel-anim/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T205928Z-default-to-cartridge-option-2-and-improve-carousel-anim/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T210122Z-inspect-milestone-runner-and-failed-run/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T210122Z-inspect-milestone-runner-and-failed-run/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T210201Z-inspect-current-carousel-implementation-before-version-/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T210201Z-inspect-current-carousel-implementation-before-version-/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T210317Z-implement-version-2-default-and-slower-sliding-carousel/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T210317Z-implement-version-2-default-and-slower-sliding-carousel/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T211719Z-inspect-carousel-animation-patch-boundaries/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T211719Z-inspect-carousel-animation-patch-boundaries/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T212127Z-default-option-2-and-smooth-slower-cartridge-carousel/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T212127Z-default-option-2-and-smooth-slower-cartridge-carousel/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T212221Z-update-cartridge-style-test-for-option-2-default/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T212221Z-update-cartridge-style-test-for-option-2-default/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T212257Z-align-cartridge-style-tests-with-option-2-default/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T212257Z-align-cartridge-style-tests-with-option-2-default/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T214626Z-audit-initial-four-platform-scope/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T214626Z-audit-initial-four-platform-scope/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T214804Z-inspect-four-platform-carousel-assets-and-ordering/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T214804Z-inspect-four-platform-carousel-assets-and-ordering/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T214903Z-limit-initial-kiddos-carousel-to-four-platforms/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T214903Z-limit-initial-kiddos-carousel-to-four-platforms/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T214929Z-update-carousel-tests-for-four-platform-wraparound/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T214929Z-update-carousel-tests-for-four-platform-wraparound/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T215018Z-fix-four-platform-carousel-boundary-tests/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T215018Z-fix-four-platform-carousel-boundary-tests/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T215151Z-inspect-carousel-selection-boundary-behavior/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T215151Z-inspect-carousel-selection-boundary-behavior/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T215358Z-correct-invalid-carousel-selection-test/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T215358Z-correct-invalid-carousel-selection-test/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T215435Z-audit-remaining-nine-platform-assumptions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T215435Z-audit-remaining-nine-platform-assumptions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T215507Z-inspect-four-platform-cartridge-presentation/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T215507Z-inspect-four-platform-cartridge-presentation/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T215718Z-inspect-platform-identity-integration-points/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T215718Z-inspect-platform-identity-integration-points/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T215739Z-add-initial-kiddos-platform-catalog/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T215739Z-add-initial-kiddos-platform-catalog/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T220342Z-inspect-game-box-art-replacement-assets/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T220342Z-inspect-game-box-art-replacement-assets/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T220408Z-inspect-game-cover-asset-dimensions-and-conventions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T220408Z-inspect-game-cover-asset-dimensions-and-conventions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T221318Z-download-four-prototype-game-box-covers/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T221318Z-download-four-prototype-game-box-covers/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T221345Z-inspect-carousel-box-art-integration-points/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T221345Z-inspect-carousel-box-art-integration-points/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T221359Z-inspect-carousel-box-art-integration-points/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T221359Z-inspect-carousel-box-art-integration-points/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T221420Z-inspect-cartridge-toggle-action-definitions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T221420Z-inspect-cartridge-toggle-action-definitions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T221851Z-replace-cartridge-carousel-with-four-game-covers/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T221851Z-replace-cartridge-carousel-with-four-game-covers/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T221941Z-update-carousel-background-pixel-assertion-for-box-art/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T221941Z-update-carousel-background-pixel-assertion-for-box-art/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T221954Z-launch-box-art-carousel-preview/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T221954Z-launch-box-art-carousel-preview/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T222318Z-inspect-selected-game-cover-layout/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T222318Z-inspect-selected-game-cover-layout/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T222343Z-enlarge-and-center-selected-game-cover/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T222343Z-enlarge-and-center-selected-game-cover/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T222435Z-preview-enlarged-centered-game-cover/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T222435Z-preview-enlarged-centered-game-cover/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T222651Z-match-highlight-to-enlarged-game-cover/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T222651Z-match-highlight-to-enlarged-game-cover/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T222824Z-inspect-carousel-highlight-implementation/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T222824Z-inspect-carousel-highlight-implementation/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T222909Z-remove-carousel-highlight-completely/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T222909Z-remove-carousel-highlight-completely/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T222928Z-update-carousel-structure-test-after-highlight-removal/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T222928Z-update-carousel-structure-test-after-highlight-removal/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T223105Z-explore-retro-kiddos-home-screen-branding-concepts/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T223105Z-explore-retro-kiddos-home-screen-branding-concepts/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T223218Z-inspect-retro-kiddos-branding-assets-and-home-screen-co/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T223218Z-inspect-retro-kiddos-branding-assets-and-home-screen-co/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T223504Z-inspect-current-kiddos-wordmark-and-artwork-tooling/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T223504Z-inspect-current-kiddos-wordmark-and-artwork-tooling/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T223541Z-inspect-kiddos-wordmark-source-and-rendering-support/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T223541Z-inspect-kiddos-wordmark-source-and-rendering-support/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T223615Z-capture-wordmark-rendering-and-font-environment/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T223615Z-capture-wordmark-rendering-and-font-environment/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T223747Z-create-three-retro-kiddos-branding-concepts/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T223747Z-create-three-retro-kiddos-branding-concepts/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T223941Z-explore-three-classic-gaming-branding-variations/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T223941Z-explore-three-classic-gaming-branding-variations/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T224055Z-explore-three-classic-gaming-branding-variations/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T224055Z-explore-three-classic-gaming-branding-variations/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T224213Z-refine-classic-pixel-branding-into-three-variations/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T224213Z-refine-classic-pixel-branding-into-three-variations/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T224308Z-refine-pixel-minimal-typography-and-detailing/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T224308Z-refine-pixel-minimal-typography-and-detailing/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T224358Z-preview-pixel-minimal-type-in-home-screen-header/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T224358Z-preview-pixel-minimal-type-in-home-screen-header/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T230034Z-preview-pixel-minimal-type-in-running-kiddos-applicatio/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T230034Z-preview-pixel-minimal-type-in-running-kiddos-applicatio/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T230159Z-preview-pixel-minimal-type-at-correct-header-size/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T230159Z-preview-pixel-minimal-type-at-correct-header-size/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T230528Z-inspect-approved-pixel-minimal-type-artwork-for-native-/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T230528Z-inspect-approved-pixel-minimal-type-artwork-for-native-/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T230720Z-preview-wider-pixel-minimal-type-logo-in-home-screen/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T230720Z-preview-wider-pixel-minimal-type-logo-in-home-screen/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T230747Z-preview-wider-approved-pixel-minimal-type-logo/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T230747Z-preview-wider-approved-pixel-minimal-type-logo/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T232228Z-preview-approved-pixel-minimal-type-logo-in-home-screen/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T232228Z-preview-approved-pixel-minimal-type-logo-in-home-screen/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T232814Z-use-approved-2x-pixel-minimal-type-header-artwork-at-la/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T232814Z-use-approved-2x-pixel-minimal-type-header-artwork-at-la/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T232847Z-enlarge-approved-pixel-minimal-type-header-area/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T232847Z-enlarge-approved-pixel-minimal-type-header-area/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T233416Z-locate-browse-navigation-label/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T233416Z-locate-browse-navigation-label/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T233506Z-inspect-navigation-hint-artwork-pipeline/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T233506Z-inspect-navigation-hint-artwork-pipeline/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T233528Z-change-browse-hint-to-outward-arrows/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T233528Z-change-browse-hint-to-outward-arrows/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T233632Z-correct-browse-arrow-directions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T233632Z-correct-browse-arrow-directions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T233950Z-swap-select-and-parent-menu-hint-positions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T233950Z-swap-select-and-parent-menu-hint-positions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T234014Z-swap-select-and-parent-menu-hint-positions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T234014Z-swap-select-and-parent-menu-hint-positions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T234042Z-swap-select-and-parent-menu-hint-positions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T234042Z-swap-select-and-parent-menu-hint-positions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T234122Z-swap-select-and-parent-menu-hint-positions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T234122Z-swap-select-and-parent-menu-hint-positions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T234402Z-swap-select-and-parent-menu-hint-positions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T234402Z-swap-select-and-parent-menu-hint-positions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T234507Z-swap-select-and-parent-menu-hint-positions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T234507Z-swap-select-and-parent-menu-hint-positions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T234554Z-swap-select-and-parent-menu-artwork-positions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T234554Z-swap-select-and-parent-menu-artwork-positions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T234729Z-swap-a-select-and-parent-menu-positions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T234729Z-swap-a-select-and-parent-menu-positions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T234846Z-swap-a-select-and-parent-menu-positions/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T234846Z-swap-a-select-and-parent-menu-positions/run.log
+research/milestones/visual-fidelity-pass/runs/20261111T235134Z-center-parent-menu-hint-and-right-align-a-select/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261111T235134Z-center-parent-menu-hint-and-right-align-a-select/run.log
+research/milestones/visual-fidelity-pass/runs/20261112T000516Z-center-parent-menu-hint-and-right-align-a-select/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261112T000516Z-center-parent-menu-hint-and-right-align-a-select/run.log
+research/milestones/visual-fidelity-pass/runs/20261112T000609Z-place-parent-menu-center-and-a-select-right/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261112T000609Z-place-parent-menu-center-and-a-select-right/run.log
+research/milestones/visual-fidelity-pass/runs/20261112T000908Z-put-plus-between-start-and-select/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261112T000908Z-put-plus-between-start-and-select/run.log
+research/milestones/visual-fidelity-pass/runs/20261112T001228Z-move-browse-group-to-bottom-left/REPORT.md
+research/milestones/visual-fidelity-pass/runs/20261112T001228Z-move-browse-group-to-bottom-left/run.log
+research/milestones/workflow-setup/LATEST.txt
+research/milestones/workflow-setup/runs/20261110T192000Z-milestone-workflow-installation-test/REPORT.md
+research/milestones/workflow-setup/runs/20261110T192000Z-milestone-workflow-installation-test/run.log
+research/milestones/workflow-setup/runs/20261110T192149Z-milestone-workflow-verification/REPORT.md
+research/milestones/workflow-setup/runs/20261110T192149Z-milestone-workflow-verification/run.log
+research/milestones/workflow-setup/runs/20261111T033433Z-milestone-runner-end-to-end-smoke-test/REPORT.md
+research/milestones/workflow-setup/runs/20261111T033433Z-milestone-runner-end-to-end-smoke-test/run.log
+src/app/application.cpp
+src/app/home_carousel_screen.cpp
+src/main.cpp
+src/platform/sdl_platform.cpp
+src/ui/button.cpp
+src/ui/checkbox.cpp
+src/ui/controller.cpp
+src/ui/focus.cpp
+src/ui/font.cpp
+src/ui/image.cpp
+src/ui/label.cpp
+src/ui/layout.cpp
+src/ui/list_view.cpp
+src/ui/panel.cpp
+src/ui/progress_bar.cpp
+src/ui/radio_group.cpp
+src/ui/renderer.cpp
+src/ui/screen.cpp
+src/ui/screen_manager.cpp
+src/ui/select.cpp
+src/ui/slider.cpp
+src/ui/text.cpp
+src/ui/text_input.cpp
+src/ui/text_input_interaction.cpp
+src/ui/texture.cpp
+src/ui/theme.cpp
+src/ui/toggle.cpp
+tests/app_home_carousel_screen_test.cpp
+tests/app_ui_action_mapping_test.cpp
+tests/platform_sdl_keyboard_policy_test.cpp
+tests/platform_sdl_text_input_translator_test.cpp
+tests/platform_text_input_event_test.cpp
+tests/platform_text_input_interface_test.cpp
+tests/ui_button_test.cpp
+tests/ui_checkbox_test.cpp
+tests/ui_controller_test.cpp
+tests/ui_focus_test.cpp
+tests/ui_geometry_test.cpp
+tests/ui_image_test.cpp
+tests/ui_label_test.cpp
+tests/ui_layout_test.cpp
+tests/ui_list_view_test.cpp
+tests/ui_panel_test.cpp
+tests/ui_progress_bar_test.cpp
+tests/ui_radio_group_test.cpp
+tests/ui_renderer_test.cpp
+tests/ui_screen_manager_test.cpp
+tests/ui_select_test.cpp
+tests/ui_slider_test.cpp
+tests/ui_text_input_interaction_test.cpp
+tests/ui_text_input_test.cpp
+tests/ui_theme_test.cpp
+tests/ui_toggle_test.cpp
+tools/kiddos-milestone
+
+===== ROOT DIRECTORY =====
+total 24
+drwxr-xr-x 1 hawk hawk   248 Nov 11 22:43 .
+drwx------ 1 hawk hawk   724 Nov 11 21:51 ..
+drwxr-xr-x 1 hawk hawk    36 Nov  9 14:16 assets
+drwxr-xr-x 1 hawk hawk  1796 Nov 11 22:35 build
+-rw-r--r-- 1 hawk hawk 10892 Nov 11 21:14 CMakeLists.txt
+drwxr-xr-x 1 hawk hawk     0 Nov  9 14:16 config
+-rw-r--r-- 1 hawk hawk  1344 Nov 10 11:50 CONTRIBUTING.md
+drwxr-xr-x 1 hawk hawk    18 Nov 11 22:43 design
+drwxr-xr-x 1 hawk hawk   866 Nov 11 14:09 docs
+drwxr-xr-x 1 hawk hawk   166 Nov 11 23:22 .git
+-rw-r--r-- 1 hawk hawk    84 Nov  9 14:16 .gitignore
+drwxr-xr-x 1 hawk hawk    12 Nov 10 14:01 include
+drwxr-xr-x 1 hawk hawk    82 Nov 10 14:40 logs
+drwxr-xr-x 1 hawk hawk    28 Nov  9 14:16 platform
+-rw-r--r-- 1 hawk hawk  2608 Nov 10 22:02 README.md
+drwxr-xr-x 1 hawk hawk   104 Nov 11 17:37 research
+drwxr-xr-x 1 hawk hawk    42 Nov 10 20:01 src
+drwxr-xr-x 1 hawk hawk    30 Nov 10 22:44 tasks
+drwxr-xr-x 1 hawk hawk  1310 Nov 11 20:27 tests
+drwxr-xr-x 1 hawk hawk    32 Nov 10 22:47 tools
+
+===== DOCUMENTATION INVENTORY =====
+docs/ARCHITECTURE.md
+docs/DEVELOPMENT_LOG.md
+docs/DEVELOPMENT_STATUS.md
+docs/FIRMWARE_AUDIT.md
+docs/GAME_ACTION_SCREEN.md
+docs/GAME_LIBRARY.md
+docs/HARDWARE.md
+docs/INPUT_CONTROLS.md
+docs/KIDDOS_UI_LIBRARY.md
+docs/KID_MODE_CAROUSEL_PROTOTYPE.md
+docs/LOW_BATTERY_PROTECTION.md
+docs/MEDIA_MANAGER.md
+docs/PRODUCT_SPECIFICATION.md
+docs/PROJECT_VISION.md
+docs/reference/game-artwork-sources.md
+docs/reference/retro-pixel-pocket.jpg
+docs/reference/retro-pixel-pocket-palette.md
+docs/SAVE_STATE_SYSTEM.md
+docs/UI_DESIGN.md
+docs/ui-image-support.md
+docs/ui-label-support.md
+docs/ui-list-view.md
+docs/ui-panel-support.md
+docs/ui-progress-bar.md
+docs/ui-slider.md
+docs/ui-theme.md
+docs/ui-toggle.md
+
+===== RESEARCH INVENTORY =====
+research/abandoned/runs/20261110T233212Z-ui-framework-feasibility-codebase-audit/REPORT.md
+research/abandoned/runs/20261110T233212Z-ui-framework-feasibility-codebase-audit/run.log
+research/abandoned/runs/20261110T233347Z-ui-framework-feasibility-framework-source-audit/REPORT.md
+research/abandoned/runs/20261110T233347Z-ui-framework-feasibility-framework-source-audit/run.log
+research/abandoned/runs/20261110T234612Z-rmlui-feasibility-repository-inspection/REPORT.md
+research/abandoned/runs/20261110T234612Z-rmlui-feasibility-repository-inspection/run.log
+research/abandoned/runs/20261110T234645Z-rmlui-feasibility-graphics-backend-check/REPORT.md
+research/abandoned/runs/20261110T234645Z-rmlui-feasibility-graphics-backend-check/run.log
+research/abandoned/runs/20261110T234900Z-rmlui-feasibility-sdl-renderer-source-verification/REPORT.md
+research/abandoned/runs/20261110T234900Z-rmlui-feasibility-sdl-renderer-source-verification/run.log
+research/abandoned/runs/20261110T234949Z-lvgl-feasibility-sdl2-and-ui-capability-audit/REPORT.md
+research/abandoned/runs/20261110T234949Z-lvgl-feasibility-sdl2-and-ui-capability-audit/run.log
+research/abandoned/runs/20261110T235035Z-lvgl-feasibility-sdl-controller-bridge-and-configuratio/REPORT.md
+research/abandoned/runs/20261110T235035Z-lvgl-feasibility-sdl-controller-bridge-and-configuratio/run.log
+research/abandoned/runs/20261110T235853Z-lvgl-feasibility-isolated-sdl-prototype/REPORT.md
+research/abandoned/runs/20261110T235853Z-lvgl-feasibility-isolated-sdl-prototype/run.log
+research/abandoned/runs/20261111T000149Z-lvgl-feasibility-prototype-api-verification/REPORT.md
+research/abandoned/runs/20261111T000149Z-lvgl-feasibility-prototype-api-verification/run.log
+research/abandoned/runs/20261111T000717Z-lvgl-feasibility-isolated-sdl-prototype/REPORT.md
+research/abandoned/runs/20261111T000717Z-lvgl-feasibility-isolated-sdl-prototype/run.log
+research/abandoned/runs/20261111T001117Z-lvgl-feasibility-prototype-build-fixes/REPORT.md
+research/abandoned/runs/20261111T001117Z-lvgl-feasibility-prototype-build-fixes/run.log
+research/abandoned/runs/20261111T001230Z-lvgl-feasibility-correct-prototype-callback/REPORT.md
+research/abandoned/runs/20261111T001230Z-lvgl-feasibility-correct-prototype-callback/run.log
+research/abandoned/runs/20261111T001253Z-lvgl-feasibility-desktop-visual-runtime/REPORT.md
+research/abandoned/runs/20261111T001253Z-lvgl-feasibility-desktop-visual-runtime/run.log
+research/abandoned/runs/20261111T001329Z-lvgl-feasibility-screenshot-capture/REPORT.md
+research/abandoned/runs/20261111T001329Z-lvgl-feasibility-screenshot-capture/run.log
+research/abandoned/runs/20261111T001617Z-lvgl-feasibility-x11-visual-capture/REPORT.md
+research/abandoned/runs/20261111T001617Z-lvgl-feasibility-x11-visual-capture/run.log
+research/abandoned/runs/20261111T001649Z-lvgl-feasibility-controller-interaction-test/REPORT.md
+research/abandoned/runs/20261111T001649Z-lvgl-feasibility-controller-interaction-test/run.log
+research/abandoned/runs/20261111T001728Z-lvgl-feasibility-input-and-runtime-audit/REPORT.md
+research/abandoned/runs/20261111T001728Z-lvgl-feasibility-input-and-runtime-audit/run.log
+research/abandoned/runs/20261111T001744Z-lvgl-feasibility-prototype-interaction-completion/REPORT.md
+research/abandoned/runs/20261111T001744Z-lvgl-feasibility-prototype-interaction-completion/run.log
+research/abandoned/runs/20261111T001803Z-lvgl-feasibility-complete-controller-key-mapping/REPORT.md
+research/abandoned/runs/20261111T001803Z-lvgl-feasibility-complete-controller-key-mapping/run.log
+research/abandoned/runs/20261111T001826Z-lvgl-feasibility-target-platform-integration-audit/REPORT.md
+research/abandoned/runs/20261111T001826Z-lvgl-feasibility-target-platform-integration-audit/run.log
+research/abandoned/runs/20261111T001846Z-lvgl-feasibility-existing-sdl-renderer-adapter/REPORT.md
+research/abandoned/runs/20261111T001846Z-lvgl-feasibility-existing-sdl-renderer-adapter/run.log
+research/abandoned/runs/20261111T001911Z-lvgl-feasibility-custom-sdl-renderer-adapter-prototype/REPORT.md
+research/abandoned/runs/20261111T001911Z-lvgl-feasibility-custom-sdl-renderer-adapter-prototype/run.log
+research/abandoned/runs/20261111T001933Z-lvgl-feasibility-sdl-renderer-adapter-implementation/REPORT.md
+research/abandoned/runs/20261111T001933Z-lvgl-feasibility-sdl-renderer-adapter-implementation/run.log
+research/abandoned/runs/20261111T001950Z-lvgl-feasibility-locate-public-display-api/REPORT.md
+research/abandoned/runs/20261111T001950Z-lvgl-feasibility-locate-public-display-api/run.log
+research/abandoned/runs/20261111T002022Z-lvgl-feasibility-display-api-and-flush-contract/REPORT.md
+research/abandoned/runs/20261111T002022Z-lvgl-feasibility-display-api-and-flush-contract/run.log
+research/abandoned/runs/20261111T002218Z-lvgl-feasibility-build-custom-sdl-renderer-adapter/REPORT.md
+research/abandoned/runs/20261111T002218Z-lvgl-feasibility-build-custom-sdl-renderer-adapter/run.log
+research/abandoned/runs/20261111T002422Z-lvgl-feasibility-fix-and-build-sdl-adapter/REPORT.md
+research/abandoned/runs/20261111T002422Z-lvgl-feasibility-fix-and-build-sdl-adapter/run.log
+research/abandoned/runs/20261111T002624Z-lvgl-feasibility-run-custom-sdl-adapter/REPORT.md
+research/abandoned/runs/20261111T002624Z-lvgl-feasibility-run-custom-sdl-adapter/run.log
+research/abandoned/runs/20261111T002701Z-lvgl-feasibility-capture-adapter-on-desktop/REPORT.md
+research/abandoned/runs/20261111T002701Z-lvgl-feasibility-capture-adapter-on-desktop/run.log
+research/abandoned/runs/20261111T002726Z-lvgl-feasibility-diagnose-adapter-crash/REPORT.md
+research/abandoned/runs/20261111T002726Z-lvgl-feasibility-diagnose-adapter-crash/run.log
+research/abandoned/runs/20261111T002753Z-lvgl-feasibility-correct-custom-renderer-configuration/REPORT.md
+research/abandoned/runs/20261111T002753Z-lvgl-feasibility-correct-custom-renderer-configuration/run.log
+research/abandoned/runs/20261111T002823Z-lvgl-feasibility-resolve-renderer-configuration/REPORT.md
+research/abandoned/runs/20261111T002823Z-lvgl-feasibility-resolve-renderer-configuration/run.log
+research/abandoned/runs/20261111T002843Z-lvgl-feasibility-build-minimal-software-adapter/REPORT.md
+research/abandoned/runs/20261111T002843Z-lvgl-feasibility-build-minimal-software-adapter/run.log
+research/abandoned/runs/20261111T003213Z-lvgl-feasibility-run-custom-sdl-adapter/REPORT.md
+research/abandoned/runs/20261111T003213Z-lvgl-feasibility-run-custom-sdl-adapter/run.log
+research/abandoned/runs/20261111T003241Z-lvgl-feasibility-capture-custom-adapter-ui/REPORT.md
+research/abandoned/runs/20261111T003241Z-lvgl-feasibility-capture-custom-adapter-ui/run.log
+research/abandoned/runs/20261111T003302Z-lvgl-feasibility-inspect-controller-input-apis/REPORT.md
+research/abandoned/runs/20261111T003302Z-lvgl-feasibility-inspect-controller-input-apis/run.log
+research/abandoned/runs/20261111T003325Z-lvgl-feasibility-add-sdl-controller-navigation/REPORT.md
+research/abandoned/runs/20261111T003325Z-lvgl-feasibility-add-sdl-controller-navigation/run.log
+research/abandoned/runs/20261111T003344Z-lvgl-feasibility-fix-controller-build/REPORT.md
+research/abandoned/runs/20261111T003344Z-lvgl-feasibility-fix-controller-build/run.log
+research/abandoned/runs/20261111T003513Z-lvgl-feasibility-verify-focus-navigation/REPORT.md
+research/abandoned/runs/20261111T003513Z-lvgl-feasibility-verify-focus-navigation/run.log
+research/abandoned/runs/20261111T003537Z-lvgl-feasibility-verify-focus-navigation/REPORT.md
+research/abandoned/runs/20261111T003537Z-lvgl-feasibility-verify-focus-navigation/run.log
+research/abandoned/runs/20261111T003547Z-lvgl-feasibility-make-controller-focus-visible/REPORT.md
+research/abandoned/runs/20261111T003547Z-lvgl-feasibility-make-controller-focus-visible/run.log
+research/abandoned/runs/20261111T003723Z-lvgl-feasibility-inspect-input-test-harness/REPORT.md
+research/abandoned/runs/20261111T003723Z-lvgl-feasibility-inspect-input-test-harness/run.log
+research/abandoned/runs/20261111T003757Z-lvgl-feasibility-verify-keypad-focus-movement/REPORT.md
+research/abandoned/runs/20261111T003757Z-lvgl-feasibility-verify-keypad-focus-movement/run.log
+research/abandoned/runs/20261111T003927Z-lvgl-feasibility-diagnose-keypad-event-delivery/REPORT.md
+research/abandoned/runs/20261111T003927Z-lvgl-feasibility-diagnose-keypad-event-delivery/run.log
+research/abandoned/runs/20261111T004028Z-lvgl-feasibility-correct-keypad-press-state/REPORT.md
+research/abandoned/runs/20261111T004028Z-lvgl-feasibility-correct-keypad-press-state/run.log
+research/abandoned/runs/20261111T004155Z-lvgl-feasibility-trace-keypad-input-pipeline/REPORT.md
+research/abandoned/runs/20261111T004155Z-lvgl-feasibility-trace-keypad-input-pipeline/run.log
+research/abandoned/runs/20261111T004244Z-lvgl-feasibility-clean-keypad-test-harness/REPORT.md
+research/abandoned/runs/20261111T004244Z-lvgl-feasibility-clean-keypad-test-harness/run.log
+research/abandoned/runs/20261111T004312Z-lvgl-feasibility-verify-one-shot-focus-navigation/REPORT.md
+research/abandoned/runs/20261111T004312Z-lvgl-feasibility-verify-one-shot-focus-navigation/run.log
+research/abandoned/runs/20261111T004331Z-lvgl-feasibility-inspect-actual-input-loop/REPORT.md
+research/abandoned/runs/20261111T004331Z-lvgl-feasibility-inspect-actual-input-loop/run.log
+research/abandoned/runs/20261111T004357Z-lvgl-feasibility-verify-one-shot-focus-navigation/REPORT.md
+research/abandoned/runs/20261111T004357Z-lvgl-feasibility-verify-one-shot-focus-navigation/run.log
+research/abandoned/runs/20261111T004427Z-lvgl-feasibility-trace-keypad-polling/REPORT.md
+research/abandoned/runs/20261111T004427Z-lvgl-feasibility-trace-keypad-polling/run.log
+research/abandoned/runs/20261111T004447Z-lvgl-feasibility-verify-lvgl-tick-source/REPORT.md
+research/abandoned/runs/20261111T004447Z-lvgl-feasibility-verify-lvgl-tick-source/run.log
+research/abandoned/runs/20261111T004507Z-lvgl-feasibility-install-sdl-tick-source/REPORT.md
+research/abandoned/runs/20261111T004507Z-lvgl-feasibility-install-sdl-tick-source/run.log
+research/abandoned/runs/20261111T004552Z-lvgl-feasibility-inspect-focus-group-membership/REPORT.md
+research/abandoned/runs/20261111T004552Z-lvgl-feasibility-inspect-focus-group-membership/run.log
+research/abandoned/runs/20261111T004628Z-lvgl-feasibility-map-dpad-to-group-navigation/REPORT.md
+research/abandoned/runs/20261111T004628Z-lvgl-feasibility-map-dpad-to-group-navigation/run.log
+research/abandoned/runs/20261111T004701Z-lvgl-feasibility-measure-runtime-footprint/REPORT.md
+research/abandoned/runs/20261111T004701Z-lvgl-feasibility-measure-runtime-footprint/run.log
+research/abandoned/runs/20261111T004729Z-lvgl-feasibility-measure-runtime-memory/REPORT.md
+research/abandoned/runs/20261111T004729Z-lvgl-feasibility-measure-runtime-memory/run.log
+research/abandoned/runs/20261111T004753Z-lvgl-feasibility-inspect-minimal-build-and-integration/REPORT.md
+research/abandoned/runs/20261111T004753Z-lvgl-feasibility-inspect-minimal-build-and-integration/run.log
+research/abandoned/runs/20261111T004815Z-lvgl-feasibility-audit-minimal-configuration/REPORT.md
+research/abandoned/runs/20261111T004815Z-lvgl-feasibility-audit-minimal-configuration/run.log
+research/abandoned/runs/20261111T004839Z-lvgl-feasibility-build-minimal-widget-configuration/REPORT.md
+research/abandoned/runs/20261111T004839Z-lvgl-feasibility-build-minimal-widget-configuration/run.log
+research/abandoned/runs/20261111T004951Z-lvgl-feasibility-trace-active-configuration/REPORT.md
+research/abandoned/runs/20261111T004951Z-lvgl-feasibility-trace-active-configuration/run.log
+research/abandoned/runs/20261111T005014Z-lvgl-feasibility-enable-required-minimal-widgets/REPORT.md
+research/abandoned/runs/20261111T005014Z-lvgl-feasibility-enable-required-minimal-widgets/run.log
+research/abandoned/runs/20261111T005112Z-lvgl-feasibility-audit-target-and-build-options/REPORT.md
+research/abandoned/runs/20261111T005112Z-lvgl-feasibility-audit-target-and-build-options/run.log
+research/abandoned/runs/20261111T005200Z-lvgl-feasibility-identify-firmware-cross-compile-target/REPORT.md
+research/abandoned/runs/20261111T005200Z-lvgl-feasibility-identify-firmware-cross-compile-target/run.log
+research/abandoned/runs/20261111T005220Z-lvgl-feasibility-verify-device-architecture-and-minimal/REPORT.md
+research/abandoned/runs/20261111T005220Z-lvgl-feasibility-verify-device-architecture-and-minimal/run.log
+research/abandoned/runs/20261111T005306Z-lvgl-feasibility-locate-arm-target-toolchain/REPORT.md
+research/abandoned/runs/20261111T005306Z-lvgl-feasibility-locate-arm-target-toolchain/run.log
+research/abandoned/runs/20261111T005400Z-lvgl-feasibility-inspect-firmware-arm-toolchain-recipe/REPORT.md
+research/abandoned/runs/20261111T005400Z-lvgl-feasibility-inspect-firmware-arm-toolchain-recipe/run.log
+research/abandoned/runs/20261111T005426Z-lvgl-feasibility-inspect-toolchain-generation-and-sdl-b/REPORT.md
+research/abandoned/runs/20261111T005426Z-lvgl-feasibility-inspect-toolchain-generation-and-sdl-b/run.log
+research/abandoned/runs/20261111T005449Z-lvgl-feasibility-verify-active-rendering-engine/REPORT.md
+research/abandoned/runs/20261111T005449Z-lvgl-feasibility-verify-active-rendering-engine/run.log
+research/branding/concepts/classic-arcade.png
+research/branding/concepts/classic-arcade.svg
+research/branding/concepts/classic-console.png
+research/branding/concepts/classic-console.svg
+research/branding/concepts/classic-gaming-comparison.png
+research/branding/concepts/classic-gaming.png
+research/branding/concepts/classic-pixel.png
+research/branding/concepts/classic-pixel-refinements.png
+research/branding/concepts/classic-pixel.svg
+research/branding/concepts/comparison.png
+research/branding/concepts/modern-retro.png
+research/branding/concepts/pixel-bold.png
+research/branding/concepts/pixel-bold.svg
+research/branding/concepts/pixel-minimal-accent.png
+research/branding/concepts/pixel-minimal-accent.svg
+research/branding/concepts/pixel-minimal-detail-comparison.png
+research/branding/concepts/pixel-minimal-frame.png
+research/branding/concepts/pixel-minimal-frame.svg
+research/branding/concepts/pixel-minimal.png
+research/branding/concepts/pixel-minimal.svg
+research/branding/concepts/pixel-minimal-type-header-2x.png
+research/branding/concepts/pixel-minimal-type-header.svg
+research/branding/concepts/pixel-minimal-type-home-header.png
+research/branding/concepts/pixel-minimal-type.png
+research/branding/concepts/pixel-minimal-type.svg
+research/branding/concepts/pixel-premium.png
+research/branding/concepts/pixel-premium.svg
+research/branding/concepts/playful-premium.png
+research/firmware/manufacturer/RetroPixel_Pocket/Dockerfile
+research/firmware/manufacturer/RetroPixel_Pocket/.dockerignore
+research/firmware/manufacturer/RetroPixel_Pocket/.gitignore
+research/firmware/manufacturer/RetroPixel_Pocket/Makefile
+research/firmware/manufacturer/RetroPixel_Pocket/版本记录.txt
+research/kiddos-ui/foundation-audit-20261110-195705.log
+research/milestones/kiddos-approved-screen-references/LATEST.txt
+research/milestones/kiddos-carousel-test-investigation/LATEST.txt
+research/milestones/kiddos-larger-wordmark/LATEST.txt
+research/milestones/kiddos-selected-game-artwork-review/LATEST.txt
+research/milestones/kiddos-selected-game-audit/LATEST.txt
+research/milestones/kiddos-selected-game-controls/LATEST.txt
+research/milestones/kiddos-selected-game-controls-test-fix/LATEST.txt
+research/milestones/kiddos-selected-game-design/LATEST.txt
+research/milestones/kiddos-selected-game-fix/LATEST.txt
+research/milestones/kiddos-selected-game-footer-alignment-2/LATEST.txt
+research/milestones/kiddos-selected-game-footer-alignment-3/LATEST.txt
+research/milestones/kiddos-selected-game-footer-alignment-4/LATEST.txt
+research/milestones/kiddos-selected-game-footer-alignment-5/LATEST.txt
+research/milestones/kiddos-selected-game-footer-alignment/LATEST.txt
+research/milestones/kiddos-selected-game-footer-artwork/LATEST.txt
+research/milestones/kiddos-selected-game-footer-cleanup/LATEST.txt
+research/milestones/kiddos-selected-game-footer-exact-match/LATEST.txt
+research/milestones/kiddos-selected-game-footer-integration/LATEST.txt
+research/milestones/kiddos-selected-game-footer-match/LATEST.txt
+research/milestones/kiddos-selected-game-footer-style-audit/LATEST.txt
+research/milestones/kiddos-selected-game-footer-warning-fix-2/LATEST.txt
+research/milestones/kiddos-selected-game-footer-warning-fix-3/LATEST.txt
+research/milestones/kiddos-selected-game-footer-warning-fix/LATEST.txt
+research/milestones/kiddos-selected-game-integration-audit/LATEST.txt
+research/milestones/kiddos-selected-game-integration/LATEST.txt
+research/milestones/kiddos-selected-game-preparation/LATEST.txt
+research/milestones/kiddos-selected-game-review/LATEST.txt
+research/milestones/kiddos-selected-game-runtime/LATEST.txt
+research/milestones/kiddos-selected-game-screen/LATEST.txt
+research/milestones/kiddos-selected-game-ui-footer-cleanup/LATEST.txt
+research/milestones/kiddos-selected-game-ui-footer/LATEST.txt
+research/milestones/kiddos-selected-game-ui-footer-test-fix/LATEST.txt
+research/milestones/kiddos-selected-game-verification/LATEST.txt
+research/milestones/kiddos-shared-shell-audit/LATEST.txt
+research/milestones/kiddos-shared-shell-build/LATEST.txt
+research/milestones/kiddos-shared-shell-implementation/LATEST.txt
+research/milestones/kiddos-shared-shell-implementation-review/LATEST.txt
+research/milestones/kiddos-shell-layout-cleanup-audit/LATEST.txt
+research/milestones/kiddos-shell-layout-cleanup/LATEST.txt
+research/milestones/kiddos-shell-layout-test-fix/LATEST.txt
+research/milestones/kiddos-shell-restore-original-style/LATEST.txt
+research/milestones/kiddos-shell-style-assets-audit/LATEST.txt
+research/milestones/kiddos-shell-style-regression-audit/LATEST.txt
+research/milestones/kiddos-shell-visual-capture/kiddos-desktop-screenshot.png
+research/milestones/kiddos-shell-visual-capture/LATEST.txt
+research/milestones/kiddos-shell-visual-review/LATEST.txt
+research/milestones/kiddos-ttf-lifecycle/LATEST.txt
+research/milestones/kiddos-ui-library/LATEST.txt
+research/milestones/kiddos-visual-regression-audit/LATEST.txt
+research/milestones/kiddos-wordmark-size-adjustment/LATEST.txt
+research/milestones/kid-mode-reconstruction/LATEST.txt
+research/milestones/kid-mode-reconstruction/README.md
+research/milestones/visual-fidelity-pass/LATEST.txt
+research/milestones/workflow-setup/LATEST.txt
+
+===== MILESTONE TOOL =====
+#!/bin/bash
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+if [ -z "$ROOT" ]; then
+    echo "ERROR: Not inside a Git repository."
+    exit 1
+fi
+
+cd "$ROOT" || exit 1
+
+MILESTONE="$1"
+TITLE="$2"
+
+if [ -z "$MILESTONE" ] || [ -z "$TITLE" ]; then
+    echo "Usage: ./tools/kiddos-milestone <milestone-slug> 'Run title' <<'TASK'"
+    exit 1
+fi
+
+if ! [[ "$MILESTONE" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+    echo "ERROR: Milestone slug must contain lowercase letters, numbers, and hyphens only."
+    exit 1
+fi
+
+MILESTONE_DIR="research/milestones/$MILESTONE"
+
+if [ ! -d "$MILESTONE_DIR" ]; then
+    echo "ERROR: Milestone does not exist: $MILESTONE_DIR"
+    exit 1
+fi
+
+BRANCH="$(git branch --show-current)"
+if [ -z "$BRANCH" ]; then
+    echo "ERROR: No current Git branch."
+    exit 1
+fi
+
+if ! git remote get-url origin >/dev/null 2>&1; then
+    echo "ERROR: GitHub origin remote unavailable."
+    exit 1
+fi
+
+STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+SLUG="$(printf '%s' "$TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g; s/--*/-/g; s/^-//; s/-$//' | cut -c1-55)"
+
+if [ -z "$SLUG" ]; then
+    echo "ERROR: Title must contain letters or numbers."
+    exit 1
+fi
+
+RUN="$MILESTONE_DIR/runs/${STAMP}-${SLUG}"
+LOG="$RUN/run.log"
+REPORT="$RUN/REPORT.md"
+LATEST="$MILESTONE_DIR/LATEST.txt"
+TASKFILE="$(mktemp)"
+
+if [ -t 0 ]; then
+    echo "ERROR: Supply commands through a TASK heredoc."
+    rm -f "$TASKFILE"
+    exit 1
+fi
+
+mkdir -p "$RUN"
+cat > "$TASKFILE"
+
+echo "Running: $TITLE"
+echo "Milestone: $MILESTONE"
+echo "Output: $RUN"
+echo "Full output is being captured."
+
+bash "$TASKFILE" > "$LOG" 2>&1
+TASK_RC=$?
+rm -f "$TASKFILE"
+
+LINES="$(wc -l < "$LOG")"
+SIZE="$(du -h "$LOG" | cut -f1)"
+
+if [ "$TASK_RC" -eq 0 ]; then
+    RESULT="SUCCESS"
+else
+    RESULT="FAILED (exit code $TASK_RC)"
+fi
+
+cat > "$REPORT" <<EOF
+# Milestone Run Report
+
+- Milestone: $MILESTONE
+- Title: $TITLE
+- Timestamp (UTC): $STAMP
+- Result: $RESULT
+- Branch: $BRANCH
+- Log: $LOG
+- Lines captured: $LINES
+- Log size: $SIZE
+
+Full terminal output is available in run.log.
+EOF
+
+printf '%s\n' "$RUN" > "$LATEST"
+
+git add -f -- "$RUN" "$LATEST"
+git add -- tools/kiddos-milestone
+
+git commit -m "chore: record milestone run - $SLUG"
+COMMIT_RC=$?
+
+if [ "$COMMIT_RC" -ne 0 ]; then
+    echo "ERROR: Could not commit milestone results."
+    exit 2
+fi
+
+git push origin "$BRANCH"
+PUSH_RC=$?
+
+if [ "$PUSH_RC" -ne 0 ]; then
+    echo "ERROR: GitHub upload failed. Results remain local."
+    exit 3
+fi
+
+echo
+echo "======================================"
+echo "MILESTONE REPORT"
+echo "======================================"
+echo "Milestone: $MILESTONE"
+echo "Title: $TITLE"
+echo "Result: $RESULT"
+echo "Output lines: $LINES"
+echo "GitHub upload: VERIFIED"
+echo "Report: $REPORT"
+echo "Full log: $LOG"
+echo
+echo "LAST 20 LINES:"
+tail -n 20 "$LOG"
+echo
+echo "======================================"
+
+exit "$TASK_RC"
+
+===== MILESTONE AND TASK INFRASTRUCTURE =====
+tools/kiddos-milestone
+
+===== UI ARCHITECTURE AUDIT REFERENCES =====
+research/milestones/kiddos-ui-library/runs/20261112T035529Z-ui-architecture-audit-repository-inventory/run.log:344:./src/app/shared_shell.cpp:25:bool SharedShell::initialize(SDL_Renderer* renderer) {
+research/milestones/kiddos-ui-library/runs/20261112T035529Z-ui-architecture-audit-repository-inventory/REPORT.md:4:- Title: UI Architecture Audit - Repository Inventory
+research/milestones/kiddos-ui-library/runs/20261112T035601Z-audit-rendering-architecture-and-screen-implementations/run.log:311:    21	SharedShell::~SharedShell() {
+research/milestones/kiddos-ui-library/runs/20261112T035601Z-audit-rendering-architecture-and-screen-implementations/run.log:315:    25	bool SharedShell::initialize(SDL_Renderer* renderer) {
+research/milestones/kiddos-ui-library/runs/20261112T035601Z-audit-rendering-architecture-and-screen-implementations/run.log:349:    59	void SharedShell::draw_text(const char* text, int x, int y) {
+research/milestones/kiddos-ui-library/runs/20261112T035601Z-audit-rendering-architecture-and-screen-implementations/run.log:364:    74	void SharedShell::render_header() {
+research/milestones/kiddos-ui-library/runs/20261112T035601Z-audit-rendering-architecture-and-screen-implementations/run.log:429:   139	void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-ui-library/runs/20261112T035601Z-audit-rendering-architecture-and-screen-implementations/run.log:439:   149	void SharedShell::reset() noexcept {
+research/milestones/kiddos-ui-library/runs/20261112T035601Z-audit-rendering-architecture-and-screen-implementations/run.log:494:    37	    app::SharedShell shell;
+research/milestones/kiddos-ui-library/runs/20261112T035601Z-audit-rendering-architecture-and-screen-implementations/run.log:579:   122	void Application::render(app::SharedShell& shell) {
+research/milestones/kiddos-ui-library/runs/20261112T035647Z-audit-legacy-rendering-and-reusable-components/run.log:409:src/app/shared_shell.cpp:74:void SharedShell::render_header() {
+research/milestones/kiddos-ui-library/runs/20261112T035647Z-audit-legacy-rendering-and-reusable-components/run.log:410:src/app/shared_shell.cpp:139:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-ui-library/runs/20261112T035647Z-audit-legacy-rendering-and-reusable-components/run.log:770:     8	class SharedShell final {
+research/milestones/kiddos-ui-library/runs/20261112T035647Z-audit-legacy-rendering-and-reusable-components/run.log:772:    10	    SharedShell() = default;
+research/milestones/kiddos-ui-library/runs/20261112T035647Z-audit-legacy-rendering-and-reusable-components/run.log:773:    11	    ~SharedShell();
+research/milestones/kiddos-ui-library/runs/20261112T035647Z-audit-legacy-rendering-and-reusable-components/run.log:775:    13	    SharedShell(const SharedShell&) = delete;
+research/milestones/kiddos-ui-library/runs/20261112T035647Z-audit-legacy-rendering-and-reusable-components/run.log:776:    14	    SharedShell& operator=(const SharedShell&) = delete;
+research/milestones/kiddos-ui-library/runs/20261112T035647Z-audit-legacy-rendering-and-reusable-components/REPORT.md:4:- Title: Audit - Legacy Rendering and Reusable Components
+research/milestones/kiddos-ui-library/runs/20261112T035740Z-audit-shared-shell-and-screen-composition/run.log:38:    37	    app::SharedShell shell;
+research/milestones/kiddos-ui-library/runs/20261112T035740Z-audit-shared-shell-and-screen-composition/run.log:123:   122	void Application::render(app::SharedShell& shell) {
+research/milestones/kiddos-ui-library/runs/20261112T035740Z-audit-shared-shell-and-screen-composition/run.log:159:    21	SharedShell::~SharedShell() {
+research/milestones/kiddos-ui-library/runs/20261112T035740Z-audit-shared-shell-and-screen-composition/run.log:163:    25	bool SharedShell::initialize(SDL_Renderer* renderer) {
+research/milestones/kiddos-ui-library/runs/20261112T035740Z-audit-shared-shell-and-screen-composition/run.log:197:    59	void SharedShell::draw_text(const char* text, int x, int y) {
+research/milestones/kiddos-ui-library/runs/20261112T035740Z-audit-shared-shell-and-screen-composition/run.log:212:    74	void SharedShell::render_header() {
+research/milestones/kiddos-ui-library/runs/20261112T035740Z-audit-shared-shell-and-screen-composition/run.log:277:   139	void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-ui-library/runs/20261112T035740Z-audit-shared-shell-and-screen-composition/run.log:287:   149	void SharedShell::reset() noexcept {
+research/milestones/kiddos-ui-library/runs/20261112T035811Z-audit-resource-ownership-and-build-coverage/run.log:572:    10	namespace app { class SharedShell; }
+research/milestones/kiddos-ui-library/runs/20261112T035811Z-audit-resource-ownership-and-build-coverage/run.log:588:    26	    void render(app::SharedShell& shell);
+research/milestones/kiddos-ui-library/runs/20261112T035811Z-audit-resource-ownership-and-build-coverage/run.log:609:    37	    app::SharedShell shell;
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:432:class SharedShell final {
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:434:    SharedShell() = default;
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:435:    ~SharedShell();
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:437:    SharedShell(const SharedShell&) = delete;
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:438:    SharedShell& operator=(const SharedShell&) = delete;
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:472:SharedShell::~SharedShell() {
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:476:bool SharedShell::initialize(SDL_Renderer* renderer) {
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:503:void SharedShell::draw_text(const char* text, int x, int y) {
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:518:void SharedShell::render_header() {
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:551:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:570:void SharedShell::reset() noexcept {
+research/milestones/kiddos-shell-layout-cleanup-audit/runs/20261112T021544Z-inspect-screen-layouts-and-tests-before-removing-duplic/run.log:595:121:void Application::render(app::SharedShell& shell) {
+research/milestones/kiddos-shell-visual-review/runs/20261112T021727Z-inspect-shared-shell-and-menu-rendering-integration/run.log:20:SharedShell::~SharedShell() {
+research/milestones/kiddos-shell-visual-review/runs/20261112T021727Z-inspect-shared-shell-and-menu-rendering-integration/run.log:24:bool SharedShell::initialize(SDL_Renderer* renderer) {
+research/milestones/kiddos-shell-visual-review/runs/20261112T021727Z-inspect-shared-shell-and-menu-rendering-integration/run.log:51:void SharedShell::draw_text(const char* text, int x, int y) {
+research/milestones/kiddos-shell-visual-review/runs/20261112T021727Z-inspect-shared-shell-and-menu-rendering-integration/run.log:66:void SharedShell::render_header() {
+research/milestones/kiddos-shell-visual-review/runs/20261112T021727Z-inspect-shared-shell-and-menu-rendering-integration/run.log:99:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-shell-visual-review/runs/20261112T021727Z-inspect-shared-shell-and-menu-rendering-integration/run.log:118:void SharedShell::reset() noexcept {
+research/milestones/kiddos-shell-visual-review/runs/20261112T021727Z-inspect-shared-shell-and-menu-rendering-integration/run.log:143:121:void Application::render(app::SharedShell& shell) {
+research/milestones/kiddos-shell-visual-capture/runs/20261112T021928Z-inspect-sdl-window-dimensions-and-application-lifecycle/run.log:100:36-    app::SharedShell shell;
+research/milestones/kiddos-shell-visual-capture/runs/20261112T021928Z-inspect-sdl-window-dimensions-and-application-lifecycle/run.log:185:121-void Application::render(app::SharedShell& shell) {
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:9:class SharedShell final {
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:11:    SharedShell() = default;
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:12:    ~SharedShell();
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:14:    SharedShell(const SharedShell&) = delete;
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:15:    SharedShell& operator=(const SharedShell&) = delete;
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:49:SharedShell::~SharedShell() {
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:53:bool SharedShell::initialize(SDL_Renderer* renderer) {
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:80:void SharedShell::draw_text(const char* text, int x, int y) {
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:95:void SharedShell::render_header() {
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:128:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:147:void SharedShell::reset() noexcept {
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:206:src/app/shared_shell.cpp:65:void SharedShell::render_header() {
+research/milestones/kiddos-shell-style-regression-audit/runs/20261112T022538Z-compare-original-carousel-header-and-footer-styling-wit/run.log:221:src/app/shared_shell.cpp:98:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log:20:SharedShell::~SharedShell() {
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log:24:bool SharedShell::initialize(SDL_Renderer* renderer) {
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log:51:void SharedShell::draw_text(const char* text, int x, int y) {
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log:66:void SharedShell::render_header() {
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log:99:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log:118:void SharedShell::reset() noexcept {
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log:140:class SharedShell final {
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log:142:    SharedShell() = default;
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log:143:    ~SharedShell();
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log:145:    SharedShell(const SharedShell&) = delete;
+research/milestones/kiddos-shell-restore-original-style/runs/20261112T022633Z-restore-original-carousel-header-and-footer-visual-asse/run.log:146:    SharedShell& operator=(const SharedShell&) = delete;
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:137:class SharedShell final {
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:139:    SharedShell() = default;
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:140:    ~SharedShell();
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:142:    SharedShell(const SharedShell&) = delete;
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:143:    SharedShell& operator=(const SharedShell&) = delete;
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:180:SharedShell::~SharedShell() {
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:184:bool SharedShell::initialize(SDL_Renderer* renderer) {
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:218:void SharedShell::draw_text(const char* text, int x, int y) {
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:233:void SharedShell::render_header() {
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:298:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:322:void SharedShell::reset() noexcept {
+research/milestones/kiddos-selected-game-review/runs/20261112T023309Z-audit-selected-game-screen-layout-styling-and-navigatio/run.log:371:src/app/shared_shell.cpp:139:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:37:139:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:61:163-void SharedShell::reset() noexcept {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:100:SharedShell::~SharedShell() {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:104:bool SharedShell::initialize(SDL_Renderer* renderer) {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:138:void SharedShell::draw_text(const char* text, int x, int y) {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:153:void SharedShell::render_header() {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:218:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:242:void SharedShell::reset() noexcept {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:350:class SharedShell final {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:352:    SharedShell() = default;
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:353:    ~SharedShell();
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:355:    SharedShell(const SharedShell&) = delete;
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T023634Z-compare-selected-game-footer-against-the-original-carou/run.log:356:    SharedShell& operator=(const SharedShell&) = delete;
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:37:139:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:61:163-void SharedShell::reset() noexcept {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:100:SharedShell::~SharedShell() {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:104:bool SharedShell::initialize(SDL_Renderer* renderer) {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:138:void SharedShell::draw_text(const char* text, int x, int y) {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:153:void SharedShell::render_header() {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:218:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:242:void SharedShell::reset() noexcept {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:350:class SharedShell final {
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:352:    SharedShell() = default;
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:353:    ~SharedShell();
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:355:    SharedShell(const SharedShell&) = delete;
+research/milestones/kiddos-selected-game-footer-style-audit/runs/20261112T024557Z-compare-selected-game-footer-against-the-original-carou/run.log:356:    SharedShell& operator=(const SharedShell&) = delete;
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032754Z-connect-selected-game-footer-to-ui-renderer/run.log:12:namespace app { class SharedShell; }
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032754Z-connect-selected-game-footer-to-ui-renderer/run.log:28:    void render(app::SharedShell& shell);
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032754Z-connect-selected-game-footer-to-ui-renderer/run.log:70:    app::SharedShell shell;
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032754Z-connect-selected-game-footer-to-ui-renderer/run.log:155:void Application::render(app::SharedShell& shell) {
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032855Z-render-selected-game-footer-through-ui-image/run.log:7:src/app/shared_shell.cpp:139:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032950Z-finish-selected-game-ui-footer-integration/run.log:5:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-selected-game-ui-footer/runs/20261112T032950Z-finish-selected-game-ui-footer-integration/run.log:20:void SharedShell::reset() noexcept {
+research/milestones/kiddos-selected-game-ui-footer-cleanup/runs/20261112T033015Z-remove-duplicate-footer-and-verify-ui-image/run.log:1:Updated SharedShell footer; carousel rendering retained.
+research/milestones/kiddos-selected-game-ui-footer-cleanup/runs/20261112T033015Z-remove-duplicate-footer-and-verify-ui-image/run.log:9:void SharedShell::render_footer(bool selected_game) {
+research/milestones/kiddos-selected-game-ui-footer-cleanup/runs/20261112T033015Z-remove-duplicate-footer-and-verify-ui-image/run.log:19:void SharedShell::reset() noexcept {
+
+===== APPROVED SCREEN REFERENCES =====
+design/reference/approved-screens/GameCarouselScreen.png: PNG image data, 720 x 720, 8-bit/color RGBA, non-interlaced
+d7bdd004ce6b9440ca615f29cc1c0efa531dcaf51db5d857fc302705502c9bf4  design/reference/approved-screens/GameCarouselScreen.png
+design/reference/approved-screens/SelectedGameScreen.png: PNG image data, 720 x 720, 8-bit/color RGBA, non-interlaced
+86ea1cc478cfe6926c4904e42bdad80597d6236137afbcf02bf4d882bef81ecd  design/reference/approved-screens/SelectedGameScreen.png
+
+===== GITHUB ISSUE AND MILESTONE INVENTORY =====
+--- Issues ---
+
+--- Milestones ---
+
+===== END AUDIT =====
