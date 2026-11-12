@@ -1,0 +1,426 @@
+===== EXISTING COMPONENT TEST PATTERNS =====
+tests/app_home_carousel_screen_test.cpp
+tests/app_selected_game_screen_test.cpp
+tests/app_ui_action_mapping_test.cpp
+tests/platform_sdl_keyboard_policy_test.cpp
+tests/platform_sdl_text_input_translator_test.cpp
+tests/platform_text_input_event_test.cpp
+tests/platform_text_input_interface_test.cpp
+tests/ui_button_test.cpp
+tests/ui_checkbox_test.cpp
+tests/ui_controller_test.cpp
+tests/ui_focus_test.cpp
+tests/ui_geometry_test.cpp
+tests/ui_image_test.cpp
+tests/ui_label_test.cpp
+tests/ui_layout_test.cpp
+tests/ui_list_view_test.cpp
+tests/ui_panel_test.cpp
+tests/ui_progress_bar_test.cpp
+tests/ui_radio_group_test.cpp
+tests/ui_renderer_test.cpp
+tests/ui_screen_manager_test.cpp
+tests/ui_select_test.cpp
+tests/ui_slider_test.cpp
+tests/ui_text_input_interaction_test.cpp
+tests/ui_text_input_test.cpp
+tests/ui_theme_test.cpp
+tests/ui_toggle_test.cpp
+
+===== PROGRESS BAR TESTS =====
+tests/ui_progress_bar_test.cpp-5-int main() {
+tests/ui_progress_bar_test.cpp-6-    using namespace kiddos::ui;
+tests/ui_progress_bar_test.cpp-7-
+tests/ui_progress_bar_test.cpp:8:    ProgressBar bar;
+tests/ui_progress_bar_test.cpp-9-
+tests/ui_progress_bar_test.cpp-10-    assert(bar.value() == 0);
+tests/ui_progress_bar_test.cpp-11-    assert(bar.orientation() == ProgressOrientation::horizontal);
+tests/ui_progress_bar_test.cpp-12-    assert(bar.style().border_thickness == 1);
+tests/ui_progress_bar_test.cpp-13-
+tests/ui_progress_bar_test.cpp-14-    bar.set_value(65);
+tests/ui_progress_bar_test.cpp-15-    assert(bar.value() == 65);
+tests/ui_progress_bar_test.cpp-16-
+--
+tests/ui_progress_bar_test.cpp-23-    bar.set_orientation(ProgressOrientation::vertical);
+tests/ui_progress_bar_test.cpp-24-    assert(bar.orientation() == ProgressOrientation::vertical);
+tests/ui_progress_bar_test.cpp-25-
+tests/ui_progress_bar_test.cpp:26:    ProgressBarStyle style;
+tests/ui_progress_bar_test.cpp-27-    style.background = {1, 2, 3, 255};
+tests/ui_progress_bar_test.cpp-28-    style.fill = {4, 5, 6, 255};
+tests/ui_progress_bar_test.cpp-29-    style.border = {7, 8, 9, 255};
+tests/ui_progress_bar_test.cpp-30-    style.border_thickness = 3;
+tests/ui_progress_bar_test.cpp-31-
+tests/ui_progress_bar_test.cpp-32-    bar.set_style(style);
+tests/ui_progress_bar_test.cpp-33-
+tests/ui_progress_bar_test.cpp-34-    assert(bar.style().background.r == 1);
+--
+tests/ui_progress_bar_test.cpp-40-    bar.set_style(style);
+tests/ui_progress_bar_test.cpp-41-    assert(bar.style().border_thickness == 0);
+tests/ui_progress_bar_test.cpp-42-
+tests/ui_progress_bar_test.cpp:43:    ProgressBar initial(42);
+tests/ui_progress_bar_test.cpp-44-    assert(initial.value() == 42);
+tests/ui_progress_bar_test.cpp-45-
+tests/ui_progress_bar_test.cpp-46-    initial.set_bounds({0, 0, 200, 20});
+tests/ui_progress_bar_test.cpp-47-    assert(initial.bounds().w == 200);
+tests/ui_progress_bar_test.cpp-48-
+tests/ui_progress_bar_test.cpp-49-    return 0;
+tests/ui_progress_bar_test.cpp-50-}
+--
+tests/ui_theme_test.cpp-34-    assert(slider.fill.g == colors.primary.g);
+tests/ui_theme_test.cpp-35-    assert(slider.track.r == colors.disabled.r);
+tests/ui_theme_test.cpp-36-
+tests/ui_theme_test.cpp:37:    const ProgressBarStyle progress = theme.progress_bar_style();
+tests/ui_theme_test.cpp-38-    assert(progress.fill.b == colors.primary.b);
+tests/ui_theme_test.cpp-39-    assert(progress.background.r == colors.disabled.r);
+tests/ui_theme_test.cpp-40-
+tests/ui_theme_test.cpp-41-    ThemeColors alternate = colors;
+tests/ui_theme_test.cpp-42-    alternate.primary = {200, 100, 50, 255};
+tests/ui_theme_test.cpp-43-    theme.set_colors(alternate);
+tests/ui_theme_test.cpp-44-
+tests/ui_theme_test.cpp-45-    assert(theme.colors().primary.r == 200);
+
+===== RENDERER IMPLEMENTATION =====
+     1	#include "kiddos/ui/renderer.hpp"
+     2	
+     3	#include <algorithm>
+     4	#include <cmath>
+     5	
+     6	namespace kiddos::ui {
+     7	
+     8	Renderer::Renderer(SDL_Renderer* renderer) noexcept
+     9	    : renderer_(renderer) {
+    10	}
+    11	
+    12	void Renderer::attach(SDL_Renderer* renderer) noexcept {
+    13	    renderer_ = renderer;
+    14	}
+    15	
+    16	bool Renderer::valid() const noexcept {
+    17	    return renderer_ != nullptr;
+    18	}
+    19	
+    20	SDL_Renderer* Renderer::native() const noexcept {
+    21	    return renderer_;
+    22	}
+    23	
+    24	bool Renderer::set_color(Color color) const {
+    25	    if (!renderer_) return false;
+    26	
+    27	    return SDL_SetRenderDrawColor(
+    28	        renderer_,
+    29	        color.r,
+    30	        color.g,
+    31	        color.b,
+    32	        color.a
+    33	    ) == 0;
+    34	}
+    35	
+    36	bool Renderer::clear(Color color) const {
+    37	    if (!set_color(color)) return false;
+    38	    return SDL_RenderClear(renderer_) == 0;
+    39	}
+    40	
+    41	bool Renderer::fill_rect(Rect rect, Color color) const {
+    42	    if (!renderer_ || rect.empty() || !set_color(color)) return false;
+    43	
+    44	    SDL_Rect native_rect{rect.x, rect.y, rect.w, rect.h};
+    45	    return SDL_RenderFillRect(renderer_, &native_rect) == 0;
+    46	}
+    47	
+    48	bool Renderer::outline_rect(Rect rect, Color color) const {
+    49	    if (!renderer_ || rect.empty() || !set_color(color)) return false;
+    50	
+    51	    SDL_Rect native_rect{rect.x, rect.y, rect.w, rect.h};
+    52	    return SDL_RenderDrawRect(renderer_, &native_rect) == 0;
+    53	}
+    54	
+    55	bool Renderer::draw_line(Point from, Point to, Color color) const {
+    56	    if (!renderer_ || !set_color(color)) return false;
+    57	
+    58	    return SDL_RenderDrawLine(
+    59	        renderer_, from.x, from.y, to.x, to.y
+    60	    ) == 0;
+    61	}
+    62	
+    63	bool Renderer::draw_point(Point point, Color color) const {
+    64	    if (!renderer_ || !set_color(color)) return false;
+    65	
+    66	    return SDL_RenderDrawPoint(
+    67	        renderer_, point.x, point.y
+    68	    ) == 0;
+    69	}
+    70	
+    71	bool Renderer::draw_texture(
+    72	    SDL_Texture* texture,
+    73	    Rect source,
+    74	    Rect destination,
+    75	    std::uint8_t opacity
+    76	) const {
+    77	    if (!renderer_ || !texture || source.empty() || destination.empty()) return false;
+    78	
+    79	    Uint8 previous_opacity = 255;
+    80	    if (SDL_GetTextureAlphaMod(texture, &previous_opacity) != 0) return false;
+    81	    if (SDL_SetTextureAlphaMod(texture, opacity) != 0) return false;
+    82	
+    83	    SDL_Rect src{source.x, source.y, source.w, source.h};
+    84	    SDL_Rect dst{destination.x, destination.y, destination.w, destination.h};
+    85	    const bool rendered = SDL_RenderCopy(renderer_, texture, &src, &dst) == 0;
+    86	    const bool restored = SDL_SetTextureAlphaMod(texture, previous_opacity) == 0;
+    87	
+    88	    return rendered && restored;
+    89	}
+    90	
+    91	namespace {
+    92	
+    93	// Distance from the rect edge to the rounded-corner boundary at the row or
+    94	// column `steps` in from the corner, sampled at the pixel center. Fills use
+    95	// this so corner arcs are smooth and evenly shaped.
+    96	int corner_inset(int radius, int steps) {
+    97	    const double dy = static_cast<double>(radius - steps) - 0.5;
+    98	    const double inside = std::max(
+    99	        0.0,
+   100	        static_cast<double>(radius) * radius - dy * dy
+   101	    );
+   102	    return radius - static_cast<int>(std::sqrt(inside));
+   103	}
+   104	
+   105	} // namespace
+   106	
+   107	bool Renderer::fill_rounded_rect(Rect rect, int radius, Color color) const {
+   108	    if (!renderer_ || rect.empty() || !set_color(color)) return false;
+   109	
+   110	    radius = std::clamp(radius, 0, std::min(rect.w, rect.h) / 2);
+   111	    if (radius == 0) {
+   112	        SDL_Rect native_rect{rect.x, rect.y, rect.w, rect.h};
+   113	        return SDL_RenderFillRect(renderer_, &native_rect) == 0;
+   114	    }
+   115	
+   116	    for (int y = 0; y < rect.h; ++y) {
+   117	        int inset = 0;
+   118	        if (y < radius) {
+   119	            inset = corner_inset(radius, y);
+   120	        } else if (y >= rect.h - radius) {
+   121	            inset = corner_inset(radius, rect.h - 1 - y);
+   122	        }
+   123	
+   124	        if (SDL_RenderDrawLine(
+   125	                renderer_,
+   126	                rect.x + inset,
+   127	                rect.y + y,
+   128	                rect.x + rect.w - 1 - inset,
+   129	                rect.y + y
+   130	            ) != 0) {
+   131	            return false;
+   132	        }
+   133	    }
+   134	
+   135	    return true;
+   136	}
+   137	
+   138	bool Renderer::outline_rounded_rect(Rect rect, int radius, Color color) const {
+   139	    if (!renderer_ || rect.empty() || !set_color(color)) return false;
+   140	
+   141	    radius = std::clamp(radius, 0, std::min(rect.w, rect.h) / 2);
+   142	    if (radius == 0) {
+   143	        SDL_Rect native_rect{rect.x, rect.y, rect.w, rect.h};
+   144	        return SDL_RenderDrawRect(renderer_, &native_rect) == 0;
+   145	    }
+   146	
+   147	    // Straight edges between the corner arcs.
+   148	    if (SDL_RenderDrawLine(
+   149	            renderer_, rect.x + radius, rect.y,
+   150	            rect.x + rect.w - 1 - radius, rect.y
+   151	        ) != 0 ||
+   152	        SDL_RenderDrawLine(
+   153	            renderer_, rect.x + radius, rect.y + rect.h - 1,
+   154	            rect.x + rect.w - 1 - radius, rect.y + rect.h - 1
+   155	        ) != 0 ||
+   156	        SDL_RenderDrawLine(
+   157	            renderer_, rect.x, rect.y + radius,
+   158	            rect.x, rect.y + rect.h - 1 - radius
+   159	        ) != 0 ||
+   160	        SDL_RenderDrawLine(
+   161	            renderer_, rect.x + rect.w - 1, rect.y + radius,
+   162	            rect.x + rect.w - 1, rect.y + rect.h - 1 - radius
+   163	        ) != 0) {
+   164	        return false;
+   165	    }
+   166	
+   167	    // Corner arcs, traced along the true circle with dense angle steps so
+   168	    // every corner stays continuous with no gaps. Points that land on the
+   169	    // straight edge lines are skipped: the lines already cover them, and
+   170	    // re-drawing would blend semi-transparent borders twice on one pixel.
+   171	    constexpr double kPi = 3.14159265358979323846;
+   172	    const int steps = std::max(2, radius * 2);
+   173	    const int right = rect.x + rect.w - 1;
+   174	    const int bottom = rect.y + rect.h - 1;
+   175	
+   176	    const auto on_edge_line = [&](ui::Point point) {
+   177	        if (point.y == rect.y || point.y == bottom) {
+   178	            return point.x >= rect.x + radius && point.x <= right - radius;
+   179	        }
+   180	        if (point.x == rect.x || point.x == right) {
+   181	            return point.y >= rect.y + radius && point.y <= bottom - radius;
+   182	        }
+   183	        return false;
+   184	    };
+   185	
+   186	    const auto draw_corner = [&](int center_x, int center_y, int sign_x,
+   187	                                 int sign_y) {
+   188	        ui::Point previous{
+   189	            center_x + sign_x * radius,
+   190	            center_y
+   191	        };
+   192	
+   193	        for (int step = 1; step < steps; ++step) {
+   194	            const double angle = (kPi / 2.0) * step / steps;
+   195	            const ui::Point point{
+   196	                center_x + sign_x *
+   197	                    static_cast<int>(std::lround(radius * std::cos(angle))),
+   198	                center_y + sign_y *
+   199	                    static_cast<int>(std::lround(radius * std::sin(angle)))
+   200	            };
+   201	
+   202	            if ((point.x != previous.x || point.y != previous.y) &&
+   203	                !on_edge_line(point)) {
+   204	                if (SDL_RenderDrawPoint(
+   205	                        renderer_, point.x, point.y
+   206	                    ) != 0) {
+   207	                    return false;
+   208	                }
+   209	            }
+   210	            previous = point;
+   211	        }
+   212	
+   213	        return true;
+   214	    };
+   215	
+   216	    if (!draw_corner(rect.x + radius, rect.y + radius, -1, -1) ||
+   217	        !draw_corner(
+   218	            rect.x + rect.w - 1 - radius, rect.y + radius, 1, -1
+   219	        ) ||
+   220	        !draw_corner(
+   221	            rect.x + radius, rect.y + rect.h - 1 - radius, -1, 1
+   222	        ) ||
+   223	        !draw_corner(
+   224	            rect.x + rect.w - 1 - radius,
+   225	            rect.y + rect.h - 1 - radius,
+   226	            1,
+   227	            1
+   228	        )) {
+   229	        return false;
+   230	    }
+   231	
+   232	    return true;
+   233	}
+   234	
+   235	bool Renderer::set_clip(Rect rect) const {
+   236	    if (!renderer_) return false;
+   237	
+   238	    SDL_Rect native_rect{rect.x, rect.y, rect.w, rect.h};
+   239	    return SDL_RenderSetClipRect(renderer_, &native_rect) == 0;
+   240	}
+   241	
+   242	bool Renderer::clear_clip() const {
+   243	    if (!renderer_) return false;
+   244	
+   245	    return SDL_RenderSetClipRect(renderer_, nullptr) == 0;
+   246	}
+   247	
+   248	void Renderer::present() const {
+   249	    if (renderer_) {
+   250	        SDL_RenderPresent(renderer_);
+   251	    }
+   252	}
+   253	
+   254	} // namespace kiddos::ui
+
+===== TEST FRAMEWORK AND CMAKE REGISTRATION =====
+57:add_executable(kiddos
+79:    add_executable(kiddos_app_ui_action_mapping_test
+80:        tests/app_ui_action_mapping_test.cpp)
+83:    add_test(NAME kiddos_app_ui_action_mapping
+86:    add_executable(kiddos_app_selected_game_screen_test
+87:        tests/app_selected_game_screen_test.cpp
+93:    add_test(NAME kiddos_app_selected_game_screen
+96:    add_executable(kiddos_app_home_carousel_screen_test
+97:        tests/app_home_carousel_screen_test.cpp
+103:    add_test(NAME kiddos_app_home_carousel_screen
+106:    add_executable(kiddos_platform_sdl_text_input_translator_test
+107:        tests/platform_sdl_text_input_translator_test.cpp)
+110:    add_test(NAME kiddos_platform_sdl_text_input_translator
+113:    add_executable(kiddos_platform_text_input_interface_test
+114:        tests/platform_text_input_interface_test.cpp)
+116:    add_test(NAME kiddos_platform_text_input_interface
+119:    add_executable(kiddos_platform_sdl_keyboard_policy_test
+120:        tests/platform_sdl_keyboard_policy_test.cpp)
+123:    add_test(NAME kiddos_platform_sdl_keyboard_policy
+126:    add_executable(kiddos_platform_text_input_event_test
+127:        tests/platform_text_input_event_test.cpp)
+129:    add_test(NAME kiddos_platform_text_input_event
+132:    add_executable(kiddos_ui_geometry_test
+133:        tests/ui_geometry_test.cpp
+138:    add_executable(kiddos_ui_layout_test
+139:        tests/ui_layout_test.cpp
+146:    add_test(
+151:    add_test(
+156:    add_executable(kiddos_ui_focus_test
+157:        tests/ui_focus_test.cpp
+163:    add_test(
+168:    add_executable(kiddos_ui_button_test
+169:        tests/ui_button_test.cpp
+175:    add_test(
+180:    add_executable(kiddos_ui_controller_test
+181:        tests/ui_controller_test.cpp
+187:    add_test(
+192:    add_executable(kiddos_ui_renderer_test tests/ui_renderer_test.cpp)
+195:    add_test(NAME kiddos_ui_renderer COMMAND kiddos_ui_renderer_test)
+197:    add_executable(kiddos_ui_image_test tests/ui_image_test.cpp)
+200:    add_test(NAME kiddos_ui_image COMMAND kiddos_ui_image_test)
+202:    add_executable(kiddos_ui_label_test tests/ui_label_test.cpp)
+205:    add_test(NAME kiddos_ui_label COMMAND kiddos_ui_label_test)
+207:    add_executable(kiddos_ui_panel_test tests/ui_panel_test.cpp)
+210:    add_test(NAME kiddos_ui_panel COMMAND kiddos_ui_panel_test)
+212:    add_executable(kiddos_ui_progress_bar_test tests/ui_progress_bar_test.cpp)
+215:    add_test(NAME kiddos_ui_progress_bar COMMAND kiddos_ui_progress_bar_test)
+217:    add_executable(kiddos_ui_toggle_test tests/ui_toggle_test.cpp)
+220:    add_test(NAME kiddos_ui_toggle COMMAND kiddos_ui_toggle_test)
+222:    add_executable(kiddos_ui_slider_test tests/ui_slider_test.cpp)
+225:    add_test(NAME kiddos_ui_slider COMMAND kiddos_ui_slider_test)
+227:    add_executable(kiddos_ui_theme_test tests/ui_theme_test.cpp)
+230:    add_test(NAME kiddos_ui_theme COMMAND kiddos_ui_theme_test)
+231:    add_executable(kiddos_ui_list_view_test tests/ui_list_view_test.cpp)
+234:    add_test(NAME kiddos_ui_list_view COMMAND kiddos_ui_list_view_test)
+236:    add_executable(kiddos_ui_checkbox_test tests/ui_checkbox_test.cpp)
+239:    add_test(NAME kiddos_ui_checkbox COMMAND kiddos_ui_checkbox_test)
+241:    add_executable(kiddos_ui_radio_group_test tests/ui_radio_group_test.cpp)
+244:    add_test(NAME kiddos_ui_radio_group COMMAND kiddos_ui_radio_group_test)
+246:    add_executable(kiddos_ui_select_test tests/ui_select_test.cpp)
+249:    add_test(NAME kiddos_ui_select COMMAND kiddos_ui_select_test)
+251:    add_executable(kiddos_ui_text_input_test tests/ui_text_input_test.cpp)
+254:    add_test(NAME kiddos_ui_text_input COMMAND kiddos_ui_text_input_test)
+256:    add_executable(kiddos_ui_text_input_interaction_test
+257:        tests/ui_text_input_interaction_test.cpp)
+260:    add_test(NAME kiddos_ui_text_input_interaction
+273:    add_executable(kiddos_ui_screen_manager_test
+274:        tests/ui_screen_manager_test.cpp)
+277:    add_test(NAME kiddos_ui_screen_manager
+
+===== CURRENT WORKTREE =====
+ M CMakeLists.txt
+ M assets/artwork/generated/navigation-hints.png
+ M assets/artwork/source/branding/navigation-hints.svg
+ M include/kiddos/app/application.hpp
+ M include/kiddos/app/home_carousel_screen.hpp
+ M src/app/application.cpp
+ M src/app/home_carousel_screen.cpp
+ M src/platform/sdl_platform.cpp
+ M tests/app_home_carousel_screen_test.cpp
+?? assets/artwork/generated/cartridges/
+?? assets/artwork/generated/selected-game-hints.png
+?? assets/artwork/source/branding/selected-game-hints.svg
+?? include/kiddos/app/selected_game_screen.hpp
+?? include/kiddos/app/shared_shell.hpp
+?? src/app/selected_game_screen.cpp
+?? src/app/shared_shell.cpp
+?? tests/app_selected_game_screen_test.cpp
