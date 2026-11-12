@@ -1,0 +1,3705 @@
+===== RETRO KIDDOS UI LIBRARY AUDIT =====
+Date: 2026-11-11T23:44:59-05:00
+Commit: 0ea37a46e2ce7f1159448f8ff9c3a39aec554966
+
+===== UI DIRECTORY STRUCTURE =====
+include/kiddos/ui/button.hpp
+include/kiddos/ui/checkbox.hpp
+include/kiddos/ui/color.hpp
+include/kiddos/ui/container.hpp
+include/kiddos/ui/controller.hpp
+include/kiddos/ui/element.hpp
+include/kiddos/ui/focus.hpp
+include/kiddos/ui/font.hpp
+include/kiddos/ui/geometry.hpp
+include/kiddos/ui/image.hpp
+include/kiddos/ui/label.hpp
+include/kiddos/ui/layout.hpp
+include/kiddos/ui/list_view.hpp
+include/kiddos/ui/panel.hpp
+include/kiddos/ui/progress_bar.hpp
+include/kiddos/ui/radio_group.hpp
+include/kiddos/ui/renderer.hpp
+include/kiddos/ui/screen.hpp
+include/kiddos/ui/screen_manager.hpp
+include/kiddos/ui/select.hpp
+include/kiddos/ui/slider.hpp
+include/kiddos/ui/text.hpp
+include/kiddos/ui/text_input.hpp
+include/kiddos/ui/text_input_interaction.hpp
+include/kiddos/ui/texture.hpp
+include/kiddos/ui/theme.hpp
+include/kiddos/ui/toggle.hpp
+include/kiddos/ui/ui.hpp
+src/ui/button.cpp
+src/ui/checkbox.cpp
+src/ui/controller.cpp
+src/ui/focus.cpp
+src/ui/font.cpp
+src/ui/image.cpp
+src/ui/label.cpp
+src/ui/layout.cpp
+src/ui/list_view.cpp
+src/ui/panel.cpp
+src/ui/progress_bar.cpp
+src/ui/radio_group.cpp
+src/ui/renderer.cpp
+src/ui/screen.cpp
+src/ui/screen_manager.cpp
+src/ui/select.cpp
+src/ui/slider.cpp
+src/ui/text.cpp
+src/ui/text_input.cpp
+src/ui/text_input_interaction.cpp
+src/ui/texture.cpp
+src/ui/theme.cpp
+src/ui/toggle.cpp
+tests/app_home_carousel_screen_test.cpp
+tests/app_selected_game_screen_test.cpp
+tests/app_ui_action_mapping_test.cpp
+tests/platform_sdl_keyboard_policy_test.cpp
+tests/platform_sdl_text_input_translator_test.cpp
+tests/platform_text_input_event_test.cpp
+tests/platform_text_input_interface_test.cpp
+tests/ui_button_test.cpp
+tests/ui_checkbox_test.cpp
+tests/ui_controller_test.cpp
+tests/ui_focus_test.cpp
+tests/ui_geometry_test.cpp
+tests/ui_image_test.cpp
+tests/ui_label_test.cpp
+tests/ui_layout_test.cpp
+tests/ui_list_view_test.cpp
+tests/ui_panel_test.cpp
+tests/ui_progress_bar_test.cpp
+tests/ui_radio_group_test.cpp
+tests/ui_renderer_test.cpp
+tests/ui_screen_manager_test.cpp
+tests/ui_select_test.cpp
+tests/ui_slider_test.cpp
+tests/ui_text_input_interaction_test.cpp
+tests/ui_text_input_test.cpp
+tests/ui_theme_test.cpp
+tests/ui_toggle_test.cpp
+
+===== PUBLIC UI COMPONENT HEADERS =====
+
+----- include/kiddos/ui/button.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+#include "kiddos/ui/font.hpp"
+
+#include <functional>
+#include <string>
+
+namespace kiddos::ui {
+
+struct ButtonStyle {
+    Color normal{20, 34, 65, 255};
+    Color focused{35, 83, 150, 255};
+    Color pressed{18, 55, 105, 255};
+    Color disabled{35, 39, 50, 255};
+    Color border{69, 151, 255, 255};
+    Color focused_border{125, 190, 255, 255};
+    Color text{255, 255, 255, 255};
+    Color disabled_text{150, 155, 165, 255};
+};
+
+class Button final : public Element {
+public:
+    explicit Button(std::string label = {});
+
+    void set_label(std::string label);
+    const std::string& label() const noexcept;
+
+    void set_style(ButtonStyle style) noexcept;
+    const ButtonStyle& style() const noexcept;
+
+    void set_font(const Font* font) noexcept;
+    const Font* font() const noexcept;
+
+    void set_pressed(bool pressed) noexcept;
+    bool pressed() const noexcept;
+
+    void set_on_activate(std::function<void()> callback);
+    bool activate();
+
+private:
+    std::string label_;
+    ButtonStyle style_{};
+    const Font* font_ = nullptr;
+    std::function<void()> on_activate_;
+    bool pressed_ = false;
+
+    void draw(Renderer& renderer) override;
+};
+
+} // namespace kiddos::ui
+
+----- include/kiddos/ui/checkbox.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+#include "kiddos/ui/font.hpp"
+
+#include <functional>
+#include <string>
+
+namespace kiddos::ui {
+
+struct CheckboxStyle {
+    Color background{20, 34, 65, 255};
+    Color checked{45, 125, 230, 255};
+    Color checkmark{245, 248, 255, 255};
+    Color border{65, 105, 165, 255};
+    Color focused_border{75, 155, 255, 255};
+    Color text{245, 248, 255, 255};
+    Color disabled_text{160, 175, 200, 255};
+};
+
+class Checkbox final : public Element {
+public:
+    explicit Checkbox(std::string label = {}, bool checked = false);
+
+    void set_label(std::string label);
+    const std::string& label() const noexcept;
+
+    void set_checked(bool checked);
+    bool checked() const noexcept;
+    bool toggle();
+
+    void set_font(const Font* font) noexcept;
+    const Font* font() const noexcept;
+
+    void set_style(CheckboxStyle style) noexcept;
+    const CheckboxStyle& style() const noexcept;
+
+    void set_on_change(std::function<void(bool)> callback);
+
+private:
+    std::string label_;
+    bool checked_ = false;
+    const Font* font_ = nullptr;
+    CheckboxStyle style_{};
+    std::function<void(bool)> on_change_;
+
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+----- include/kiddos/ui/color.hpp -----
+#pragma once
+
+#include <cstdint>
+
+namespace kiddos::ui {
+
+struct Color {
+    std::uint8_t r = 0;
+    std::uint8_t g = 0;
+    std::uint8_t b = 0;
+    std::uint8_t a = 255;
+};
+
+namespace colors {
+inline constexpr Color transparent{0, 0, 0, 0};
+inline constexpr Color navy{8, 15, 35, 255};
+inline constexpr Color blue{69, 151, 255, 255};
+inline constexpr Color white{255, 255, 255, 255};
+}
+
+} // namespace kiddos::ui
+
+----- include/kiddos/ui/container.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+
+#include <memory>
+#include <type_traits>
+#include <utility>
+#include <vector>
+
+namespace kiddos::ui {
+
+class Container : public Element {
+public:
+    template<typename T, typename... Args>
+    T& add(Args&&... args) {
+        static_assert(std::is_base_of_v<Element, T>,
+                      "Container children must derive from Element");
+
+        auto child = std::make_unique<T>(
+            std::forward<Args>(args)...
+        );
+
+        T& reference = *child;
+        children_.push_back(std::move(child));
+        return reference;
+    }
+
+    std::size_t child_count() const noexcept {
+        return children_.size();
+    }
+
+    Element* child(std::size_t index) noexcept {
+        if (index >= children_.size()) return nullptr;
+        return children_[index].get();
+    }
+
+    const Element* child(std::size_t index) const noexcept {
+        if (index >= children_.size()) return nullptr;
+        return children_[index].get();
+    }
+
+protected:
+    void draw(Renderer& renderer) override {
+        for (auto& element : children_) {
+            element->render(renderer);
+        }
+    }
+
+private:
+    std::vector<std::unique_ptr<Element>> children_;
+};
+
+} // namespace kiddos::ui
+
+----- include/kiddos/ui/controller.hpp -----
+#pragma once
+
+#include "kiddos/ui/button.hpp"
+#include "kiddos/ui/focus.hpp"
+
+namespace kiddos::ui {
+
+enum class UIAction {
+    Left,
+    Right,
+    Up,
+    Down,
+    Confirm,
+    Back
+};
+
+class ControllerInteraction final {
+public:
+    explicit ControllerInteraction(FocusManager& focus) noexcept;
+
+    bool handle(UIAction action);
+    bool cancel() noexcept;
+
+private:
+    FocusManager& focus_;
+};
+
+} // namespace kiddos::ui
+
+----- include/kiddos/ui/element.hpp -----
+#pragma once
+
+#include "kiddos/ui/geometry.hpp"
+#include "kiddos/ui/renderer.hpp"
+
+namespace kiddos::ui {
+
+class Element {
+public:
+    virtual ~Element() = default;
+
+    void set_bounds(Rect bounds) noexcept { bounds_ = bounds; }
+    Rect bounds() const noexcept { return bounds_; }
+
+    void set_visible(bool visible) noexcept { visible_ = visible; }
+    bool visible() const noexcept { return visible_; }
+
+    void set_enabled(bool enabled) noexcept { enabled_ = enabled; }
+    bool enabled() const noexcept { return enabled_; }
+
+    void set_focusable(bool focusable) noexcept {
+        focusable_ = focusable;
+    }
+
+    bool focusable() const noexcept { return focusable_; }
+
+    void set_focused(bool focused) noexcept { focused_ = focused; }
+    bool focused() const noexcept { return focused_; }
+
+    void render(Renderer& renderer) {
+        if (visible_) draw(renderer);
+    }
+
+protected:
+    virtual void draw(Renderer& renderer) = 0;
+
+private:
+    Rect bounds_{};
+    bool visible_ = true;
+    bool enabled_ = true;
+    bool focusable_ = false;
+    bool focused_ = false;
+};
+
+} // namespace kiddos::ui
+
+----- include/kiddos/ui/focus.hpp -----
+#pragma once
+
+#include "kiddos/ui/container.hpp"
+
+namespace kiddos::ui {
+
+enum class Direction {
+    Left,
+    Right,
+    Up,
+    Down
+};
+
+class FocusManager final {
+public:
+    explicit FocusManager(Container& root) noexcept;
+
+    Element* focused() const noexcept;
+    bool focus_first() noexcept;
+    bool move(Direction direction) noexcept;
+    void clear() noexcept;
+
+private:
+    Container& root_;
+    Element* focused_ = nullptr;
+
+    bool eligible(const Element* element) const noexcept;
+};
+
+} // namespace kiddos::ui
+
+----- include/kiddos/ui/font.hpp -----
+#pragma once
+#include <SDL_ttf.h>
+#include <string>
+
+namespace kiddos::ui {
+class Font final {
+public:
+    Font() = default;
+    ~Font();
+    Font(const Font&) = delete;
+    Font& operator=(const Font&) = delete;
+    Font(Font&& other) noexcept;
+    Font& operator=(Font&& other) noexcept;
+    bool load(const std::string& path, int point_size);
+    void reset() noexcept;
+    bool valid() const noexcept;
+    TTF_Font* native() const noexcept;
+private:
+    TTF_Font* font_ = nullptr;
+};
+}
+
+----- include/kiddos/ui/geometry.hpp -----
+#pragma once
+
+namespace kiddos::ui {
+
+struct Point {
+    int x = 0;
+    int y = 0;
+};
+
+struct Rect {
+    int x = 0;
+    int y = 0;
+    int w = 0;
+    int h = 0;
+
+    constexpr bool empty() const noexcept {
+        return w <= 0 || h <= 0;
+    }
+
+    constexpr bool contains(Point p) const noexcept {
+        return !empty() &&
+               p.x >= x && p.y >= y &&
+               p.x < x + w && p.y < y + h;
+    }
+};
+
+} // namespace kiddos::ui
+
+----- include/kiddos/ui/image.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+#include "kiddos/ui/texture.hpp"
+
+#include <cstdint>
+
+namespace kiddos::ui {
+
+enum class ImageFit {
+    contain,
+    cover,
+    stretch
+};
+
+struct ImageGeometry {
+    Rect source{};
+    Rect destination{};
+    bool valid = false;
+};
+
+ImageGeometry calculate_image_geometry(
+    int texture_width,
+    int texture_height,
+    Rect bounds,
+    ImageFit fit
+) noexcept;
+
+class Image final : public Element {
+public:
+    explicit Image(Texture* texture = nullptr) noexcept;
+
+    void set_texture(Texture* texture) noexcept;
+    Texture* texture() const noexcept;
+
+    void set_fit(ImageFit fit) noexcept;
+    ImageFit fit() const noexcept;
+
+    void set_opacity(std::uint8_t opacity) noexcept;
+    std::uint8_t opacity() const noexcept;
+
+    ImageGeometry geometry() const noexcept;
+
+private:
+    Texture* texture_ = nullptr;
+    ImageFit fit_ = ImageFit::contain;
+    std::uint8_t opacity_ = 255;
+
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+----- include/kiddos/ui/label.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+#include "kiddos/ui/font.hpp"
+
+#include <string>
+
+namespace kiddos::ui {
+
+enum class LabelAlignment {
+    left,
+    center,
+    right
+};
+
+class Label final : public Element {
+public:
+    explicit Label(std::string text = {});
+
+    void set_text(std::string text);
+    const std::string& text() const noexcept;
+
+    void set_font(const Font* font) noexcept;
+    const Font* font() const noexcept;
+
+    void set_color(Color color) noexcept;
+    Color color() const noexcept;
+
+    void set_alignment(LabelAlignment alignment) noexcept;
+    LabelAlignment alignment() const noexcept;
+
+private:
+    std::string text_;
+    const Font* font_ = nullptr;
+    Color color_{255, 255, 255, 255};
+    LabelAlignment alignment_ = LabelAlignment::left;
+
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+----- include/kiddos/ui/layout.hpp -----
+#pragma once
+
+#include "kiddos/ui/container.hpp"
+
+namespace kiddos::ui {
+
+enum class Axis {
+    Horizontal,
+    Vertical
+};
+
+struct Insets {
+    int left = 0;
+    int top = 0;
+    int right = 0;
+    int bottom = 0;
+};
+
+class StackLayout final {
+public:
+    // Distributes available space equally between visible children.
+    // Remaining pixels are distributed one at a time.
+    static void apply(
+        Container& container,
+        Rect area,
+        Axis axis,
+        int gap = 0,
+        Insets padding = {}
+    ) noexcept;
+};
+
+} // namespace kiddos::ui
+
+----- include/kiddos/ui/list_view.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+#include "kiddos/ui/font.hpp"
+
+#include <functional>
+#include <string>
+#include <vector>
+
+namespace kiddos::ui {
+
+struct ListViewStyle {
+    Color background{20, 34, 65, 255};
+    Color selected{45, 125, 230, 255};
+    Color text{245, 248, 255, 255};
+    Color disabled_text{130, 145, 170, 255};
+    Color border{65, 105, 165, 255};
+};
+
+class ListView final : public Element {
+public:
+    ListView();
+
+    void set_items(std::vector<std::string> items);
+    const std::vector<std::string>& items() const noexcept;
+
+    int selected_index() const noexcept;
+    bool set_selected_index(int index);
+    bool move_selection(int direction);
+    bool activate_selected();
+
+    void set_row_height(int height) noexcept;
+    int row_height() const noexcept;
+
+    void set_font(const Font* font) noexcept;
+    void set_style(ListViewStyle style) noexcept;
+    const ListViewStyle& style() const noexcept;
+
+    void set_on_activate(std::function<void(int)> callback);
+
+private:
+    std::vector<std::string> items_;
+    int selected_index_ = -1;
+    int row_height_ = 48;
+    int scroll_offset_ = 0;
+    const Font* font_ = nullptr;
+    ListViewStyle style_{};
+    std::function<void(int)> on_activate_;
+
+    void ensure_selection_visible() noexcept;
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+----- include/kiddos/ui/panel.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+
+namespace kiddos::ui {
+
+struct PanelStyle {
+    Color background{20, 30, 55, 255};
+    Color border{55, 110, 190, 255};
+    int border_thickness = 2;
+    int corner_radius = 0;
+};
+
+class Panel final : public Element {
+public:
+    Panel() = default;
+    explicit Panel(PanelStyle style);
+
+    void set_style(PanelStyle style) noexcept;
+    const PanelStyle& style() const noexcept;
+
+    void set_background(Color color) noexcept;
+    void set_border(Color color) noexcept;
+    void set_border_thickness(int thickness) noexcept;
+    void set_corner_radius(int radius) noexcept;
+
+private:
+    PanelStyle style_{};
+
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+----- include/kiddos/ui/progress_bar.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+
+namespace kiddos::ui {
+
+enum class ProgressOrientation {
+    horizontal,
+    vertical
+};
+
+struct ProgressBarStyle {
+    Color background{15, 25, 45, 255};
+    Color fill{45, 145, 245, 255};
+    Color border{65, 100, 150, 255};
+    int border_thickness = 1;
+};
+
+class ProgressBar final : public Element {
+public:
+    explicit ProgressBar(int value = 0);
+
+    void set_value(int value) noexcept;
+    int value() const noexcept;
+
+    void set_orientation(ProgressOrientation orientation) noexcept;
+    ProgressOrientation orientation() const noexcept;
+
+    void set_style(ProgressBarStyle style) noexcept;
+    const ProgressBarStyle& style() const noexcept;
+
+private:
+    int value_ = 0;
+    ProgressOrientation orientation_ = ProgressOrientation::horizontal;
+    ProgressBarStyle style_{};
+
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+----- include/kiddos/ui/radio_group.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+#include "kiddos/ui/font.hpp"
+#include "kiddos/ui/renderer.hpp"
+
+#include <functional>
+#include <string>
+#include <vector>
+
+namespace kiddos::ui {
+
+struct RadioGroupStyle {
+    Color background{24, 32, 56, 255};
+    Color selected{50, 130, 240, 255};
+    Color indicator{255, 255, 255, 255};
+    Color border{90, 105, 135, 255};
+    Color focused_border{80, 170, 255, 255};
+    Color text{240, 244, 255, 255};
+    Color disabled_text{130, 140, 160, 255};
+};
+
+class RadioGroup final : public Element {
+public:
+    explicit RadioGroup(std::vector<std::string> options = {}, int selected = 0);
+
+    void set_options(std::vector<std::string> options);
+    const std::vector<std::string>& options() const noexcept;
+
+    bool set_selected(int index);
+    int selected() const noexcept;
+    bool select_next();
+    bool select_previous();
+
+    void set_font(const Font* font) noexcept;
+    const Font* font() const noexcept;
+
+    void set_style(RadioGroupStyle style) noexcept;
+    const RadioGroupStyle& style() const noexcept;
+
+    void set_on_change(std::function<void(int)> callback);
+    void draw(Renderer& renderer) override;
+
+private:
+    std::vector<std::string> options_;
+    int selected_{-1};
+    const Font* font_{nullptr};
+    RadioGroupStyle style_{};
+    std::function<void(int)> on_change_;
+};
+
+}
+
+----- include/kiddos/ui/renderer.hpp -----
+#pragma once
+
+#include "kiddos/ui/color.hpp"
+#include "kiddos/ui/geometry.hpp"
+
+#include <SDL.h>
+#include <cstdint>
+
+namespace kiddos::ui {
+
+// Non-owning SDL2 renderer adapter.
+// The SDLPlatform remains responsible for creating and destroying SDL_Renderer.
+class Renderer final {
+public:
+    explicit Renderer(SDL_Renderer* renderer = nullptr) noexcept;
+
+    void attach(SDL_Renderer* renderer) noexcept;
+    bool valid() const noexcept;
+
+    bool clear(Color color) const;
+    bool fill_rect(Rect rect, Color color) const;
+    bool outline_rect(Rect rect, Color color) const;
+    bool draw_line(Point from, Point to, Color color) const;
+    bool draw_point(Point point, Color color) const;
+    bool draw_texture(SDL_Texture* texture, Rect source, Rect destination,
+                      std::uint8_t opacity = 255) const;
+    bool fill_rounded_rect(Rect rect, int radius, Color color) const;
+    bool outline_rounded_rect(Rect rect, int radius, Color color) const;
+
+    bool set_clip(Rect rect) const;
+    bool clear_clip() const;
+
+    void present() const;
+
+    SDL_Renderer* native() const noexcept;
+
+private:
+    SDL_Renderer* renderer_ = nullptr;
+
+    bool set_color(Color color) const;
+};
+
+} // namespace kiddos::ui
+
+----- include/kiddos/ui/screen.hpp -----
+#pragma once
+#include "kiddos/ui/container.hpp"
+#include "kiddos/ui/controller.hpp"
+#include "kiddos/ui/text_input_interaction.hpp"
+#include "kiddos/platform/text_input_event.hpp"
+
+namespace kiddos::ui {
+class Screen {
+public:
+    Screen() noexcept;
+    virtual ~Screen() = default;
+    Screen(const Screen&) = delete;
+    Screen& operator=(const Screen&) = delete;
+    Container& root() noexcept;
+    FocusManager& focus() noexcept;
+    virtual void on_enter() {}
+    virtual void on_exit() {}
+    virtual void on_suspend() {}
+    virtual void on_resume() {}
+    virtual void update(float) {}
+    virtual void render(Renderer& renderer);
+    bool handle_action(UIAction action);
+    bool handle_text_input(const ::kiddos::TextInputEvent& event);
+private:
+    Container root_;
+    FocusManager focus_;
+    ControllerInteraction controller_;
+    TextInputInteraction text_input_;
+};
+}
+
+----- include/kiddos/ui/screen_manager.hpp -----
+#pragma once
+#include "kiddos/ui/screen.hpp"
+#include <memory>
+#include <vector>
+namespace kiddos::ui {
+class ScreenManager final {
+public:
+    ~ScreenManager();
+    ScreenManager() = default;
+    ScreenManager(const ScreenManager&) = delete;
+    ScreenManager& operator=(const ScreenManager&) = delete;
+    bool push(std::unique_ptr<Screen> screen);
+    bool pop();
+    bool replace(std::unique_ptr<Screen> screen);
+    void clear() noexcept;
+    Screen* current() noexcept;
+    const Screen* current() const noexcept;
+    std::size_t depth() const noexcept;
+    void update(float delta_seconds);
+    void render(Renderer& renderer);
+    bool handle_action(UIAction action);
+    bool handle_text_input(const ::kiddos::TextInputEvent& event);
+private:
+    std::vector<std::unique_ptr<Screen>> stack_;
+};
+}
+
+----- include/kiddos/ui/select.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+#include "kiddos/ui/font.hpp"
+
+#include <functional>
+#include <string>
+#include <vector>
+
+namespace kiddos::ui {
+
+struct SelectStyle {
+    Color background{24, 32, 56, 255};
+    Color border{90, 105, 135, 255};
+    Color focused_border{80, 170, 255, 255};
+    Color text{240, 244, 255, 255};
+    Color disabled_text{130, 140, 160, 255};
+    Color arrow{200, 215, 240, 255};
+};
+
+class Select final : public Element {
+public:
+    explicit Select(std::vector<std::string> options = {}, int selected = 0);
+
+    void set_options(std::vector<std::string> options);
+    const std::vector<std::string>& options() const noexcept;
+
+    bool set_selected(int index);
+    int selected() const noexcept;
+    const std::string* selected_option() const noexcept;
+
+    bool select_next();
+    bool select_previous();
+
+    void set_font(const Font* font) noexcept;
+    const Font* font() const noexcept;
+
+    void set_style(SelectStyle style) noexcept;
+    const SelectStyle& style() const noexcept;
+
+    void set_on_change(std::function<void(int)> callback);
+
+private:
+    std::vector<std::string> options_;
+    int selected_{-1};
+    const Font* font_{nullptr};
+    SelectStyle style_{};
+    std::function<void(int)> on_change_;
+
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+----- include/kiddos/ui/slider.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+
+#include <functional>
+
+namespace kiddos::ui {
+
+struct SliderStyle {
+    Color track{35, 45, 65, 255};
+    Color fill{45, 145, 245, 255};
+    Color knob{245, 248, 255, 255};
+    Color focused_border{125, 190, 255, 255};
+};
+
+class Slider final : public Element {
+public:
+    explicit Slider(int value = 0, int minimum = 0, int maximum = 100);
+
+    void set_value(int value);
+    int value() const noexcept;
+
+    void set_range(int minimum, int maximum);
+    int minimum() const noexcept;
+    int maximum() const noexcept;
+
+    void set_step(int step) noexcept;
+    int step() const noexcept;
+
+    bool adjust(int direction);
+
+    void set_style(SliderStyle style) noexcept;
+    const SliderStyle& style() const noexcept;
+
+    void set_on_change(std::function<void(int)> callback);
+
+private:
+    int value_ = 0;
+    int minimum_ = 0;
+    int maximum_ = 100;
+    int step_ = 1;
+    SliderStyle style_{};
+    std::function<void(int)> on_change_;
+
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+----- include/kiddos/ui/text.hpp -----
+#pragma once
+#include "kiddos/ui/color.hpp"
+#include "kiddos/ui/font.hpp"
+#include "kiddos/ui/geometry.hpp"
+#include "kiddos/ui/renderer.hpp"
+#include <string>
+
+namespace kiddos::ui {
+class TextRenderer final {
+public:
+    explicit TextRenderer(Renderer& renderer) noexcept;
+    bool draw(const std::string& text, const Font& font,
+              Point position, Color color);
+    bool draw_centered(const std::string& text, const Font& font,
+                       Rect area, Color color);
+private:
+    Renderer& renderer_;
+};
+}
+
+----- include/kiddos/ui/text_input.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+#include "kiddos/ui/font.hpp"
+
+#include <cstddef>
+#include <functional>
+#include <string>
+
+namespace kiddos::ui {
+
+struct TextInputStyle {
+    Color background{20, 30, 52, 255};
+    Color border{75, 95, 130, 255};
+    Color focused_border{65, 155, 255, 255};
+    Color text{240, 244, 255, 255};
+    Color placeholder{135, 150, 175, 255};
+    Color cursor{90, 180, 255, 255};
+    Color disabled_text{125, 135, 155, 255};
+};
+
+class TextInput final : public Element {
+public:
+    explicit TextInput(std::string text = {});
+
+    void set_text(std::string text);
+    const std::string& text() const noexcept;
+
+    void set_placeholder(std::string placeholder);
+    const std::string& placeholder() const noexcept;
+
+    void set_max_length(std::size_t length);
+    std::size_t max_length() const noexcept;
+
+    bool insert_text(const std::string& text);
+    bool backspace();
+    bool delete_forward();
+    void move_cursor_left() noexcept;
+    void move_cursor_right() noexcept;
+    void move_cursor_home() noexcept;
+    void move_cursor_end() noexcept;
+
+    std::size_t cursor_position() const noexcept;
+    void set_cursor_position(std::size_t position) noexcept;
+
+    void set_font(const Font* font) noexcept;
+    const Font* font() const noexcept;
+
+    void set_style(TextInputStyle style) noexcept;
+    const TextInputStyle& style() const noexcept;
+
+    void set_on_change(std::function<void(const std::string&)> callback);
+
+private:
+    std::string text_;
+    std::string placeholder_;
+    std::size_t cursor_{0};
+    std::size_t max_length_{256};
+    const Font* font_{nullptr};
+    TextInputStyle style_{};
+    std::function<void(const std::string&)> on_change_;
+
+    static std::size_t previous_boundary(const std::string& text,
+                                         std::size_t position) noexcept;
+    static std::size_t next_boundary(const std::string& text,
+                                     std::size_t position) noexcept;
+    static std::size_t count_codepoints(const std::string& text) noexcept;
+
+    void notify_change();
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+----- include/kiddos/ui/text_input_interaction.hpp -----
+#pragma once
+
+#include "kiddos/ui/focus.hpp"
+
+#include <string>
+
+namespace kiddos::ui {
+
+enum class TextInputKey {
+    Backspace,
+    Delete,
+    Left,
+    Right,
+    Home,
+    End
+};
+
+class TextInputInteraction final {
+public:
+    explicit TextInputInteraction(FocusManager& focus) noexcept;
+
+    bool insert_text(const std::string& text);
+    bool handle(TextInputKey key);
+
+private:
+    FocusManager& focus_;
+};
+
+} // namespace kiddos::ui
+
+----- include/kiddos/ui/texture.hpp -----
+#pragma once
+
+#include <SDL.h>
+#include <string>
+
+namespace kiddos::ui {
+
+class Texture final {
+public:
+    Texture() = default;
+    ~Texture();
+
+    Texture(const Texture&) = delete;
+    Texture& operator=(const Texture&) = delete;
+
+    Texture(Texture&& other) noexcept;
+    Texture& operator=(Texture&& other) noexcept;
+
+    // Loads an image file through SDL_image. With magenta_key enabled,
+    // bright magenta (255, 0, 255) pixels become transparent.
+    bool load(SDL_Renderer* renderer, const std::string& path,
+              bool magenta_key = false);
+    void reset() noexcept;
+    bool valid() const noexcept;
+    int width() const noexcept;
+    int height() const noexcept;
+    SDL_Texture* native() const noexcept;
+
+private:
+    SDL_Texture* texture_ = nullptr;
+    int width_ = 0;
+    int height_ = 0;
+};
+
+}
+
+----- include/kiddos/ui/theme.hpp -----
+#pragma once
+
+#include "kiddos/ui/button.hpp"
+#include "kiddos/ui/panel.hpp"
+#include "kiddos/ui/progress_bar.hpp"
+#include "kiddos/ui/slider.hpp"
+#include "kiddos/ui/toggle.hpp"
+#include "kiddos/ui/list_view.hpp"
+#include "kiddos/ui/checkbox.hpp"
+#include "kiddos/ui/radio_group.hpp"
+#include "kiddos/ui/select.hpp"
+#include "kiddos/ui/text_input.hpp"
+
+namespace kiddos::ui {
+
+struct ThemeColors {
+    Color background{12, 20, 40, 255};
+    Color surface{20, 34, 65, 255};
+    Color surface_alt{27, 43, 76, 255};
+    Color primary{45, 125, 230, 255};
+    Color primary_bright{75, 155, 255, 255};
+    Color primary_dark{25, 75, 145, 255};
+    Color text{245, 248, 255, 255};
+    Color text_muted{160, 175, 200, 255};
+    Color disabled{45, 50, 65, 255};
+    Color border{65, 105, 165, 255};
+};
+
+class Theme final {
+public:
+    Theme() = default;
+    explicit Theme(ThemeColors colors) noexcept;
+
+    static Theme kiddos_default() noexcept;
+
+    const ThemeColors& colors() const noexcept;
+    void set_colors(ThemeColors colors) noexcept;
+
+    ButtonStyle button_style() const noexcept;
+    PanelStyle panel_style() const noexcept;
+    ToggleStyle toggle_style() const noexcept;
+    SliderStyle slider_style() const noexcept;
+    ProgressBarStyle progress_bar_style() const noexcept;
+    ListViewStyle list_view_style() const noexcept;
+    CheckboxStyle checkbox_style() const noexcept;
+    RadioGroupStyle radio_group_style() const noexcept;
+    SelectStyle select_style() const noexcept;
+    TextInputStyle text_input_style() const noexcept;
+
+private:
+    ThemeColors colors_{};
+};
+
+}
+
+----- include/kiddos/ui/toggle.hpp -----
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+
+#include <functional>
+
+namespace kiddos::ui {
+
+struct ToggleStyle {
+    Color off{45, 50, 65, 255};
+    Color on{35, 125, 220, 255};
+    Color knob{245, 248, 255, 255};
+    Color focused_border{125, 190, 255, 255};
+};
+
+class Toggle final : public Element {
+public:
+    explicit Toggle(bool checked = false);
+
+    void set_checked(bool checked);
+    bool checked() const noexcept;
+    bool toggle();
+
+    void set_style(ToggleStyle style) noexcept;
+    const ToggleStyle& style() const noexcept;
+
+    void set_on_change(std::function<void(bool)> callback);
+
+private:
+    bool checked_ = false;
+    ToggleStyle style_{};
+    std::function<void(bool)> on_change_;
+
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+----- include/kiddos/ui/ui.hpp -----
+#pragma once
+#include "kiddos/ui/button.hpp"
+#include "kiddos/ui/checkbox.hpp"
+#include "kiddos/ui/container.hpp"
+#include "kiddos/ui/controller.hpp"
+#include "kiddos/ui/element.hpp"
+#include "kiddos/ui/focus.hpp"
+#include "kiddos/ui/font.hpp"
+#include "kiddos/ui/geometry.hpp"
+#include "kiddos/ui/image.hpp"
+#include "kiddos/ui/label.hpp"
+#include "kiddos/ui/layout.hpp"
+#include "kiddos/ui/list_view.hpp"
+#include "kiddos/ui/panel.hpp"
+#include "kiddos/ui/progress_bar.hpp"
+#include "kiddos/ui/radio_group.hpp"
+#include "kiddos/ui/renderer.hpp"
+#include "kiddos/ui/screen.hpp"
+#include "kiddos/ui/screen_manager.hpp"
+#include "kiddos/ui/select.hpp"
+#include "kiddos/ui/slider.hpp"
+#include "kiddos/ui/text.hpp"
+#include "kiddos/ui/text_input.hpp"
+#include "kiddos/ui/text_input_interaction.hpp"
+#include "kiddos/ui/theme.hpp"
+#include "kiddos/ui/texture.hpp"
+#include "kiddos/ui/toggle.hpp"
+
+===== UI IMPLEMENTATION FILES =====
+
+----- src/ui/button.cpp -----
+#include "kiddos/ui/button.hpp"
+#include "kiddos/ui/text.hpp"
+
+#include <utility>
+
+namespace kiddos::ui {
+
+Button::Button(std::string label)
+    : label_(std::move(label)) {
+    set_focusable(true);
+}
+
+void Button::set_label(std::string label) {
+    label_ = std::move(label);
+}
+
+const std::string& Button::label() const noexcept {
+    return label_;
+}
+
+void Button::set_style(ButtonStyle style) noexcept {
+    style_ = style;
+}
+
+const ButtonStyle& Button::style() const noexcept {
+    return style_;
+}
+
+void Button::set_font(const Font* font) noexcept {
+    font_ = font;
+}
+
+const Font* Button::font() const noexcept {
+    return font_;
+}
+
+void Button::set_pressed(bool pressed) noexcept {
+    pressed_ = pressed;
+}
+
+bool Button::pressed() const noexcept {
+    return pressed_;
+}
+
+void Button::set_on_activate(std::function<void()> callback) {
+    on_activate_ = std::move(callback);
+}
+
+bool Button::activate() {
+    if (!visible() || !enabled() || !on_activate_) return false;
+    on_activate_();
+    return true;
+}
+
+void Button::draw(Renderer& renderer) {
+    const Rect rect = bounds();
+    if (rect.empty()) return;
+
+    Color fill = style_.normal;
+    Color border = style_.border;
+    Color text_color = style_.text;
+
+    if (!enabled()) {
+        fill = style_.disabled;
+        text_color = style_.disabled_text;
+    } else if (pressed_) {
+        fill = style_.pressed;
+    } else if (focused()) {
+        fill = style_.focused;
+        border = style_.focused_border;
+    }
+
+    renderer.fill_rect(rect, fill);
+    renderer.outline_rect(rect, border);
+
+    if (font_ && font_->valid() && !label_.empty()) {
+        TextRenderer text(renderer);
+        const int horizontal_padding = 16;
+        const int vertical_padding = 8;
+        Rect text_area{
+            rect.x + horizontal_padding,
+            rect.y + vertical_padding,
+            rect.w - horizontal_padding * 2,
+            rect.h - vertical_padding * 2
+        };
+        if (!text_area.empty()) {
+            text.draw_centered(label_, *font_, text_area, text_color);
+        }
+    }
+}
+
+} // namespace kiddos::ui
+
+----- src/ui/checkbox.cpp -----
+#include "kiddos/ui/checkbox.hpp"
+#include "kiddos/ui/text.hpp"
+#include "kiddos/ui/geometry.hpp"
+
+#include <algorithm>
+#include <utility>
+
+namespace kiddos::ui {
+
+Checkbox::Checkbox(std::string label, bool checked)
+    : label_(std::move(label)), checked_(checked) {
+    set_focusable(true);
+}
+
+void Checkbox::set_label(std::string label) {
+    label_ = std::move(label);
+}
+
+const std::string& Checkbox::label() const noexcept {
+    return label_;
+}
+
+void Checkbox::set_checked(bool checked) {
+    if (checked_ == checked) return;
+    checked_ = checked;
+    if (on_change_) on_change_(checked_);
+}
+
+bool Checkbox::checked() const noexcept {
+    return checked_;
+}
+
+bool Checkbox::toggle() {
+    if (!visible() || !enabled()) return false;
+    set_checked(!checked_);
+    return true;
+}
+
+void Checkbox::set_font(const Font* font) noexcept {
+    font_ = font;
+}
+
+const Font* Checkbox::font() const noexcept {
+    return font_;
+}
+
+void Checkbox::set_style(CheckboxStyle style) noexcept {
+    style_ = style;
+}
+
+const CheckboxStyle& Checkbox::style() const noexcept {
+    return style_;
+}
+
+void Checkbox::set_on_change(std::function<void(bool)> callback) {
+    on_change_ = std::move(callback);
+}
+
+void Checkbox::draw(Renderer& renderer) {
+    const Rect area = bounds();
+    if (area.empty()) return;
+
+    const int box_size = std::max(1, std::min(area.h - 8, 36));
+    const int box_y = area.y + (area.h - box_size) / 2;
+    const Rect box{area.x, box_y, box_size, box_size};
+
+    renderer.fill_rect(box, enabled() && checked_ ? style_.checked : style_.background);
+    renderer.outline_rect(box, focused() ? style_.focused_border : style_.border);
+
+    if (checked_) {
+        const int inset = std::max(2, box_size / 4);
+        renderer.draw_line(
+            {box.x + inset, box.y + box_size / 2},
+            {box.x + box_size / 2 - 1, box.y + box_size - inset},
+            style_.checkmark
+        );
+        renderer.draw_line(
+            {box.x + box_size / 2 - 1, box.y + box_size - inset},
+            {box.x + box_size - inset, box.y + inset},
+            style_.checkmark
+        );
+    }
+
+    if (font_ && font_->valid() && !label_.empty()) {
+        const int gap = 12;
+        Rect text_area{
+            box.x + box.w + gap,
+            area.y,
+            area.w - box.w - gap,
+            area.h
+        };
+        if (!text_area.empty()) {
+            TextRenderer text(renderer);
+            text.draw_centered(
+                label_, *font_, text_area,
+                enabled() ? style_.text : style_.disabled_text
+            );
+        }
+    }
+}
+
+}
+
+----- src/ui/controller.cpp -----
+#include "kiddos/ui/controller.hpp"
+#include "kiddos/ui/toggle.hpp"
+#include "kiddos/ui/checkbox.hpp"
+#include "kiddos/ui/radio_group.hpp"
+#include "kiddos/ui/select.hpp"
+#include "kiddos/ui/slider.hpp"
+#include "kiddos/ui/list_view.hpp"
+
+namespace kiddos::ui {
+
+ControllerInteraction::ControllerInteraction(FocusManager& focus) noexcept
+    : focus_(focus) {
+}
+
+bool ControllerInteraction::handle(UIAction action) {
+    Element* focused = focus_.focused();
+
+    switch (action) {
+        case UIAction::Left:
+            if (auto* radio = dynamic_cast<RadioGroup*>(focused))
+                return radio->select_previous();
+            if (auto* select = dynamic_cast<Select*>(focused))
+                return select->select_previous();
+            if (auto* slider = dynamic_cast<Slider*>(focused))
+                return slider->adjust(-1);
+            return focus_.move(Direction::Left);
+
+        case UIAction::Right:
+            if (auto* radio = dynamic_cast<RadioGroup*>(focused))
+                return radio->select_next();
+            if (auto* select = dynamic_cast<Select*>(focused))
+                return select->select_next();
+            if (auto* slider = dynamic_cast<Slider*>(focused))
+                return slider->adjust(1);
+            return focus_.move(Direction::Right);
+
+        case UIAction::Up:
+            if (auto* radio = dynamic_cast<RadioGroup*>(focused))
+                return radio->select_previous();
+            if (auto* list = dynamic_cast<ListView*>(focused))
+                return list->move_selection(-1);
+            return focus_.move(Direction::Up);
+
+        case UIAction::Down:
+            if (auto* radio = dynamic_cast<RadioGroup*>(focused))
+                return radio->select_next();
+            if (auto* list = dynamic_cast<ListView*>(focused))
+                return list->move_selection(1);
+            return focus_.move(Direction::Down);
+
+        case UIAction::Confirm:
+            if (auto* button = dynamic_cast<Button*>(focused))
+                return button->activate();
+            if (auto* toggle = dynamic_cast<Toggle*>(focused))
+                return toggle->toggle();
+            if (auto* checkbox = dynamic_cast<Checkbox*>(focused))
+                return checkbox->toggle();
+            if (auto* list = dynamic_cast<ListView*>(focused))
+                return list->activate_selected();
+            return false;
+
+        case UIAction::Back:
+            return cancel();
+    }
+
+    return false;
+}
+
+bool ControllerInteraction::cancel() noexcept {
+    return false;
+}
+
+} // namespace kiddos::ui
+
+----- src/ui/focus.cpp -----
+#include "kiddos/ui/focus.hpp"
+
+#include <algorithm>
+#include <cstdlib>
+#include <limits>
+#include <vector>
+
+namespace kiddos::ui {
+
+namespace {
+
+void collect_focusable(Container& container,
+                       std::vector<Element*>& result) {
+    for (std::size_t i = 0; i < container.child_count(); ++i) {
+        Element* element = container.child(i);
+        if (!element || !element->visible() || !element->enabled()) continue;
+
+        if (element->focusable() && element->enabled()) {
+            result.push_back(element);
+        }
+
+        if (auto* nested = dynamic_cast<Container*>(element)) {
+            collect_focusable(*nested, result);
+        }
+    }
+}
+
+int center_x(const Rect& rect) {
+    return rect.x + rect.w / 2;
+}
+
+int center_y(const Rect& rect) {
+    return rect.y + rect.h / 2;
+}
+
+} // namespace
+
+FocusManager::FocusManager(Container& root) noexcept
+    : root_(root) {
+}
+
+Element* FocusManager::focused() const noexcept {
+    return focused_;
+}
+
+bool FocusManager::eligible(const Element* element) const noexcept {
+    return element && element->visible() && element->enabled()
+        && element->focusable();
+}
+
+void FocusManager::clear() noexcept {
+    if (focused_) focused_->set_focused(false);
+    focused_ = nullptr;
+}
+
+bool FocusManager::focus_first() noexcept {
+    std::vector<Element*> candidates;
+    collect_focusable(root_, candidates);
+
+    if (candidates.empty()) {
+        clear();
+        return false;
+    }
+
+    if (std::find(candidates.begin(), candidates.end(), focused_) != candidates.end()
+        && eligible(focused_)) return true;
+
+    clear();
+    focused_ = candidates.front();
+    focused_->set_focused(true);
+    return true;
+}
+
+bool FocusManager::move(Direction direction) noexcept {
+    std::vector<Element*> candidates;
+    collect_focusable(root_, candidates);
+
+    if (candidates.empty()) {
+        clear();
+        return false;
+    }
+
+    if (std::find(candidates.begin(), candidates.end(), focused_) == candidates.end()
+        || !eligible(focused_)) {
+        clear();
+        focused_ = candidates.front();
+        focused_->set_focused(true);
+        return true;
+    }
+
+    const Rect current = focused_->bounds();
+    const int cx = center_x(current);
+    const int cy = center_y(current);
+
+    Element* best = nullptr;
+    long long best_score = std::numeric_limits<long long>::max();
+
+    for (Element* candidate : candidates) {
+        if (candidate == focused_) continue;
+
+        const Rect target = candidate->bounds();
+        const int dx = center_x(target) - cx;
+        const int dy = center_y(target) - cy;
+
+        int primary = 0;
+        int secondary = 0;
+
+        switch (direction) {
+            case Direction::Left:
+                primary = -dx;
+                secondary = std::abs(dy);
+                break;
+            case Direction::Right:
+                primary = dx;
+                secondary = std::abs(dy);
+                break;
+            case Direction::Up:
+                primary = -dy;
+                secondary = std::abs(dx);
+                break;
+            case Direction::Down:
+                primary = dy;
+                secondary = std::abs(dx);
+                break;
+        }
+
+        if (primary <= 0) continue;
+
+        const long long score =
+            static_cast<long long>(primary) * 1000LL + secondary;
+
+        if (score < best_score) {
+            best_score = score;
+            best = candidate;
+        }
+    }
+
+    // No candidate in that direction: leave focus unchanged.
+    if (!best) return false;
+
+    focused_->set_focused(false);
+    focused_ = best;
+    focused_->set_focused(true);
+    return true;
+}
+
+} // namespace kiddos::ui
+
+----- src/ui/font.cpp -----
+#include "kiddos/ui/font.hpp"
+#include <utility>
+
+namespace kiddos::ui {
+Font::~Font() { reset(); }
+Font::Font(Font&& other) noexcept
+    : font_(std::exchange(other.font_, nullptr)) {}
+Font& Font::operator=(Font&& other) noexcept {
+    if (this != &other) {
+        reset();
+        font_ = std::exchange(other.font_, nullptr);
+    }
+    return *this;
+}
+bool Font::load(const std::string& path, int point_size) {
+    reset();
+    if (path.empty() || point_size <= 0) return false;
+    font_ = TTF_OpenFont(path.c_str(), point_size);
+    return font_ != nullptr;
+}
+void Font::reset() noexcept {
+    if (font_) {
+        TTF_CloseFont(font_);
+        font_ = nullptr;
+    }
+}
+bool Font::valid() const noexcept { return font_ != nullptr; }
+TTF_Font* Font::native() const noexcept { return font_; }
+}
+
+----- src/ui/image.cpp -----
+#include "kiddos/ui/image.hpp"
+
+#include <algorithm>
+#include <cmath>
+
+namespace kiddos::ui {
+
+ImageGeometry calculate_image_geometry(
+    int texture_width,
+    int texture_height,
+    Rect bounds,
+    ImageFit fit
+) noexcept {
+    ImageGeometry result{};
+    if (texture_width <= 0 || texture_height <= 0 || bounds.empty()) {
+        return result;
+    }
+
+    result.source = {0, 0, texture_width, texture_height};
+    result.destination = bounds;
+
+    if (fit == ImageFit::stretch) {
+        result.valid = true;
+        return result;
+    }
+
+    const double sx = static_cast<double>(bounds.w) / texture_width;
+    const double sy = static_cast<double>(bounds.h) / texture_height;
+
+    if (fit == ImageFit::contain) {
+        const double scale = std::min(sx, sy);
+        const int w = std::max(1, static_cast<int>(std::round(texture_width * scale)));
+        const int h = std::max(1, static_cast<int>(std::round(texture_height * scale)));
+        result.destination = {
+            bounds.x + (bounds.w - w) / 2,
+            bounds.y + (bounds.h - h) / 2,
+            w,
+            h
+        };
+    } else {
+        const double scale = std::max(sx, sy);
+        const int crop_w = std::max(1, static_cast<int>(std::round(bounds.w / scale)));
+        const int crop_h = std::max(1, static_cast<int>(std::round(bounds.h / scale)));
+        result.source = {
+            (texture_width - crop_w) / 2,
+            (texture_height - crop_h) / 2,
+            crop_w,
+            crop_h
+        };
+    }
+
+    result.valid = true;
+    return result;
+}
+
+Image::Image(Texture* texture) noexcept : texture_(texture) {}
+
+void Image::set_texture(Texture* texture) noexcept { texture_ = texture; }
+Texture* Image::texture() const noexcept { return texture_; }
+
+void Image::set_fit(ImageFit fit) noexcept { fit_ = fit; }
+ImageFit Image::fit() const noexcept { return fit_; }
+
+void Image::set_opacity(std::uint8_t opacity) noexcept { opacity_ = opacity; }
+std::uint8_t Image::opacity() const noexcept { return opacity_; }
+
+ImageGeometry Image::geometry() const noexcept {
+    if (!texture_ || !texture_->valid()) return {};
+    return calculate_image_geometry(
+        texture_->width(), texture_->height(), bounds(), fit_
+    );
+}
+
+void Image::draw(Renderer& renderer) {
+    if (!texture_ || !texture_->valid()) return;
+    const ImageGeometry g = geometry();
+    if (!g.valid) return;
+
+    if (fit_ == ImageFit::cover) {
+        renderer.set_clip(bounds());
+        renderer.draw_texture(texture_->native(), g.source, g.destination, opacity_);
+        renderer.clear_clip();
+    } else {
+        renderer.draw_texture(texture_->native(), g.source, g.destination, opacity_);
+    }
+}
+
+}
+
+----- src/ui/label.cpp -----
+#include "kiddos/ui/label.hpp"
+#include "kiddos/ui/text.hpp"
+
+#include <SDL_ttf.h>
+#include <utility>
+
+namespace kiddos::ui {
+
+Label::Label(std::string text)
+    : text_(std::move(text)) {
+}
+
+void Label::set_text(std::string text) {
+    text_ = std::move(text);
+}
+
+const std::string& Label::text() const noexcept {
+    return text_;
+}
+
+void Label::set_font(const Font* font) noexcept {
+    font_ = font;
+}
+
+const Font* Label::font() const noexcept {
+    return font_;
+}
+
+void Label::set_color(Color color) noexcept {
+    color_ = color;
+}
+
+Color Label::color() const noexcept {
+    return color_;
+}
+
+void Label::set_alignment(LabelAlignment alignment) noexcept {
+    alignment_ = alignment;
+}
+
+LabelAlignment Label::alignment() const noexcept {
+    return alignment_;
+}
+
+void Label::draw(Renderer& renderer) {
+    const Rect area = bounds();
+
+    if (!font_ || !font_->valid() || text_.empty() || area.empty()) {
+        return;
+    }
+
+    int width = 0;
+    int height = 0;
+
+    if (TTF_SizeUTF8(font_->native(), text_.c_str(), &width, &height) != 0) {
+        return;
+    }
+
+    int x = area.x;
+
+    switch (alignment_) {
+        case LabelAlignment::left:
+            break;
+        case LabelAlignment::center:
+            x += (area.w - width) / 2;
+            break;
+        case LabelAlignment::right:
+            x += area.w - width;
+            break;
+    }
+
+    const int y = area.y + (area.h - height) / 2;
+
+    TextRenderer text_renderer(renderer);
+    text_renderer.draw(text_, *font_, {x, y}, color_);
+}
+
+}
+
+----- src/ui/layout.cpp -----
+#include "kiddos/ui/layout.hpp"
+
+#include <algorithm>
+#include <vector>
+
+namespace kiddos::ui {
+
+void StackLayout::apply(
+    Container& container,
+    Rect area,
+    Axis axis,
+    int gap,
+    Insets padding
+) noexcept {
+    container.set_bounds(area);
+
+    gap = std::max(0, gap);
+
+    const int left = std::clamp(padding.left, 0, area.w);
+    const int right = std::clamp(padding.right, 0, area.w - left);
+    const int top = std::clamp(padding.top, 0, area.h);
+    const int bottom = std::clamp(padding.bottom, 0, area.h - top);
+
+    const int content_x = area.x + left;
+    const int content_y = area.y + top;
+    const int content_w = std::max(0, area.w - left - right);
+    const int content_h = std::max(0, area.h - top - bottom);
+
+    std::vector<Element*> visible;
+
+    for (std::size_t i = 0; i < container.child_count(); ++i) {
+        Element* item = container.child(i);
+        if (item && item->visible()) {
+            visible.push_back(item);
+        }
+    }
+
+    if (visible.empty()) return;
+
+    const int main_size =
+        axis == Axis::Horizontal ? content_w : content_h;
+
+    const int cross_size =
+        axis == Axis::Horizontal ? content_h : content_w;
+
+    const int total_gaps =
+        gap * static_cast<int>(visible.size() - 1);
+
+    const int available = std::max(0, main_size - total_gaps);
+    const int base_size = available / static_cast<int>(visible.size());
+    const int remainder = available % static_cast<int>(visible.size());
+
+    int position = axis == Axis::Horizontal ? content_x : content_y;
+
+    for (std::size_t i = 0; i < visible.size(); ++i) {
+        const int item_size =
+            base_size + (static_cast<int>(i) < remainder ? 1 : 0);
+
+        if (axis == Axis::Horizontal) {
+            visible[i]->set_bounds({
+                position, content_y, item_size, cross_size
+            });
+        } else {
+            visible[i]->set_bounds({
+                content_x, position, cross_size, item_size
+            });
+        }
+
+        position += item_size + gap;
+    }
+}
+
+} // namespace kiddos::ui
+
+----- src/ui/list_view.cpp -----
+#include "kiddos/ui/list_view.hpp"
+#include "kiddos/ui/text.hpp"
+
+#include <algorithm>
+#include <utility>
+
+namespace kiddos::ui {
+
+ListView::ListView() {
+    set_focusable(true);
+}
+
+void ListView::set_items(std::vector<std::string> items) {
+    items_ = std::move(items);
+    selected_index_ = items_.empty() ? -1 : 0;
+    scroll_offset_ = 0;
+}
+
+const std::vector<std::string>& ListView::items() const noexcept {
+    return items_;
+}
+
+int ListView::selected_index() const noexcept {
+    return selected_index_;
+}
+
+bool ListView::set_selected_index(int index) {
+    if (index < 0 || index >= static_cast<int>(items_.size())) return false;
+    if (selected_index_ == index) return true;
+    selected_index_ = index;
+    ensure_selection_visible();
+    return true;
+}
+
+bool ListView::move_selection(int direction) {
+    if (!visible() || !enabled() || direction == 0 || items_.empty()) {
+        return false;
+    }
+
+    const int next = selected_index_ + (direction > 0 ? 1 : -1);
+    if (next < 0 || next >= static_cast<int>(items_.size())) return false;
+
+    selected_index_ = next;
+    ensure_selection_visible();
+    return true;
+}
+
+bool ListView::activate_selected() {
+    if (!visible() || !enabled() || selected_index_ < 0 ||
+        selected_index_ >= static_cast<int>(items_.size()) || !on_activate_) {
+        return false;
+    }
+
+    on_activate_(selected_index_);
+    return true;
+}
+
+void ListView::set_row_height(int height) noexcept {
+    row_height_ = std::max(1, height);
+    ensure_selection_visible();
+}
+
+int ListView::row_height() const noexcept {
+    return row_height_;
+}
+
+void ListView::set_font(const Font* font) noexcept {
+    font_ = font;
+}
+
+void ListView::set_style(ListViewStyle style) noexcept {
+    style_ = style;
+}
+
+const ListViewStyle& ListView::style() const noexcept {
+    return style_;
+}
+
+void ListView::set_on_activate(std::function<void(int)> callback) {
+    on_activate_ = std::move(callback);
+}
+
+void ListView::ensure_selection_visible() noexcept {
+    const Rect area = bounds();
+    if (area.h <= 0 || row_height_ <= 0 || selected_index_ < 0) {
+        scroll_offset_ = 0;
+        return;
+    }
+
+    const int visible_rows = std::max(1, area.h / row_height_);
+    if (selected_index_ < scroll_offset_) {
+        scroll_offset_ = selected_index_;
+    } else if (selected_index_ >= scroll_offset_ + visible_rows) {
+        scroll_offset_ = selected_index_ - visible_rows + 1;
+    }
+
+    const int maximum_offset = std::max(
+        0, static_cast<int>(items_.size()) - visible_rows
+    );
+    scroll_offset_ = std::clamp(scroll_offset_, 0, maximum_offset);
+}
+
+void ListView::draw(Renderer& renderer) {
+    const Rect area = bounds();
+    if (area.empty()) return;
+
+    renderer.fill_rect(area, style_.background);
+    renderer.outline_rect(area, style_.border);
+
+    const int visible_rows = (area.h + row_height_ - 1) / row_height_;
+    const int end = std::min(
+        static_cast<int>(items_.size()), scroll_offset_ + visible_rows
+    );
+
+    renderer.set_clip(area);
+    TextRenderer text(renderer);
+
+    for (int index = scroll_offset_; index < end; ++index) {
+        const int row_y = area.y + (index - scroll_offset_) * row_height_;
+        const Rect row{area.x + 1, row_y, std::max(0, area.w - 2), row_height_};
+
+        if (index == selected_index_) {
+            renderer.fill_rect(row, style_.selected);
+        }
+
+        if (font_ && font_->valid() && !items_[index].empty()) {
+            const Color color = enabled() ? style_.text : style_.disabled_text;
+            text.draw(items_[index], *font_,
+                      {row.x + 12, row.y + std::max(0, (row.h - 20) / 2)},
+                      color);
+        }
+    }
+
+    renderer.clear_clip();
+    if (focused()) renderer.outline_rect(area, style_.selected);
+}
+
+}
+
+----- src/ui/panel.cpp -----
+#include "kiddos/ui/panel.hpp"
+
+#include <algorithm>
+#include <utility>
+
+namespace kiddos::ui {
+
+Panel::Panel(PanelStyle style)
+    : style_(std::move(style)) {
+    style_.border_thickness = std::max(0, style_.border_thickness);
+    style_.corner_radius = std::max(0, style_.corner_radius);
+}
+
+void Panel::set_style(PanelStyle style) noexcept {
+    style.border_thickness = std::max(0, style.border_thickness);
+    style.corner_radius = std::max(0, style.corner_radius);
+    style_ = style;
+}
+
+const PanelStyle& Panel::style() const noexcept {
+    return style_;
+}
+
+void Panel::set_background(Color color) noexcept {
+    style_.background = color;
+}
+
+void Panel::set_border(Color color) noexcept {
+    style_.border = color;
+}
+
+void Panel::set_border_thickness(int thickness) noexcept {
+    style_.border_thickness = std::max(0, thickness);
+}
+
+void Panel::set_corner_radius(int radius) noexcept {
+    style_.corner_radius = std::max(0, radius);
+}
+
+void Panel::draw(Renderer& renderer) {
+    const Rect rect = bounds();
+    if (rect.empty()) return;
+
+    const int radius = style_.corner_radius;
+    const int thickness = std::min(
+        style_.border_thickness, std::min(rect.w, rect.h) / 2
+    );
+
+    // An opaque background allows a clean, uniform border: fill the card
+    // with the border color, then the inset area with the background. This
+    // avoids stacking nested outlines, which look crude at small radii.
+    if (thickness > 0 && style_.background.a == 255) {
+        renderer.fill_rounded_rect(rect, radius, style_.border);
+
+        const Rect inner{
+            rect.x + thickness,
+            rect.y + thickness,
+            rect.w - thickness * 2,
+            rect.h - thickness * 2
+        };
+
+        if (!inner.empty()) {
+            renderer.fill_rounded_rect(
+                inner, std::max(0, radius - thickness), style_.background
+            );
+        }
+        return;
+    }
+
+    renderer.fill_rounded_rect(rect, radius, style_.background);
+
+    // Transparent backgrounds (for example glow outlines) draw the border
+    // as clean rounded outlines instead of covering the content beneath.
+    for (int inset = 0; inset < thickness; ++inset) {
+        const Rect outline{
+            rect.x + inset,
+            rect.y + inset,
+            rect.w - inset * 2,
+            rect.h - inset * 2
+        };
+
+        if (outline.empty()) break;
+        renderer.outline_rounded_rect(
+            outline,
+            std::max(0, radius - inset),
+            style_.border
+        );
+    }
+}
+
+}
+
+----- src/ui/progress_bar.cpp -----
+#include "kiddos/ui/progress_bar.hpp"
+
+#include <algorithm>
+
+namespace kiddos::ui {
+
+ProgressBar::ProgressBar(int value) {
+    set_value(value);
+}
+
+void ProgressBar::set_value(int value) noexcept {
+    value_ = std::clamp(value, 0, 100);
+}
+
+int ProgressBar::value() const noexcept {
+    return value_;
+}
+
+void ProgressBar::set_orientation(ProgressOrientation orientation) noexcept {
+    orientation_ = orientation;
+}
+
+ProgressOrientation ProgressBar::orientation() const noexcept {
+    return orientation_;
+}
+
+void ProgressBar::set_style(ProgressBarStyle style) noexcept {
+    style.border_thickness = std::max(0, style.border_thickness);
+    style_ = style;
+}
+
+const ProgressBarStyle& ProgressBar::style() const noexcept {
+    return style_;
+}
+
+void ProgressBar::draw(Renderer& renderer) {
+    const Rect area = bounds();
+    if (area.empty()) return;
+
+    renderer.fill_rect(area, style_.background);
+
+    const int border = std::min(
+        style_.border_thickness,
+        std::min(area.w, area.h) / 2
+    );
+
+    if (border > 0) {
+        renderer.outline_rect(area, style_.border);
+    }
+
+    const Rect inner{
+        area.x + border,
+        area.y + border,
+        area.w - border * 2,
+        area.h - border * 2
+    };
+
+    if (inner.empty() || value_ == 0) return;
+
+    Rect fill_area = inner;
+
+    if (orientation_ == ProgressOrientation::horizontal) {
+        fill_area.w = inner.w * value_ / 100;
+    } else {
+        fill_area.h = inner.h * value_ / 100;
+        fill_area.y = inner.y + inner.h - fill_area.h;
+    }
+
+    if (!fill_area.empty()) {
+        renderer.fill_rect(fill_area, style_.fill);
+    }
+}
+
+}
+
+----- src/ui/radio_group.cpp -----
+#include "kiddos/ui/radio_group.hpp"
+#include "kiddos/ui/text.hpp"
+
+#include <algorithm>
+#include <utility>
+
+namespace kiddos::ui {
+
+RadioGroup::RadioGroup(std::vector<std::string> options, int selected) {
+    set_focusable(true);
+    set_options(std::move(options));
+    if (!options_.empty()) set_selected(selected);
+}
+
+void RadioGroup::set_options(std::vector<std::string> options) {
+    options_ = std::move(options);
+    selected_ = options_.empty() ? -1 : 0;
+}
+
+const std::vector<std::string>& RadioGroup::options() const noexcept {
+    return options_;
+}
+
+bool RadioGroup::set_selected(int index) {
+    if (!visible() || !enabled() || index < 0 ||
+        index >= static_cast<int>(options_.size())) return false;
+    if (selected_ == index) return true;
+    selected_ = index;
+    if (on_change_) on_change_(selected_);
+    return true;
+}
+
+int RadioGroup::selected() const noexcept {
+    return selected_;
+}
+
+bool RadioGroup::select_next() {
+    if (options_.empty() || !visible() || !enabled()) return false;
+    return set_selected((selected_ + 1) % static_cast<int>(options_.size()));
+}
+
+bool RadioGroup::select_previous() {
+    if (options_.empty() || !visible() || !enabled()) return false;
+    const int count = static_cast<int>(options_.size());
+    return set_selected((selected_ - 1 + count) % count);
+}
+
+void RadioGroup::set_font(const Font* font) noexcept {
+    font_ = font;
+}
+
+const Font* RadioGroup::font() const noexcept {
+    return font_;
+}
+
+void RadioGroup::set_style(RadioGroupStyle style) noexcept {
+    style_ = style;
+}
+
+const RadioGroupStyle& RadioGroup::style() const noexcept {
+    return style_;
+}
+
+void RadioGroup::set_on_change(std::function<void(int)> callback) {
+    on_change_ = std::move(callback);
+}
+
+void RadioGroup::draw(Renderer& renderer) {
+    const Rect area = bounds();
+    if (area.empty() || options_.empty()) return;
+
+    const int row_height = std::max(1, area.h / static_cast<int>(options_.size()));
+    const int radius = std::max(2, std::min(10, row_height / 4));
+
+    for (int i = 0; i < static_cast<int>(options_.size()); ++i) {
+        const Rect row{area.x, area.y + i * row_height,
+                       area.w, i == static_cast<int>(options_.size()) - 1
+                                   ? area.h - i * row_height : row_height};
+        if (row.empty()) continue;
+
+        const int cy = row.y + row.h / 2;
+        const int cx = row.x + radius + 5;
+        const Rect indicator{cx - radius, cy - radius, radius * 2, radius * 2};
+        renderer.fill_rect(row, style_.background);
+        renderer.outline_rect(indicator,
+            focused() ? style_.focused_border : style_.border);
+
+        if (i == selected_) {
+            const int inner = std::max(1, radius / 2);
+            renderer.fill_rect(
+                {cx - inner, cy - inner, inner * 2, inner * 2},
+                enabled() ? style_.selected : style_.disabled_text
+            );
+        }
+
+        if (font_ && font_->valid()) {
+            const Rect text_area{cx + radius + 10, row.y,
+                                 row.w - (cx - row.x) - radius - 10, row.h};
+            if (!text_area.empty()) {
+                TextRenderer text(renderer);
+                text.draw_centered(options_[i], *font_, text_area,
+                    enabled() ? style_.text : style_.disabled_text);
+            }
+        }
+    }
+}
+
+}
+
+----- src/ui/renderer.cpp -----
+#include "kiddos/ui/renderer.hpp"
+
+#include <algorithm>
+#include <cmath>
+
+namespace kiddos::ui {
+
+Renderer::Renderer(SDL_Renderer* renderer) noexcept
+    : renderer_(renderer) {
+}
+
+void Renderer::attach(SDL_Renderer* renderer) noexcept {
+    renderer_ = renderer;
+}
+
+bool Renderer::valid() const noexcept {
+    return renderer_ != nullptr;
+}
+
+SDL_Renderer* Renderer::native() const noexcept {
+    return renderer_;
+}
+
+bool Renderer::set_color(Color color) const {
+    if (!renderer_) return false;
+
+    return SDL_SetRenderDrawColor(
+        renderer_,
+        color.r,
+        color.g,
+        color.b,
+        color.a
+    ) == 0;
+}
+
+bool Renderer::clear(Color color) const {
+    if (!set_color(color)) return false;
+    return SDL_RenderClear(renderer_) == 0;
+}
+
+bool Renderer::fill_rect(Rect rect, Color color) const {
+    if (!renderer_ || rect.empty() || !set_color(color)) return false;
+
+    SDL_Rect native_rect{rect.x, rect.y, rect.w, rect.h};
+    return SDL_RenderFillRect(renderer_, &native_rect) == 0;
+}
+
+bool Renderer::outline_rect(Rect rect, Color color) const {
+    if (!renderer_ || rect.empty() || !set_color(color)) return false;
+
+    SDL_Rect native_rect{rect.x, rect.y, rect.w, rect.h};
+    return SDL_RenderDrawRect(renderer_, &native_rect) == 0;
+}
+
+bool Renderer::draw_line(Point from, Point to, Color color) const {
+    if (!renderer_ || !set_color(color)) return false;
+
+    return SDL_RenderDrawLine(
+        renderer_, from.x, from.y, to.x, to.y
+    ) == 0;
+}
+
+bool Renderer::draw_point(Point point, Color color) const {
+    if (!renderer_ || !set_color(color)) return false;
+
+    return SDL_RenderDrawPoint(
+        renderer_, point.x, point.y
+    ) == 0;
+}
+
+bool Renderer::draw_texture(
+    SDL_Texture* texture,
+    Rect source,
+    Rect destination,
+    std::uint8_t opacity
+) const {
+    if (!renderer_ || !texture || source.empty() || destination.empty()) return false;
+
+    Uint8 previous_opacity = 255;
+    if (SDL_GetTextureAlphaMod(texture, &previous_opacity) != 0) return false;
+    if (SDL_SetTextureAlphaMod(texture, opacity) != 0) return false;
+
+    SDL_Rect src{source.x, source.y, source.w, source.h};
+    SDL_Rect dst{destination.x, destination.y, destination.w, destination.h};
+    const bool rendered = SDL_RenderCopy(renderer_, texture, &src, &dst) == 0;
+    const bool restored = SDL_SetTextureAlphaMod(texture, previous_opacity) == 0;
+
+    return rendered && restored;
+}
+
+namespace {
+
+// Distance from the rect edge to the rounded-corner boundary at the row or
+// column `steps` in from the corner, sampled at the pixel center. Fills use
+// this so corner arcs are smooth and evenly shaped.
+int corner_inset(int radius, int steps) {
+    const double dy = static_cast<double>(radius - steps) - 0.5;
+    const double inside = std::max(
+        0.0,
+        static_cast<double>(radius) * radius - dy * dy
+    );
+    return radius - static_cast<int>(std::sqrt(inside));
+}
+
+} // namespace
+
+bool Renderer::fill_rounded_rect(Rect rect, int radius, Color color) const {
+    if (!renderer_ || rect.empty() || !set_color(color)) return false;
+
+    radius = std::clamp(radius, 0, std::min(rect.w, rect.h) / 2);
+    if (radius == 0) {
+        SDL_Rect native_rect{rect.x, rect.y, rect.w, rect.h};
+        return SDL_RenderFillRect(renderer_, &native_rect) == 0;
+    }
+
+    for (int y = 0; y < rect.h; ++y) {
+        int inset = 0;
+        if (y < radius) {
+            inset = corner_inset(radius, y);
+        } else if (y >= rect.h - radius) {
+            inset = corner_inset(radius, rect.h - 1 - y);
+        }
+
+        if (SDL_RenderDrawLine(
+                renderer_,
+                rect.x + inset,
+                rect.y + y,
+                rect.x + rect.w - 1 - inset,
+                rect.y + y
+            ) != 0) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Renderer::outline_rounded_rect(Rect rect, int radius, Color color) const {
+    if (!renderer_ || rect.empty() || !set_color(color)) return false;
+
+    radius = std::clamp(radius, 0, std::min(rect.w, rect.h) / 2);
+    if (radius == 0) {
+        SDL_Rect native_rect{rect.x, rect.y, rect.w, rect.h};
+        return SDL_RenderDrawRect(renderer_, &native_rect) == 0;
+    }
+
+    // Straight edges between the corner arcs.
+    if (SDL_RenderDrawLine(
+            renderer_, rect.x + radius, rect.y,
+            rect.x + rect.w - 1 - radius, rect.y
+        ) != 0 ||
+        SDL_RenderDrawLine(
+            renderer_, rect.x + radius, rect.y + rect.h - 1,
+            rect.x + rect.w - 1 - radius, rect.y + rect.h - 1
+        ) != 0 ||
+        SDL_RenderDrawLine(
+            renderer_, rect.x, rect.y + radius,
+            rect.x, rect.y + rect.h - 1 - radius
+        ) != 0 ||
+        SDL_RenderDrawLine(
+            renderer_, rect.x + rect.w - 1, rect.y + radius,
+            rect.x + rect.w - 1, rect.y + rect.h - 1 - radius
+        ) != 0) {
+        return false;
+    }
+
+    // Corner arcs, traced along the true circle with dense angle steps so
+    // every corner stays continuous with no gaps. Points that land on the
+    // straight edge lines are skipped: the lines already cover them, and
+    // re-drawing would blend semi-transparent borders twice on one pixel.
+    constexpr double kPi = 3.14159265358979323846;
+    const int steps = std::max(2, radius * 2);
+    const int right = rect.x + rect.w - 1;
+    const int bottom = rect.y + rect.h - 1;
+
+    const auto on_edge_line = [&](ui::Point point) {
+        if (point.y == rect.y || point.y == bottom) {
+            return point.x >= rect.x + radius && point.x <= right - radius;
+        }
+        if (point.x == rect.x || point.x == right) {
+            return point.y >= rect.y + radius && point.y <= bottom - radius;
+        }
+        return false;
+    };
+
+    const auto draw_corner = [&](int center_x, int center_y, int sign_x,
+                                 int sign_y) {
+        ui::Point previous{
+            center_x + sign_x * radius,
+            center_y
+        };
+
+        for (int step = 1; step < steps; ++step) {
+            const double angle = (kPi / 2.0) * step / steps;
+            const ui::Point point{
+                center_x + sign_x *
+                    static_cast<int>(std::lround(radius * std::cos(angle))),
+                center_y + sign_y *
+                    static_cast<int>(std::lround(radius * std::sin(angle)))
+            };
+
+            if ((point.x != previous.x || point.y != previous.y) &&
+                !on_edge_line(point)) {
+                if (SDL_RenderDrawPoint(
+                        renderer_, point.x, point.y
+                    ) != 0) {
+                    return false;
+                }
+            }
+            previous = point;
+        }
+
+        return true;
+    };
+
+    if (!draw_corner(rect.x + radius, rect.y + radius, -1, -1) ||
+        !draw_corner(
+            rect.x + rect.w - 1 - radius, rect.y + radius, 1, -1
+        ) ||
+        !draw_corner(
+            rect.x + radius, rect.y + rect.h - 1 - radius, -1, 1
+        ) ||
+        !draw_corner(
+            rect.x + rect.w - 1 - radius,
+            rect.y + rect.h - 1 - radius,
+            1,
+            1
+        )) {
+        return false;
+    }
+
+    return true;
+}
+
+bool Renderer::set_clip(Rect rect) const {
+    if (!renderer_) return false;
+
+    SDL_Rect native_rect{rect.x, rect.y, rect.w, rect.h};
+    return SDL_RenderSetClipRect(renderer_, &native_rect) == 0;
+}
+
+bool Renderer::clear_clip() const {
+    if (!renderer_) return false;
+
+    return SDL_RenderSetClipRect(renderer_, nullptr) == 0;
+}
+
+void Renderer::present() const {
+    if (renderer_) {
+        SDL_RenderPresent(renderer_);
+    }
+}
+
+} // namespace kiddos::ui
+
+----- src/ui/screen.cpp -----
+#include "kiddos/ui/screen.hpp"
+namespace kiddos::ui {
+Screen::Screen() noexcept : focus_(root_), controller_(focus_), text_input_(focus_) {}
+Container& Screen::root() noexcept { return root_; }
+FocusManager& Screen::focus() noexcept { return focus_; }
+void Screen::render(Renderer& renderer) { root_.render(renderer); }
+bool Screen::handle_action(UIAction action) {
+    if (!focus_.focused()) focus_.focus_first();
+    return controller_.handle(action);
+}
+bool Screen::handle_text_input(const ::kiddos::TextInputEvent& event) {
+    switch (event.type) {
+    case ::kiddos::TextInputEventType::Text: return text_input_.insert_text(event.text);
+    case ::kiddos::TextInputEventType::Backspace: return text_input_.handle(TextInputKey::Backspace);
+    case ::kiddos::TextInputEventType::Delete: return text_input_.handle(TextInputKey::Delete);
+    case ::kiddos::TextInputEventType::Left: return text_input_.handle(TextInputKey::Left);
+    case ::kiddos::TextInputEventType::Right: return text_input_.handle(TextInputKey::Right);
+    case ::kiddos::TextInputEventType::Home: return text_input_.handle(TextInputKey::Home);
+    case ::kiddos::TextInputEventType::End: return text_input_.handle(TextInputKey::End);
+    }
+    return false;
+}
+}
+
+----- src/ui/screen_manager.cpp -----
+#include "kiddos/ui/screen_manager.hpp"
+namespace kiddos::ui {
+ScreenManager::~ScreenManager() { clear(); }
+bool ScreenManager::push(std::unique_ptr<Screen> screen) {
+    if (!screen) return false;
+    if (auto* active = current()) active->on_suspend();
+    auto* next = screen.get();
+    stack_.push_back(std::move(screen));
+    next->on_enter();
+    next->focus().focus_first();
+    return true;
+}
+bool ScreenManager::pop() {
+    if (stack_.empty()) return false;
+    stack_.back()->on_exit();
+    stack_.pop_back();
+    if (auto* active = current()) { active->on_resume(); active->focus().focus_first(); }
+    return true;
+}
+bool ScreenManager::replace(std::unique_ptr<Screen> screen) {
+    if (!screen) return false;
+    if (auto* active = current()) { active->on_exit(); stack_.pop_back(); }
+    auto* next = screen.get();
+    stack_.push_back(std::move(screen));
+    next->on_enter();
+    next->focus().focus_first();
+    return true;
+}
+void ScreenManager::clear() noexcept {
+    while (!stack_.empty()) { stack_.back()->on_exit(); stack_.pop_back(); }
+}
+Screen* ScreenManager::current() noexcept { return stack_.empty() ? nullptr : stack_.back().get(); }
+const Screen* ScreenManager::current() const noexcept { return stack_.empty() ? nullptr : stack_.back().get(); }
+std::size_t ScreenManager::depth() const noexcept { return stack_.size(); }
+void ScreenManager::update(float dt) { if (auto* s=current()) s->update(dt); }
+void ScreenManager::render(Renderer& r) { if (auto* s=current()) s->render(r); }
+bool ScreenManager::handle_action(UIAction a) {
+    if (a == UIAction::Back) return pop();
+    auto* s=current(); return s ? s->handle_action(a) : false;
+}
+bool ScreenManager::handle_text_input(const ::kiddos::TextInputEvent& e) {
+    auto* s=current(); return s ? s->handle_text_input(e) : false;
+}
+}
+
+----- src/ui/select.cpp -----
+#include "kiddos/ui/select.hpp"
+#include "kiddos/ui/text.hpp"
+
+#include <algorithm>
+#include <utility>
+
+namespace kiddos::ui {
+
+Select::Select(std::vector<std::string> options, int selected) {
+    set_focusable(true);
+    set_options(std::move(options));
+    if (!options_.empty()) set_selected(selected);
+}
+
+void Select::set_options(std::vector<std::string> options) {
+    options_ = std::move(options);
+    selected_ = options_.empty() ? -1 : 0;
+}
+
+const std::vector<std::string>& Select::options() const noexcept {
+    return options_;
+}
+
+bool Select::set_selected(int index) {
+    if (!visible() || !enabled() || index < 0 ||
+        index >= static_cast<int>(options_.size())) return false;
+    if (selected_ == index) return true;
+
+    selected_ = index;
+    if (on_change_) on_change_(selected_);
+    return true;
+}
+
+int Select::selected() const noexcept {
+    return selected_;
+}
+
+const std::string* Select::selected_option() const noexcept {
+    if (selected_ < 0 || selected_ >= static_cast<int>(options_.size()))
+        return nullptr;
+    return &options_[selected_];
+}
+
+bool Select::select_next() {
+    if (options_.empty() || !visible() || !enabled()) return false;
+    return set_selected((selected_ + 1) % static_cast<int>(options_.size()));
+}
+
+bool Select::select_previous() {
+    if (options_.empty() || !visible() || !enabled()) return false;
+    const int count = static_cast<int>(options_.size());
+    return set_selected((selected_ - 1 + count) % count);
+}
+
+void Select::set_font(const Font* font) noexcept {
+    font_ = font;
+}
+
+const Font* Select::font() const noexcept {
+    return font_;
+}
+
+void Select::set_style(SelectStyle style) noexcept {
+    style_ = style;
+}
+
+const SelectStyle& Select::style() const noexcept {
+    return style_;
+}
+
+void Select::set_on_change(std::function<void(int)> callback) {
+    on_change_ = std::move(callback);
+}
+
+void Select::draw(Renderer& renderer) {
+    const Rect area = bounds();
+    if (area.empty()) return;
+
+    renderer.fill_rect(area, style_.background);
+    renderer.outline_rect(
+        area, focused() ? style_.focused_border : style_.border);
+
+    const Color foreground = enabled() ? style_.text : style_.disabled_text;
+    const int mid_y = area.y + area.h / 2;
+    const int arrow_size = std::max(2, std::min(7, area.h / 5));
+    const int left_x = area.x + std::max(5, area.h / 3);
+    const int right_x = area.x + area.w - std::max(5, area.h / 3);
+
+    renderer.draw_line(
+        {left_x + arrow_size, mid_y - arrow_size},
+        {left_x, mid_y}, style_.arrow);
+    renderer.draw_line(
+        {left_x, mid_y},
+        {left_x + arrow_size, mid_y + arrow_size}, style_.arrow);
+
+    renderer.draw_line(
+        {right_x - arrow_size, mid_y - arrow_size},
+        {right_x, mid_y}, style_.arrow);
+    renderer.draw_line(
+        {right_x, mid_y},
+        {right_x - arrow_size, mid_y + arrow_size}, style_.arrow);
+
+    if (font_ && font_->valid()) {
+        const Rect text_area{
+            area.x + arrow_size + 12,
+            area.y,
+            area.w - (arrow_size * 2 + 24),
+            area.h
+        };
+        if (!text_area.empty() && selected_option()) {
+            TextRenderer text(renderer);
+            text.draw_centered(*selected_option(), *font_, text_area,
+                               foreground);
+        }
+    }
+}
+
+}
+
+----- src/ui/slider.cpp -----
+#include "kiddos/ui/slider.hpp"
+
+#include <algorithm>
+#include <utility>
+
+namespace kiddos::ui {
+
+Slider::Slider(int value, int minimum, int maximum) {
+    set_range(minimum, maximum);
+    set_value(value);
+    set_focusable(true);
+}
+
+void Slider::set_value(int value) {
+    const int next = std::clamp(value, minimum_, maximum_);
+    if (next == value_) return;
+
+    value_ = next;
+    if (on_change_) on_change_(value_);
+}
+
+int Slider::value() const noexcept {
+    return value_;
+}
+
+void Slider::set_range(int minimum, int maximum) {
+    if (maximum < minimum) std::swap(minimum, maximum);
+
+    minimum_ = minimum;
+    maximum_ = maximum;
+    set_value(value_);
+}
+
+int Slider::minimum() const noexcept {
+    return minimum_;
+}
+
+int Slider::maximum() const noexcept {
+    return maximum_;
+}
+
+void Slider::set_step(int step) noexcept {
+    step_ = std::max(1, step);
+}
+
+int Slider::step() const noexcept {
+    return step_;
+}
+
+bool Slider::adjust(int direction) {
+    if (!visible() || !enabled() || direction == 0) return false;
+
+    const int delta = direction > 0 ? step_ : -step_;
+    const long long next = static_cast<long long>(value_) + delta;
+    set_value(static_cast<int>(std::clamp(
+        next,
+        static_cast<long long>(minimum_),
+        static_cast<long long>(maximum_)
+    )));
+    return true;
+}
+
+void Slider::set_style(SliderStyle style) noexcept {
+    style_ = style;
+}
+
+const SliderStyle& Slider::style() const noexcept {
+    return style_;
+}
+
+void Slider::set_on_change(std::function<void(int)> callback) {
+    on_change_ = std::move(callback);
+}
+
+void Slider::draw(Renderer& renderer) {
+    const Rect area = bounds();
+    if (area.empty()) return;
+
+    const int track_height = std::min(area.h, std::max(1, area.h / 5));
+    const int track_y = area.y + (area.h - track_height) / 2;
+    const Rect track{area.x, track_y, area.w, track_height};
+
+    renderer.fill_rect(track, style_.track);
+
+    const long long range =
+        static_cast<long long>(maximum_) - minimum_;
+    const long long offset =
+        static_cast<long long>(value_) - minimum_;
+
+    const int position = range == 0
+        ? 0
+        : static_cast<int>(offset * area.w / range);
+
+    if (position > 0) {
+        renderer.fill_rect(
+            {area.x, track_y, position, track_height},
+            style_.fill
+        );
+    }
+
+    const int knob_size = std::min(
+        area.w,
+        std::min(area.h, std::max(6, area.h / 2))
+    );
+    const int knob_x = std::clamp(
+        area.x + position - knob_size / 2,
+        area.x,
+        area.x + area.w - knob_size
+    );
+
+    renderer.fill_rect(
+        {knob_x, area.y + (area.h - knob_size) / 2, knob_size, knob_size},
+        style_.knob
+    );
+
+    if (focused()) {
+        renderer.outline_rect(area, style_.focused_border);
+    }
+}
+
+}
+
+----- src/ui/text.cpp -----
+#include "kiddos/ui/text.hpp"
+
+namespace kiddos::ui {
+TextRenderer::TextRenderer(Renderer& renderer) noexcept
+    : renderer_(renderer) {}
+
+bool TextRenderer::draw(const std::string& text, const Font& font,
+                        Point position, Color color) {
+    if (!renderer_.valid() || !font.valid() || text.empty()) return false;
+    SDL_Color tint{color.r, color.g, color.b, color.a};
+    SDL_Surface* surface =
+        TTF_RenderUTF8_Blended(font.native(), text.c_str(), tint);
+    if (!surface) return false;
+    SDL_Texture* texture =
+        SDL_CreateTextureFromSurface(renderer_.native(), surface);
+    if (!texture) {
+        SDL_FreeSurface(surface);
+        return false;
+    }
+    SDL_Rect destination{position.x, position.y, surface->w, surface->h};
+    const int result =
+        SDL_RenderCopy(renderer_.native(), texture, nullptr, &destination);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
+    return result == 0;
+}
+
+bool TextRenderer::draw_centered(const std::string& text, const Font& font,
+                                 Rect area, Color color) {
+    if (!font.valid() || text.empty() || area.empty()) return false;
+    int width = 0;
+    int height = 0;
+    if (TTF_SizeUTF8(font.native(), text.c_str(), &width, &height) != 0)
+        return false;
+    return draw(text, font,
+        {area.x + (area.w - width) / 2,
+         area.y + (area.h - height) / 2}, color);
+}
+}
+
+----- src/ui/text_input.cpp -----
+#include "kiddos/ui/text_input.hpp"
+#include "kiddos/ui/text.hpp"
+
+#include <algorithm>
+#include <utility>
+
+namespace kiddos::ui {
+
+TextInput::TextInput(std::string text) {
+    set_focusable(true);
+    set_text(std::move(text));
+}
+
+std::size_t TextInput::previous_boundary(const std::string& text,
+                                         std::size_t position) noexcept {
+    if (position == 0) return 0;
+    --position;
+    while (position > 0 &&
+           (static_cast<unsigned char>(text[position]) & 0xC0) == 0x80)
+        --position;
+    return position;
+}
+
+std::size_t TextInput::next_boundary(const std::string& text,
+                                     std::size_t position) noexcept {
+    if (position >= text.size()) return text.size();
+    ++position;
+    while (position < text.size() &&
+           (static_cast<unsigned char>(text[position]) & 0xC0) == 0x80)
+        ++position;
+    return position;
+}
+
+std::size_t TextInput::count_codepoints(const std::string& text) noexcept {
+    std::size_t count = 0;
+    for (unsigned char c : text)
+        if ((c & 0xC0) != 0x80) ++count;
+    return count;
+}
+
+void TextInput::set_text(std::string text) {
+    if (count_codepoints(text) > max_length_) {
+        std::size_t position = 0;
+        for (std::size_t i = 0; i < max_length_; ++i)
+            position = next_boundary(text, position);
+        text.resize(position);
+    }
+    if (text_ == text) return;
+    text_ = std::move(text);
+    cursor_ = text_.size();
+    notify_change();
+}
+
+const std::string& TextInput::text() const noexcept {
+    return text_;
+}
+
+void TextInput::set_placeholder(std::string placeholder) {
+    placeholder_ = std::move(placeholder);
+}
+
+const std::string& TextInput::placeholder() const noexcept {
+    return placeholder_;
+}
+
+void TextInput::set_max_length(std::size_t length) {
+    max_length_ = length;
+    set_text(text_);
+}
+
+std::size_t TextInput::max_length() const noexcept {
+    return max_length_;
+}
+
+bool TextInput::insert_text(const std::string& value) {
+    if (!enabled() || !visible() || value.empty()) return false;
+
+    const std::size_t current = count_codepoints(text_);
+    const std::size_t available =
+        current >= max_length_ ? 0 : max_length_ - current;
+    const std::size_t incoming = count_codepoints(value);
+    if (available == 0) return false;
+
+    std::size_t end = value.size();
+    if (incoming > available) {
+        end = 0;
+        for (std::size_t i = 0; i < available; ++i)
+            end = next_boundary(value, end);
+    }
+
+    text_.insert(cursor_, value, 0, end);
+    cursor_ += end;
+    notify_change();
+    return true;
+}
+
+bool TextInput::backspace() {
+    if (!enabled() || !visible() || cursor_ == 0) return false;
+    const std::size_t start = previous_boundary(text_, cursor_);
+    text_.erase(start, cursor_ - start);
+    cursor_ = start;
+    notify_change();
+    return true;
+}
+
+bool TextInput::delete_forward() {
+    if (!enabled() || !visible() || cursor_ >= text_.size()) return false;
+    const std::size_t end = next_boundary(text_, cursor_);
+    text_.erase(cursor_, end - cursor_);
+    notify_change();
+    return true;
+}
+
+void TextInput::move_cursor_left() noexcept {
+    cursor_ = previous_boundary(text_, cursor_);
+}
+
+void TextInput::move_cursor_right() noexcept {
+    cursor_ = next_boundary(text_, cursor_);
+}
+
+void TextInput::move_cursor_home() noexcept {
+    cursor_ = 0;
+}
+
+void TextInput::move_cursor_end() noexcept {
+    cursor_ = text_.size();
+}
+
+std::size_t TextInput::cursor_position() const noexcept {
+    return cursor_;
+}
+
+void TextInput::set_cursor_position(std::size_t position) noexcept {
+    position = std::min(position, text_.size());
+    while (position > 0 && position < text_.size() &&
+           (static_cast<unsigned char>(text_[position]) & 0xC0) == 0x80)
+        --position;
+    cursor_ = position;
+}
+
+void TextInput::set_font(const Font* font) noexcept {
+    font_ = font;
+}
+
+const Font* TextInput::font() const noexcept {
+    return font_;
+}
+
+void TextInput::set_style(TextInputStyle style) noexcept {
+    style_ = style;
+}
+
+const TextInputStyle& TextInput::style() const noexcept {
+    return style_;
+}
+
+void TextInput::set_on_change(
+    std::function<void(const std::string&)> callback) {
+    on_change_ = std::move(callback);
+}
+
+void TextInput::notify_change() {
+    if (on_change_) on_change_(text_);
+}
+
+void TextInput::draw(Renderer& renderer) {
+    const Rect area = bounds();
+    if (area.empty()) return;
+
+    renderer.fill_rect(area, style_.background);
+    renderer.outline_rect(
+        area, focused() ? style_.focused_border : style_.border);
+
+    if (!font_ || !font_->valid()) return;
+
+    const std::string& displayed = text_.empty() ? placeholder_ : text_;
+    const Color foreground = !enabled()
+        ? style_.disabled_text
+        : (text_.empty() ? style_.placeholder : style_.text);
+
+    const int padding = 8;
+    const Rect text_area{
+        area.x + padding, area.y + padding / 2,
+        std::max(0, area.w - padding * 2),
+        std::max(0, area.h - padding)
+    };
+
+    if (!displayed.empty()) {
+        TextRenderer text_renderer(renderer);
+        text_renderer.draw(displayed, *font_,
+                           {text_area.x, text_area.y}, foreground);
+    }
+
+    if (focused() && enabled()) {
+        const std::string before = text_.substr(0, cursor_);
+        int cursor_width = 0;
+        int cursor_height = 0;
+        if (TTF_SizeUTF8(font_->native(), before.c_str(),
+                         &cursor_width, &cursor_height) == 0) {
+            const int x = text_area.x + cursor_width;
+            const int y = text_area.y;
+            renderer.draw_line(
+                {x, y}, {x, y + std::min(cursor_height, text_area.h)},
+                style_.cursor);
+        }
+    }
+}
+
+}
+
+----- src/ui/text_input_interaction.cpp -----
+#include "kiddos/ui/text_input_interaction.hpp"
+#include "kiddos/ui/text_input.hpp"
+
+namespace kiddos::ui {
+
+TextInputInteraction::TextInputInteraction(FocusManager& focus) noexcept
+    : focus_(focus) {
+}
+
+bool TextInputInteraction::insert_text(const std::string& text) {
+    auto* input = dynamic_cast<TextInput*>(focus_.focused());
+    if (!input || !input->enabled() || !input->visible()) return false;
+    return input->insert_text(text);
+}
+
+bool TextInputInteraction::handle(TextInputKey key) {
+    auto* input = dynamic_cast<TextInput*>(focus_.focused());
+    if (!input || !input->enabled() || !input->visible()) return false;
+
+    switch (key) {
+        case TextInputKey::Backspace:
+            input->backspace();
+            return true;
+        case TextInputKey::Delete:
+            input->delete_forward();
+            return true;
+        case TextInputKey::Left:
+            input->move_cursor_left();
+            return true;
+        case TextInputKey::Right:
+            input->move_cursor_right();
+            return true;
+        case TextInputKey::Home:
+            input->move_cursor_home();
+            return true;
+        case TextInputKey::End:
+            input->move_cursor_end();
+            return true;
+    }
+
+    return false;
+}
+
+} // namespace kiddos::ui
+
+----- src/ui/texture.cpp -----
+#include "kiddos/ui/texture.hpp"
+
+#include <SDL_image.h>
+#include <utility>
+
+namespace kiddos::ui {
+
+Texture::~Texture() { reset(); }
+
+Texture::Texture(Texture&& other) noexcept
+    : texture_(std::exchange(other.texture_, nullptr)),
+      width_(std::exchange(other.width_, 0)),
+      height_(std::exchange(other.height_, 0)) {}
+
+Texture& Texture::operator=(Texture&& other) noexcept {
+    if (this != &other) {
+        reset();
+        texture_ = std::exchange(other.texture_, nullptr);
+        width_ = std::exchange(other.width_, 0);
+        height_ = std::exchange(other.height_, 0);
+    }
+    return *this;
+}
+
+bool Texture::load(
+    SDL_Renderer* renderer,
+    const std::string& path,
+    bool magenta_key
+) {
+    reset();
+    if (!renderer || path.empty()) return false;
+
+    SDL_Surface* surface = IMG_Load(path.c_str());
+    if (!surface) return false;
+
+    if (magenta_key) {
+        const Uint32 key = SDL_MapRGB(surface->format, 255, 0, 255);
+        SDL_SetColorKey(surface, SDL_TRUE, key);
+    }
+
+    SDL_Texture* loaded = SDL_CreateTextureFromSurface(renderer, surface);
+    const int w = surface->w;
+    const int h = surface->h;
+    SDL_FreeSurface(surface);
+
+    if (!loaded) return false;
+
+    SDL_SetTextureBlendMode(loaded, SDL_BLENDMODE_BLEND);
+
+    texture_ = loaded;
+    width_ = w;
+    height_ = h;
+    return true;
+}
+
+void Texture::reset() noexcept {
+    if (texture_) SDL_DestroyTexture(texture_);
+    texture_ = nullptr;
+    width_ = 0;
+    height_ = 0;
+}
+
+bool Texture::valid() const noexcept { return texture_ != nullptr; }
+int Texture::width() const noexcept { return width_; }
+int Texture::height() const noexcept { return height_; }
+SDL_Texture* Texture::native() const noexcept { return texture_; }
+
+}
+
+----- src/ui/theme.cpp -----
+#include "kiddos/ui/theme.hpp"
+
+namespace kiddos::ui {
+
+Theme::Theme(ThemeColors colors) noexcept
+    : colors_(colors) {
+}
+
+Theme Theme::kiddos_default() noexcept {
+    return Theme{};
+}
+
+const ThemeColors& Theme::colors() const noexcept {
+    return colors_;
+}
+
+void Theme::set_colors(ThemeColors colors) noexcept {
+    colors_ = colors;
+}
+
+ButtonStyle Theme::button_style() const noexcept {
+    ButtonStyle style;
+    style.normal = colors_.surface;
+    style.focused = colors_.primary_dark;
+    style.pressed = colors_.primary;
+    style.disabled = colors_.disabled;
+    style.border = colors_.border;
+    style.focused_border = colors_.primary_bright;
+    style.text = colors_.text;
+    style.disabled_text = colors_.text_muted;
+    return style;
+}
+
+PanelStyle Theme::panel_style() const noexcept {
+    PanelStyle style;
+    style.background = colors_.surface;
+    style.border = colors_.border;
+    style.border_thickness = 2;
+    return style;
+}
+
+ToggleStyle Theme::toggle_style() const noexcept {
+    ToggleStyle style;
+    style.off = colors_.disabled;
+    style.on = colors_.primary;
+    style.knob = colors_.text;
+    style.focused_border = colors_.primary_bright;
+    return style;
+}
+
+SliderStyle Theme::slider_style() const noexcept {
+    SliderStyle style;
+    style.track = colors_.disabled;
+    style.fill = colors_.primary;
+    style.knob = colors_.text;
+    style.focused_border = colors_.primary_bright;
+    return style;
+}
+
+ProgressBarStyle Theme::progress_bar_style() const noexcept {
+    ProgressBarStyle style;
+    style.background = colors_.disabled;
+    style.fill = colors_.primary;
+    style.border = colors_.border;
+    style.border_thickness = 1;
+    return style;
+}
+
+ListViewStyle Theme::list_view_style() const noexcept {
+    ListViewStyle style;
+    style.background = colors_.surface;
+    style.selected = colors_.primary_dark;
+    style.text = colors_.text;
+    style.disabled_text = colors_.text_muted;
+    style.border = colors_.border;
+    return style;
+}
+
+CheckboxStyle Theme::checkbox_style() const noexcept {
+    CheckboxStyle style;
+    style.background = colors_.surface;
+    style.checked = colors_.primary;
+    style.checkmark = colors_.text;
+    style.border = colors_.border;
+    style.focused_border = colors_.primary_bright;
+    style.text = colors_.text;
+    style.disabled_text = colors_.text_muted;
+    return style;
+}
+
+
+RadioGroupStyle Theme::radio_group_style() const noexcept {
+    RadioGroupStyle style;
+    style.background = colors_.surface;
+    style.selected = colors_.primary;
+    style.indicator = colors_.text;
+    style.border = colors_.border;
+    style.focused_border = colors_.primary_bright;
+    style.text = colors_.text;
+    style.disabled_text = colors_.text_muted;
+    return style;
+}
+
+
+SelectStyle Theme::select_style() const noexcept {
+    SelectStyle style;
+    style.background = colors_.surface;
+    style.border = colors_.border;
+    style.focused_border = colors_.primary_bright;
+    style.text = colors_.text;
+    style.disabled_text = colors_.text_muted;
+    style.arrow = colors_.primary_bright;
+    return style;
+}
+
+
+TextInputStyle Theme::text_input_style() const noexcept {
+    TextInputStyle style;
+    style.background = colors_.surface;
+    style.border = colors_.border;
+    style.focused_border = colors_.primary_bright;
+    style.text = colors_.text;
+    style.placeholder = colors_.text_muted;
+    style.cursor = colors_.primary_bright;
+    style.disabled_text = colors_.text_muted;
+    return style;
+}
+
+
+} // namespace kiddos::ui
+
+----- src/ui/toggle.cpp -----
+#include "kiddos/ui/toggle.hpp"
+
+#include <algorithm>
+#include <utility>
+
+namespace kiddos::ui {
+
+Toggle::Toggle(bool checked)
+    : checked_(checked) {
+    set_focusable(true);
+}
+
+void Toggle::set_checked(bool checked) {
+    if (checked_ == checked) return;
+
+    checked_ = checked;
+    if (on_change_) on_change_(checked_);
+}
+
+bool Toggle::checked() const noexcept {
+    return checked_;
+}
+
+bool Toggle::toggle() {
+    if (!visible() || !enabled()) return false;
+    set_checked(!checked_);
+    return true;
+}
+
+void Toggle::set_style(ToggleStyle style) noexcept {
+    style_ = style;
+}
+
+const ToggleStyle& Toggle::style() const noexcept {
+    return style_;
+}
+
+void Toggle::set_on_change(std::function<void(bool)> callback) {
+    on_change_ = std::move(callback);
+}
+
+void Toggle::draw(Renderer& renderer) {
+    const Rect area = bounds();
+    if (area.empty()) return;
+
+    const int inset = std::max(1, std::min(area.w, area.h) / 12);
+    const Rect track{
+        area.x + inset,
+        area.y + inset,
+        area.w - inset * 2,
+        area.h - inset * 2
+    };
+
+    if (track.empty()) return;
+
+    const Color track_color = checked_ ? style_.on : style_.off;
+    renderer.fill_rect(track, track_color);
+
+    if (focused()) {
+        renderer.outline_rect(area, style_.focused_border);
+    }
+
+    const int knob_size = std::max(1, track.h - inset * 2);
+    const int knob_y = track.y + (track.h - knob_size) / 2;
+    const int knob_x = checked_
+        ? track.x + track.w - knob_size - inset
+        : track.x + inset;
+
+    renderer.fill_rect(
+        {knob_x, knob_y, knob_size, knob_size},
+        style_.knob
+    );
+}
+
+}
+
+===== APPLICATION UI COMPONENT USAGE =====
+include/kiddos/app/application.hpp:19:    ui::ScreenManager screens_;
+include/kiddos/app/application.hpp:20:    ui::Renderer ui_renderer_;
+include/kiddos/app/home_carousel_screen.hpp:14:class HomeCarouselScreen final : public ui::Screen {
+include/kiddos/app/home_carousel_screen.hpp:26:    std::array<ui::Texture, game_count> game_textures_{};
+include/kiddos/app/home_carousel_screen.hpp:29:    std::array<ui::Image*, visible_slot_count_> game_images_{};
+include/kiddos/app/selected_game_screen.hpp:13:class SelectedGameScreen final : public ui::Screen {
+include/kiddos/app/selected_game_screen.hpp:25:    ui::Texture artwork_texture_;
+include/kiddos/app/selected_game_screen.hpp:26:    ui::Image* artwork_ = nullptr;
+include/kiddos/app/selected_game_screen.hpp:27:    ui::Texture hints_texture_;
+include/kiddos/app/selected_game_screen.hpp:28:    ui::Image* hints_ = nullptr;
+include/kiddos/app/selected_game_screen.hpp:29:    ui::Font font_;
+include/kiddos/app/selected_game_screen.hpp:30:    ui::Button* play_button_ = nullptr;
+src/app/home_carousel_screen.cpp:55:        auto& image = root().add<ui::Image>();
+src/app/home_carousel_screen.cpp:56:        image.set_fit(ui::ImageFit::contain);
+src/app/home_carousel_screen.cpp:130:        ui::Image* image = game_images_[i];
+src/app/selected_game_screen.cpp:18:void load_ui_font(ui::Font& font, int size) {
+src/app/selected_game_screen.cpp:47:    auto& artwork = root().add<ui::Image>(&artwork_texture_);
+src/app/selected_game_screen.cpp:49:    artwork.set_fit(ui::ImageFit::contain);
+src/app/selected_game_screen.cpp:58:    auto& hints = root().add<ui::Image>(&hints_texture_);
+src/app/selected_game_screen.cpp:60:    hints.set_fit(ui::ImageFit::contain);
+src/app/selected_game_screen.cpp:65:    auto& play = root().add<ui::Button>("PLAY");
+tests/ui_layout_test.cpp:7:    void draw(kiddos::ui::Renderer&) override {}
+tests/ui_focus_test.cpp:10:    void draw(kiddos::ui::Renderer&) override {}
+tests/ui_screen_manager_test.cpp:14:class ProbeScreen final : public kiddos::ui::Screen {
+tests/ui_screen_manager_test.cpp:20:        auto& button = root().add<kiddos::ui::Button>("Activate");
+tests/app_home_carousel_screen_test.cpp:48:    kiddos::ui::Screen& screen,
+tests/app_home_carousel_screen_test.cpp:103:        kiddos::ui::Renderer renderer(native);
+tests/app_selected_game_screen_test.cpp:23:    auto* artwork = dynamic_cast<kiddos::ui::Image*>(
+tests/app_selected_game_screen_test.cpp:25:    auto* hints = dynamic_cast<kiddos::ui::Image*>(
+tests/app_selected_game_screen_test.cpp:27:    auto* play = dynamic_cast<kiddos::ui::Button*>(
+tests/app_selected_game_screen_test.cpp:46:    kiddos::ui::ScreenManager manager;
+tests/app_selected_game_screen_test.cpp:78:        kiddos::ui::Renderer renderer(native);
+
+===== SDL DRAWING OUTSIDE THE UI LIBRARY =====
+src/app/shared_shell.cpp:62:    SDL_Surface* surface = TTF_RenderUTF8_Blended(font_, text, white);
+src/app/shared_shell.cpp:68:        SDL_RenderCopy(renderer_, texture, nullptr, &destination);
+src/app/shared_shell.cpp:86:    SDL_RenderFillRect(renderer_, &cabinet);
+src/app/shared_shell.cpp:95:        SDL_RenderDrawLine(renderer_, left, y, 44, y);
+src/app/shared_shell.cpp:111:                SDL_RenderDrawLine(renderer_, previous.x, previous.y,
+src/app/shared_shell.cpp:125:    SDL_RenderDrawRect(renderer_, &battery);
+src/app/shared_shell.cpp:126:    SDL_RenderFillRect(renderer_, &terminal);
+src/app/shared_shell.cpp:130:    SDL_RenderFillRect(renderer_, &fill);
+src/app/shared_shell.cpp:135:        SDL_RenderCopy(renderer_, logo_, nullptr, &destination);
+src/app/shared_shell.cpp:145:        SDL_RenderCopy(renderer_, hints_, nullptr, &destination);
+src/platform/sdl_platform.cpp:60:    SDL_RenderFillRect(r, &rect);
+src/platform/sdl_platform.cpp:65:    SDL_RenderDrawRect(r, &rect);
+src/platform/sdl_platform.cpp:84:        SDL_RenderDrawLine(r, rect.x + inset, rect.y + y,
+src/platform/sdl_platform.cpp:94:    SDL_RenderDrawLine(r, rect.x + radius, rect.y,
+src/platform/sdl_platform.cpp:96:    SDL_RenderDrawLine(r, rect.x + radius, rect.y + rect.h - 1,
+src/platform/sdl_platform.cpp:98:    SDL_RenderDrawLine(r, rect.x, rect.y + radius,
+src/platform/sdl_platform.cpp:100:    SDL_RenderDrawLine(r, rect.x + rect.w - 1, rect.y + radius,
+src/platform/sdl_platform.cpp:109:        SDL_RenderDrawPoint(r, rect.x + radius - dx,
+src/platform/sdl_platform.cpp:111:        SDL_RenderDrawPoint(r, rect.x + rect.w - radius - 1 + dx,
+src/platform/sdl_platform.cpp:113:        SDL_RenderDrawPoint(r, rect.x + radius - dx,
+src/platform/sdl_platform.cpp:115:        SDL_RenderDrawPoint(r, rect.x + rect.w - radius - 1 + dx,
+src/platform/sdl_platform.cpp:129:        SDL_RenderDrawLine(r, rect.x, rect.y + y,
+src/platform/sdl_platform.cpp:131:        SDL_RenderDrawLine(r, rect.x + rect.w - 1 - inset, rect.y + y,
+src/platform/sdl_platform.cpp:135:        SDL_RenderDrawLine(r, rect.x, bottom_y,
+src/platform/sdl_platform.cpp:137:        SDL_RenderDrawLine(r, rect.x + rect.w - 1 - inset, bottom_y,
+src/platform/sdl_platform.cpp:151:        SDL_RenderDrawLine(r, cx - x, cy + y, cx + x, cy + y);
+src/platform/sdl_platform.cpp:183:            SDL_RenderDrawLine(
+src/platform/sdl_platform.cpp:278:            SDL_RenderDrawPoint(r, x, wave_y);
+src/platform/sdl_platform.cpp:295:    SDL_RenderCopy(r, texture, nullptr, &area);
+src/platform/sdl_platform.cpp:349:    SDL_RenderDrawLine(r, 49, 29, 54, 34);
+src/platform/sdl_platform.cpp:350:    SDL_RenderDrawLine(r, 54, 34, 54, 42);
+src/platform/sdl_platform.cpp:351:    SDL_RenderDrawLine(r, 54, 42, 49, 47);
+src/platform/sdl_platform.cpp:714:        SDL_RenderCopy(renderer_, carousel_title_texture,
+src/platform/sdl_platform.cpp:731:    SDL_RenderCopy(r, texture, nullptr, &destination);
+src/platform/sdl_platform.cpp:773:            SDL_RenderDrawLine(r, previous_x, previous_y, next_x, next_y);
+src/platform/sdl_platform.cpp:848:        SDL_RenderCopy(renderer_, selected_game_hints_texture,
+src/platform/sdl_platform.cpp:855:        SDL_RenderCopy(renderer_, navigation_hints_texture,
+
+===== UI TEST REGISTRATION =====
+18:add_library(kiddos_ui STATIC
+44:add_library(KiddOS::UI ALIAS kiddos_ui)
+45:target_include_directories(kiddos_ui PUBLIC
+49:target_link_libraries(kiddos_ui PUBLIC PkgConfig::SDL2 PkgConfig::SDL2_TTF PkgConfig::SDL2_IMAGE)
+51:target_compile_options(kiddos_ui PRIVATE
+57:add_executable(kiddos
+68:target_link_libraries(kiddos PRIVATE kiddos_ui)
+79:    add_executable(kiddos_app_ui_action_mapping_test
+82:    target_link_libraries(kiddos_app_ui_action_mapping_test PRIVATE kiddos_ui)
+83:    add_test(NAME kiddos_app_ui_action_mapping
+86:    add_executable(kiddos_app_selected_game_screen_test
+92:    target_link_libraries(kiddos_app_selected_game_screen_test PRIVATE kiddos_ui)
+93:    add_test(NAME kiddos_app_selected_game_screen
+96:    add_executable(kiddos_app_home_carousel_screen_test
+102:    target_link_libraries(kiddos_app_home_carousel_screen_test PRIVATE kiddos_ui)
+103:    add_test(NAME kiddos_app_home_carousel_screen
+106:    add_executable(kiddos_platform_sdl_text_input_translator_test
+110:    add_test(NAME kiddos_platform_sdl_text_input_translator
+113:    add_executable(kiddos_platform_text_input_interface_test
+116:    add_test(NAME kiddos_platform_text_input_interface
+119:    add_executable(kiddos_platform_sdl_keyboard_policy_test
+123:    add_test(NAME kiddos_platform_sdl_keyboard_policy
+126:    add_executable(kiddos_platform_text_input_event_test
+129:    add_test(NAME kiddos_platform_text_input_event
+132:    add_executable(kiddos_ui_geometry_test
+136:    target_include_directories(kiddos_ui_geometry_test PRIVATE include)
+138:    add_executable(kiddos_ui_layout_test
+143:    target_include_directories(kiddos_ui_layout_test PRIVATE include)
+144:    target_link_libraries(kiddos_ui_layout_test PRIVATE kiddos_ui)
+146:    add_test(
+147:        NAME kiddos_ui_layout
+148:        COMMAND kiddos_ui_layout_test
+151:    add_test(
+152:        NAME kiddos_ui_geometry
+153:        COMMAND kiddos_ui_geometry_test
+156:    add_executable(kiddos_ui_focus_test
+160:    target_include_directories(kiddos_ui_focus_test PRIVATE include)
+161:    target_link_libraries(kiddos_ui_focus_test PRIVATE kiddos_ui)
+163:    add_test(
+164:        NAME kiddos_ui_focus
+165:        COMMAND kiddos_ui_focus_test
+168:    add_executable(kiddos_ui_button_test
+172:    target_include_directories(kiddos_ui_button_test PRIVATE include)
+173:    target_link_libraries(kiddos_ui_button_test PRIVATE kiddos_ui)
+175:    add_test(
+176:        NAME kiddos_ui_button
+177:        COMMAND kiddos_ui_button_test
+180:    add_executable(kiddos_ui_controller_test
+184:    target_include_directories(kiddos_ui_controller_test PRIVATE include)
+185:    target_link_libraries(kiddos_ui_controller_test PRIVATE kiddos_ui)
+187:    add_test(
+188:        NAME kiddos_ui_controller
+189:        COMMAND kiddos_ui_controller_test
+192:    add_executable(kiddos_ui_renderer_test tests/ui_renderer_test.cpp)
+193:    target_include_directories(kiddos_ui_renderer_test PRIVATE include)
+194:    target_link_libraries(kiddos_ui_renderer_test PRIVATE kiddos_ui)
+195:    add_test(NAME kiddos_ui_renderer COMMAND kiddos_ui_renderer_test)
+197:    add_executable(kiddos_ui_image_test tests/ui_image_test.cpp)
+198:    target_include_directories(kiddos_ui_image_test PRIVATE include)
+199:    target_link_libraries(kiddos_ui_image_test PRIVATE kiddos_ui)
+200:    add_test(NAME kiddos_ui_image COMMAND kiddos_ui_image_test)
+202:    add_executable(kiddos_ui_label_test tests/ui_label_test.cpp)
+203:    target_include_directories(kiddos_ui_label_test PRIVATE include)
+204:    target_link_libraries(kiddos_ui_label_test PRIVATE kiddos_ui)
+205:    add_test(NAME kiddos_ui_label COMMAND kiddos_ui_label_test)
+207:    add_executable(kiddos_ui_panel_test tests/ui_panel_test.cpp)
+208:    target_include_directories(kiddos_ui_panel_test PRIVATE include)
+209:    target_link_libraries(kiddos_ui_panel_test PRIVATE kiddos_ui)
+210:    add_test(NAME kiddos_ui_panel COMMAND kiddos_ui_panel_test)
+212:    add_executable(kiddos_ui_progress_bar_test tests/ui_progress_bar_test.cpp)
+213:    target_include_directories(kiddos_ui_progress_bar_test PRIVATE include)
+214:    target_link_libraries(kiddos_ui_progress_bar_test PRIVATE kiddos_ui)
+215:    add_test(NAME kiddos_ui_progress_bar COMMAND kiddos_ui_progress_bar_test)
+217:    add_executable(kiddos_ui_toggle_test tests/ui_toggle_test.cpp)
+218:    target_include_directories(kiddos_ui_toggle_test PRIVATE include)
+219:    target_link_libraries(kiddos_ui_toggle_test PRIVATE kiddos_ui)
+220:    add_test(NAME kiddos_ui_toggle COMMAND kiddos_ui_toggle_test)
+222:    add_executable(kiddos_ui_slider_test tests/ui_slider_test.cpp)
+223:    target_include_directories(kiddos_ui_slider_test PRIVATE include)
+224:    target_link_libraries(kiddos_ui_slider_test PRIVATE kiddos_ui)
+225:    add_test(NAME kiddos_ui_slider COMMAND kiddos_ui_slider_test)
+227:    add_executable(kiddos_ui_theme_test tests/ui_theme_test.cpp)
+228:    target_include_directories(kiddos_ui_theme_test PRIVATE include)
+229:    target_link_libraries(kiddos_ui_theme_test PRIVATE kiddos_ui)
+230:    add_test(NAME kiddos_ui_theme COMMAND kiddos_ui_theme_test)
+231:    add_executable(kiddos_ui_list_view_test tests/ui_list_view_test.cpp)
+232:    target_include_directories(kiddos_ui_list_view_test PRIVATE include)
+233:    target_link_libraries(kiddos_ui_list_view_test PRIVATE kiddos_ui)
+234:    add_test(NAME kiddos_ui_list_view COMMAND kiddos_ui_list_view_test)
+236:    add_executable(kiddos_ui_checkbox_test tests/ui_checkbox_test.cpp)
+237:    target_include_directories(kiddos_ui_checkbox_test PRIVATE include)
+238:    target_link_libraries(kiddos_ui_checkbox_test PRIVATE kiddos_ui)
+239:    add_test(NAME kiddos_ui_checkbox COMMAND kiddos_ui_checkbox_test)
+241:    add_executable(kiddos_ui_radio_group_test tests/ui_radio_group_test.cpp)
+242:    target_include_directories(kiddos_ui_radio_group_test PRIVATE include)
+243:    target_link_libraries(kiddos_ui_radio_group_test PRIVATE kiddos_ui)
+244:    add_test(NAME kiddos_ui_radio_group COMMAND kiddos_ui_radio_group_test)
+246:    add_executable(kiddos_ui_select_test tests/ui_select_test.cpp)
+247:    target_include_directories(kiddos_ui_select_test PRIVATE include)
+248:    target_link_libraries(kiddos_ui_select_test PRIVATE kiddos_ui)
+249:    add_test(NAME kiddos_ui_select COMMAND kiddos_ui_select_test)
+251:    add_executable(kiddos_ui_text_input_test tests/ui_text_input_test.cpp)
+252:    target_include_directories(kiddos_ui_text_input_test PRIVATE include)
+253:    target_link_libraries(kiddos_ui_text_input_test PRIVATE kiddos_ui)
+254:    add_test(NAME kiddos_ui_text_input COMMAND kiddos_ui_text_input_test)
+256:    add_executable(kiddos_ui_text_input_interaction_test
+258:    target_include_directories(kiddos_ui_text_input_interaction_test PRIVATE include)
+259:    target_link_libraries(kiddos_ui_text_input_interaction_test PRIVATE kiddos_ui)
+260:    add_test(NAME kiddos_ui_text_input_interaction
+261:        COMMAND kiddos_ui_text_input_interaction_test)
+268:install(TARGETS kiddos_ui ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+273:    add_executable(kiddos_ui_screen_manager_test
+275:    target_include_directories(kiddos_ui_screen_manager_test PRIVATE include)
+276:    target_link_libraries(kiddos_ui_screen_manager_test PRIVATE kiddos_ui)
+277:    add_test(NAME kiddos_ui_screen_manager
+278:        COMMAND kiddos_ui_screen_manager_test)
+
+===== END OF UI LIBRARY AUDIT =====
