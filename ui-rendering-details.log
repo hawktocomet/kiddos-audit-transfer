@@ -1,0 +1,540 @@
+
+========== include/kiddos/ui/label.hpp ==========
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+#include "kiddos/ui/font.hpp"
+
+#include <string>
+
+namespace kiddos::ui {
+
+enum class LabelAlignment {
+    left,
+    center,
+    right
+};
+
+class Label final : public Element {
+public:
+    explicit Label(std::string text = {});
+
+    void set_text(std::string text);
+    const std::string& text() const noexcept;
+
+    void set_font(const Font* font) noexcept;
+    const Font* font() const noexcept;
+
+    void set_color(Color color) noexcept;
+    Color color() const noexcept;
+
+    void set_alignment(LabelAlignment alignment) noexcept;
+    LabelAlignment alignment() const noexcept;
+
+private:
+    std::string text_;
+    const Font* font_ = nullptr;
+    Color color_{255, 255, 255, 255};
+    LabelAlignment alignment_ = LabelAlignment::left;
+
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+========== src/ui/label.cpp ==========
+#include "kiddos/ui/label.hpp"
+#include "kiddos/ui/text.hpp"
+
+#include <SDL_ttf.h>
+#include <utility>
+
+namespace kiddos::ui {
+
+Label::Label(std::string text)
+    : text_(std::move(text)) {
+}
+
+void Label::set_text(std::string text) {
+    text_ = std::move(text);
+}
+
+const std::string& Label::text() const noexcept {
+    return text_;
+}
+
+void Label::set_font(const Font* font) noexcept {
+    font_ = font;
+}
+
+const Font* Label::font() const noexcept {
+    return font_;
+}
+
+void Label::set_color(Color color) noexcept {
+    color_ = color;
+}
+
+Color Label::color() const noexcept {
+    return color_;
+}
+
+void Label::set_alignment(LabelAlignment alignment) noexcept {
+    alignment_ = alignment;
+}
+
+LabelAlignment Label::alignment() const noexcept {
+    return alignment_;
+}
+
+void Label::draw(Renderer& renderer) {
+    const Rect area = bounds();
+
+    if (!font_ || !font_->valid() || text_.empty() || area.empty()) {
+        return;
+    }
+
+    int width = 0;
+    int height = 0;
+
+    if (TTF_SizeUTF8(font_->native(), text_.c_str(), &width, &height) != 0) {
+        return;
+    }
+
+    int x = area.x;
+
+    switch (alignment_) {
+        case LabelAlignment::left:
+            break;
+        case LabelAlignment::center:
+            x += (area.w - width) / 2;
+            break;
+        case LabelAlignment::right:
+            x += area.w - width;
+            break;
+    }
+
+    const int y = area.y + (area.h - height) / 2;
+
+    TextRenderer text_renderer(renderer);
+    text_renderer.draw(text_, *font_, {x, y}, color_);
+}
+
+}
+
+========== include/kiddos/ui/text.hpp ==========
+#pragma once
+#include "kiddos/ui/color.hpp"
+#include "kiddos/ui/font.hpp"
+#include "kiddos/ui/geometry.hpp"
+#include "kiddos/ui/renderer.hpp"
+#include <string>
+
+namespace kiddos::ui {
+class TextRenderer final {
+public:
+    explicit TextRenderer(Renderer& renderer) noexcept;
+    bool draw(const std::string& text, const Font& font,
+              Point position, Color color);
+    bool draw_centered(const std::string& text, const Font& font,
+                       Rect area, Color color);
+private:
+    Renderer& renderer_;
+};
+}
+
+========== src/ui/text.cpp ==========
+#include "kiddos/ui/text.hpp"
+
+namespace kiddos::ui {
+TextRenderer::TextRenderer(Renderer& renderer) noexcept
+    : renderer_(renderer) {}
+
+bool TextRenderer::draw(const std::string& text, const Font& font,
+                        Point position, Color color) {
+    if (!renderer_.valid() || !font.valid() || text.empty()) return false;
+    SDL_Color tint{color.r, color.g, color.b, color.a};
+    SDL_Surface* surface =
+        TTF_RenderUTF8_Blended(font.native(), text.c_str(), tint);
+    if (!surface) return false;
+    SDL_Texture* texture =
+        SDL_CreateTextureFromSurface(renderer_.native(), surface);
+    if (!texture) {
+        SDL_FreeSurface(surface);
+        return false;
+    }
+    SDL_Rect destination{position.x, position.y, surface->w, surface->h};
+    const int result =
+        SDL_RenderCopy(renderer_.native(), texture, nullptr, &destination);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
+    return result == 0;
+}
+
+bool TextRenderer::draw_centered(const std::string& text, const Font& font,
+                                 Rect area, Color color) {
+    if (!font.valid() || text.empty() || area.empty()) return false;
+    int width = 0;
+    int height = 0;
+    if (TTF_SizeUTF8(font.native(), text.c_str(), &width, &height) != 0)
+        return false;
+    return draw(text, font,
+        {area.x + (area.w - width) / 2,
+         area.y + (area.h - height) / 2}, color);
+}
+}
+
+========== include/kiddos/ui/font.hpp ==========
+#pragma once
+#include <SDL_ttf.h>
+#include <string>
+
+namespace kiddos::ui {
+class Font final {
+public:
+    Font() = default;
+    ~Font();
+    Font(const Font&) = delete;
+    Font& operator=(const Font&) = delete;
+    Font(Font&& other) noexcept;
+    Font& operator=(Font&& other) noexcept;
+    bool load(const std::string& path, int point_size);
+    void reset() noexcept;
+    bool valid() const noexcept;
+    TTF_Font* native() const noexcept;
+private:
+    TTF_Font* font_ = nullptr;
+};
+}
+
+========== src/ui/font.cpp ==========
+#include "kiddos/ui/font.hpp"
+#include <utility>
+
+namespace kiddos::ui {
+Font::~Font() { reset(); }
+Font::Font(Font&& other) noexcept
+    : font_(std::exchange(other.font_, nullptr)) {}
+Font& Font::operator=(Font&& other) noexcept {
+    if (this != &other) {
+        reset();
+        font_ = std::exchange(other.font_, nullptr);
+    }
+    return *this;
+}
+bool Font::load(const std::string& path, int point_size) {
+    reset();
+    if (path.empty() || point_size <= 0) return false;
+    font_ = TTF_OpenFont(path.c_str(), point_size);
+    return font_ != nullptr;
+}
+void Font::reset() noexcept {
+    if (font_) {
+        TTF_CloseFont(font_);
+        font_ = nullptr;
+    }
+}
+bool Font::valid() const noexcept { return font_ != nullptr; }
+TTF_Font* Font::native() const noexcept { return font_; }
+}
+
+========== include/kiddos/ui/texture.hpp ==========
+#pragma once
+
+#include <SDL.h>
+#include <string>
+
+namespace kiddos::ui {
+
+class Texture final {
+public:
+    Texture() = default;
+    ~Texture();
+
+    Texture(const Texture&) = delete;
+    Texture& operator=(const Texture&) = delete;
+
+    Texture(Texture&& other) noexcept;
+    Texture& operator=(Texture&& other) noexcept;
+
+    // Loads an image file through SDL_image. With magenta_key enabled,
+    // bright magenta (255, 0, 255) pixels become transparent.
+    bool load(SDL_Renderer* renderer, const std::string& path,
+              bool magenta_key = false);
+    void reset() noexcept;
+    bool valid() const noexcept;
+    int width() const noexcept;
+    int height() const noexcept;
+    SDL_Texture* native() const noexcept;
+
+private:
+    SDL_Texture* texture_ = nullptr;
+    int width_ = 0;
+    int height_ = 0;
+};
+
+}
+
+========== src/ui/texture.cpp ==========
+#include "kiddos/ui/texture.hpp"
+
+#include <SDL_image.h>
+#include <utility>
+
+namespace kiddos::ui {
+
+Texture::~Texture() { reset(); }
+
+Texture::Texture(Texture&& other) noexcept
+    : texture_(std::exchange(other.texture_, nullptr)),
+      width_(std::exchange(other.width_, 0)),
+      height_(std::exchange(other.height_, 0)) {}
+
+Texture& Texture::operator=(Texture&& other) noexcept {
+    if (this != &other) {
+        reset();
+        texture_ = std::exchange(other.texture_, nullptr);
+        width_ = std::exchange(other.width_, 0);
+        height_ = std::exchange(other.height_, 0);
+    }
+    return *this;
+}
+
+bool Texture::load(
+    SDL_Renderer* renderer,
+    const std::string& path,
+    bool magenta_key
+) {
+    reset();
+    if (!renderer || path.empty()) return false;
+
+    SDL_Surface* surface = IMG_Load(path.c_str());
+    if (!surface) return false;
+
+    if (magenta_key) {
+        const Uint32 key = SDL_MapRGB(surface->format, 255, 0, 255);
+        SDL_SetColorKey(surface, SDL_TRUE, key);
+    }
+
+    SDL_Texture* loaded = SDL_CreateTextureFromSurface(renderer, surface);
+    const int w = surface->w;
+    const int h = surface->h;
+    SDL_FreeSurface(surface);
+
+    if (!loaded) return false;
+
+    SDL_SetTextureBlendMode(loaded, SDL_BLENDMODE_BLEND);
+
+    texture_ = loaded;
+    width_ = w;
+    height_ = h;
+    return true;
+}
+
+void Texture::reset() noexcept {
+    if (texture_) SDL_DestroyTexture(texture_);
+    texture_ = nullptr;
+    width_ = 0;
+    height_ = 0;
+}
+
+bool Texture::valid() const noexcept { return texture_ != nullptr; }
+int Texture::width() const noexcept { return width_; }
+int Texture::height() const noexcept { return height_; }
+SDL_Texture* Texture::native() const noexcept { return texture_; }
+
+}
+
+========== include/kiddos/ui/screen.hpp ==========
+#pragma once
+#include "kiddos/ui/container.hpp"
+#include "kiddos/ui/controller.hpp"
+#include "kiddos/ui/text_input_interaction.hpp"
+#include "kiddos/platform/text_input_event.hpp"
+
+namespace kiddos::ui {
+class Screen {
+public:
+    Screen() noexcept;
+    virtual ~Screen() = default;
+    Screen(const Screen&) = delete;
+    Screen& operator=(const Screen&) = delete;
+    Container& root() noexcept;
+    FocusManager& focus() noexcept;
+    virtual void on_enter() {}
+    virtual void on_exit() {}
+    virtual void on_suspend() {}
+    virtual void on_resume() {}
+    virtual void update(float) {}
+    virtual void render(Renderer& renderer);
+    bool handle_action(UIAction action);
+    bool handle_text_input(const ::kiddos::TextInputEvent& event);
+private:
+    Container root_;
+    FocusManager focus_;
+    ControllerInteraction controller_;
+    TextInputInteraction text_input_;
+};
+}
+
+========== src/ui/screen.cpp ==========
+#include "kiddos/ui/screen.hpp"
+namespace kiddos::ui {
+Screen::Screen() noexcept : focus_(root_), controller_(focus_), text_input_(focus_) {}
+Container& Screen::root() noexcept { return root_; }
+FocusManager& Screen::focus() noexcept { return focus_; }
+void Screen::render(Renderer& renderer) { root_.render(renderer); }
+bool Screen::handle_action(UIAction action) {
+    if (!focus_.focused()) focus_.focus_first();
+    return controller_.handle(action);
+}
+bool Screen::handle_text_input(const ::kiddos::TextInputEvent& event) {
+    switch (event.type) {
+    case ::kiddos::TextInputEventType::Text: return text_input_.insert_text(event.text);
+    case ::kiddos::TextInputEventType::Backspace: return text_input_.handle(TextInputKey::Backspace);
+    case ::kiddos::TextInputEventType::Delete: return text_input_.handle(TextInputKey::Delete);
+    case ::kiddos::TextInputEventType::Left: return text_input_.handle(TextInputKey::Left);
+    case ::kiddos::TextInputEventType::Right: return text_input_.handle(TextInputKey::Right);
+    case ::kiddos::TextInputEventType::Home: return text_input_.handle(TextInputKey::Home);
+    case ::kiddos::TextInputEventType::End: return text_input_.handle(TextInputKey::End);
+    }
+    return false;
+}
+}
+
+========== src/app/application.cpp ==========
+#include "kiddos/app/application.hpp"
+
+#include "kiddos/app/home_carousel_screen.hpp"
+#include "kiddos/app/selected_game_screen.hpp"
+#include "kiddos/app/shared_shell.hpp"
+#include "kiddos/app/ui_action_mapping.hpp"
+
+#include <SDL_image.h>
+
+#include <chrono>
+#include <memory>
+#include <thread>
+#include <SDL_ttf.h>
+
+namespace kiddos {
+
+Application::Application(Platform& platform)
+    : platform_(platform) {
+}
+
+int Application::run() {
+    IMG_Init(IMG_INIT_PNG);
+    if (!platform_.initialize()) {
+        platform_.shutdown();
+        IMG_Quit();
+        return 1;
+    }
+
+    // The UI renderer is a non-owning adapter around the platform renderer.
+    ui_renderer_.attach(platform_.native_renderer());
+    if (TTF_Init() != 0) {
+        IMG_Quit();
+        platform_.shutdown();
+        return 1;
+    }
+
+    app::SharedShell shell;
+    if (!shell.initialize(platform_.native_renderer())) {
+        TTF_Quit();
+        IMG_Quit();
+        platform_.shutdown();
+        return 1;
+    }
+
+    screens_.push(std::make_unique<app::HomeCarouselScreen>(
+        platform_.native_renderer()));
+
+    running_ = true;
+
+    while (running_) {
+        Action action = Action::None;
+
+        while (platform_.poll_action(action)) {
+            handle_action(action);
+            if (!running_) break;
+        }
+
+        if (running_) {
+            screens_.update(0.008f);
+            render(shell);
+            std::this_thread::sleep_for(std::chrono::milliseconds(8));
+        }
+    }
+
+    // Screens and their textures must be destroyed before the SDL renderer.
+    screens_.clear();
+    shell.reset();
+    TTF_Quit();
+    IMG_Quit();
+    platform_.shutdown();
+    return 0;
+}
+
+void Application::handle_action(Action action) {
+    if (action == Action::Quit) {
+        running_ = false;
+        return;
+    }
+
+    const auto ui_action = app::to_ui_action(action);
+    if (!ui_action) return;
+
+    // Back pops a child screen, but never removes the home screen.
+    if (*ui_action == ui::UIAction::Back) {
+        if (screens_.depth() > 1) {
+            screens_.handle_action(*ui_action);
+        }
+        return;
+    }
+
+    // Let the active screen handle its own controls first. This is how
+    // Confirm activates the Play button on Selected Game.
+    if (screens_.handle_action(*ui_action)) return;
+
+    auto* home = dynamic_cast<app::HomeCarouselScreen*>(screens_.current());
+    if (!home) return;
+
+    switch (*ui_action) {
+        case ui::UIAction::Left:
+            selected_game_ =
+                (selected_game_ + game_count_ - 1) % game_count_;
+            home->set_selected_game(selected_game_);
+            break;
+
+        case ui::UIAction::Right:
+            selected_game_ = (selected_game_ + 1) % game_count_;
+            home->set_selected_game(selected_game_);
+            break;
+
+        case ui::UIAction::Confirm:
+            screens_.push(std::make_unique<app::SelectedGameScreen>(
+                platform_.native_renderer(), selected_game_));
+            break;
+
+        case ui::UIAction::Up:
+        case ui::UIAction::Down:
+        case ui::UIAction::Back:
+            break;
+    }
+}
+
+void Application::render(app::SharedShell& shell) {
+    platform_.begin_frame();
+    screens_.render(ui_renderer_);
+
+    const bool selected_game =
+        dynamic_cast<app::SelectedGameScreen*>(screens_.current()) != nullptr;
+
+    shell.render_header();
+    shell.render_footer(selected_game);
+
+    platform_.present();
+}
+
+} // namespace kiddos
