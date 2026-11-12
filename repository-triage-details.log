@@ -1,0 +1,82 @@
+===== CONFIGURATION FILES =====
+
+===== ASSET INVENTORY =====
+assets/artwork/generated/boxart/arcade-pac-man.png (566979 bytes)
+assets/artwork/generated/boxart/gba-mario-kart-super-circuit.png (360955 bytes)
+assets/artwork/generated/boxart/gb-tetris.png (402583 bytes)
+assets/artwork/generated/boxart/snes-super-mario-world.png (301072 bytes)
+assets/artwork/generated/boxart/SOURCES.txt (347 bytes)
+assets/artwork/generated/carousel-car.bmp (86454 bytes)
+assets/artwork/generated/carousel-car.png (4927 bytes)
+assets/artwork/generated/carousel-mushroom.bmp (86454 bytes)
+assets/artwork/generated/carousel-mushroom.png (5453 bytes)
+assets/artwork/generated/carousel-selected.bmp (15422 bytes)
+assets/artwork/generated/carousel-star.bmp (76854 bytes)
+assets/artwork/generated/carousel-star.png (6642 bytes)
+assets/artwork/generated/carousel-title.bmp (56214 bytes)
+assets/artwork/generated/carousel-title-car.png (1188 bytes)
+assets/artwork/generated/carousel-title.png (3092 bytes)
+assets/artwork/generated/carousel-title-star.png (1384 bytes)
+assets/artwork/generated/cartridges/option-1/cartridge-01.png (72276 bytes)
+assets/artwork/generated/cartridges/option-1/cartridge-02.png (77785 bytes)
+assets/artwork/generated/cartridges/option-1/cartridge-03.png (66098 bytes)
+assets/artwork/generated/cartridges/option-1/cartridge-04.png (71249 bytes)
+assets/artwork/generated/cartridges/option-1/cartridge-05.png (56217 bytes)
+assets/artwork/generated/cartridges/option-1/cartridge-06.png (56084 bytes)
+assets/artwork/generated/cartridges/option-1/cartridge-07.png (51520 bytes)
+assets/artwork/generated/cartridges/option-1/cartridge-08.png (55027 bytes)
+assets/artwork/generated/cartridges/option-1/cartridge-09.png (72187 bytes)
+assets/artwork/generated/cartridges/option-2/cartridge-01.png (159779 bytes)
+assets/artwork/generated/cartridges/option-2/cartridge-02.png (145800 bytes)
+assets/artwork/generated/cartridges/option-2/cartridge-03.png (114938 bytes)
+assets/artwork/generated/cartridges/option-2/cartridge-04.png (125269 bytes)
+assets/artwork/generated/cartridges/option-2/cartridge-05.png (105170 bytes)
+assets/artwork/generated/cartridges/option-2/cartridge-06.png (99952 bytes)
+assets/artwork/generated/cartridges/option-2/cartridge-07.png (118343 bytes)
+assets/artwork/generated/cartridges/option-2/cartridge-08.png (119997 bytes)
+assets/artwork/generated/cartridges/option-2/cartridge-09.png (133099 bytes)
+assets/artwork/generated/forest.bmp (1612938 bytes)
+assets/artwork/generated/kiddos-wordmark.png (4368 bytes)
+assets/artwork/generated/label-play.bmp (504138 bytes)
+assets/artwork/generated/label-resume.bmp (504138 bytes)
+assets/artwork/generated/label-start-over.bmp (504138 bytes)
+assets/artwork/generated/navigation-hints.png (7190 bytes)
+assets/artwork/generated/ocean.bmp (1612938 bytes)
+assets/artwork/generated/selected-game-hints.png (3146 bytes)
+assets/artwork/generated/space.bmp (1612938 bytes)
+assets/artwork/source/branding/kiddos-wordmark.svg (242 bytes)
+assets/artwork/source/branding/navigation-hints.svg (1414 bytes)
+assets/artwork/source/branding/selected-game-hints.svg (584 bytes)
+assets/artwork/source/carousel/car.svg (619 bytes)
+assets/artwork/source/carousel/mushroom.svg (563 bytes)
+assets/artwork/source/carousel/selected.svg (311 bytes)
+assets/artwork/source/carousel/star.svg (361 bytes)
+assets/artwork/source/carousel/title-car.svg (239 bytes)
+assets/artwork/source/carousel/title-star.svg (240 bytes)
+assets/artwork/source/carousel/title.svg (248 bytes)
+assets/artwork/source/cartridges/cart-option-1.png (1489565 bytes)
+assets/artwork/source/cartridges/cart-option-2.png (1306818 bytes)
+assets/artwork/source/forest.svg (3088 bytes)
+assets/artwork/source/ocean.svg (2981 bytes)
+assets/artwork/source/space.svg (2642 bytes)
+
+===== ASSET COUNTS BY DIRECTORY =====
+     43 assets/artwork/generated
+     15 assets/artwork/source
+
+===== TASK FILES =====
+
+===== TASK DIRECTORY CONTENTS =====
+
+===== GIT IGNORE RULES =====
+/build/
+/cmake-build-*/
+/.cache/
+*.o
+*.a
+*.so
+*.log
+.DS_Store
+compile_commands.json
+
+===== COMPLETE =====
