@@ -1,0 +1,110 @@
+===== RETRO KIDDOS UI COMPONENT INVENTORY =====
+Thu Nov 12 12:08:07 PM EST 2026
+
+===== PUBLIC UI HEADERS =====
+button.hpp
+checkbox.hpp
+color.hpp
+container.hpp
+controller.hpp
+element.hpp
+focus.hpp
+font.hpp
+geometry.hpp
+image.hpp
+label.hpp
+layout.hpp
+list_view.hpp
+panel.hpp
+progress_bar.hpp
+radio_group.hpp
+renderer.hpp
+screen.hpp
+screen_manager.hpp
+select.hpp
+slider.hpp
+text.hpp
+text_input.hpp
+text_input_interaction.hpp
+texture.hpp
+theme.hpp
+toggle.hpp
+ui.hpp
+
+===== UI IMPLEMENTATION FILES =====
+button.cpp
+checkbox.cpp
+controller.cpp
+focus.cpp
+font.cpp
+image.cpp
+label.cpp
+layout.cpp
+list_view.cpp
+panel.cpp
+progress_bar.cpp
+radio_group.cpp
+renderer.cpp
+screen.cpp
+screen_manager.cpp
+select.cpp
+slider.cpp
+text.cpp
+text_input.cpp
+text_input_interaction.cpp
+texture.cpp
+theme.cpp
+toggle.cpp
+
+===== APP SCREEN AND SHELL FILES =====
+application.cpp
+home_carousel_screen.cpp
+selected_game_screen.cpp
+shared_shell.cpp
+
+===== UI COMPONENT USAGE IN APP SCREENS =====
+src/app/home_carousel_screen.cpp:55:        auto& image = root().add<ui::Image>();
+src/app/home_carousel_screen.cpp:56:        image.set_fit(ui::ImageFit::contain);
+src/app/home_carousel_screen.cpp:130:        ui::Image* image = game_images_[i];
+src/app/selected_game_screen.cpp:47:    auto& artwork = root().add<ui::Image>(&artwork_texture_);
+src/app/selected_game_screen.cpp:49:    artwork.set_fit(ui::ImageFit::contain);
+src/app/selected_game_screen.cpp:58:    auto& hints = root().add<ui::Image>(&hints_texture_);
+src/app/selected_game_screen.cpp:60:    hints.set_fit(ui::ImageFit::contain);
+src/app/selected_game_screen.cpp:65:    auto& play = root().add<ui::Button>("PLAY");
+include/kiddos/app/home_carousel_screen.hpp:26:    std::array<ui::Texture, game_count> game_textures_{};
+include/kiddos/app/home_carousel_screen.hpp:29:    std::array<ui::Image*, visible_slot_count_> game_images_{};
+include/kiddos/app/selected_game_screen.hpp:25:    ui::Texture artwork_texture_;
+include/kiddos/app/selected_game_screen.hpp:26:    ui::Image* artwork_ = nullptr;
+include/kiddos/app/selected_game_screen.hpp:27:    ui::Texture hints_texture_;
+include/kiddos/app/selected_game_screen.hpp:28:    ui::Image* hints_ = nullptr;
+include/kiddos/app/selected_game_screen.hpp:30:    ui::Button* play_button_ = nullptr;
+
+===== SCREEN ROOT CHILD COUNTS AND LAYOUT =====
+src/app/home_carousel_screen.cpp:57:        image.set_bounds(slot_bounds[slot]);
+src/app/home_carousel_screen.cpp:86:        recycled->set_bounds({720, right_art.y, right_art.w, right_art.h});
+src/app/home_carousel_screen.cpp:92:        recycled->set_bounds({-128, left_art.y, left_art.w, left_art.h});
+src/app/home_carousel_screen.cpp:114:            image->set_bounds(slot_bounds[slot]);
+src/app/home_carousel_screen.cpp:140:        image->set_bounds(next);
+src/app/home_carousel_screen.cpp:148:            image->set_bounds(target);
+src/app/selected_game_screen.cpp:48:    artwork.set_bounds({90, 85, 540, 450});
+src/app/selected_game_screen.cpp:59:    hints.set_bounds({0, 678, 720, 42});
+src/app/selected_game_screen.cpp:66:    play.set_bounds({190, 545, 340, 88});
+
+===== GIT STATUS =====
+ M CMakeLists.txt
+ M assets/artwork/generated/navigation-hints.png
+ M assets/artwork/source/branding/navigation-hints.svg
+ M include/kiddos/app/application.hpp
+ M include/kiddos/app/home_carousel_screen.hpp
+ M src/app/application.cpp
+ M src/app/home_carousel_screen.cpp
+ M src/platform/sdl_platform.cpp
+ M tests/app_home_carousel_screen_test.cpp
+?? assets/artwork/generated/cartridges/
+?? assets/artwork/generated/selected-game-hints.png
+?? assets/artwork/source/branding/selected-game-hints.svg
+?? include/kiddos/app/selected_game_screen.hpp
+?? include/kiddos/app/shared_shell.hpp
+?? src/app/selected_game_screen.cpp
+?? src/app/shared_shell.cpp
+?? tests/app_selected_game_screen_test.cpp
