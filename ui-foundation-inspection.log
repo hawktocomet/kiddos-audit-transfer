@@ -1,0 +1,124 @@
+===== RETRO KIDDOS UI FOUNDATION INSPECTION =====
+Thu Nov 12 11:49:36 AM EST 2026
+
+===== PUBLIC UI HEADERS =====
+include/kiddos/ui/button.hpp
+include/kiddos/ui/checkbox.hpp
+include/kiddos/ui/color.hpp
+include/kiddos/ui/container.hpp
+include/kiddos/ui/controller.hpp
+include/kiddos/ui/element.hpp
+include/kiddos/ui/focus.hpp
+include/kiddos/ui/font.hpp
+include/kiddos/ui/geometry.hpp
+include/kiddos/ui/image.hpp
+include/kiddos/ui/label.hpp
+include/kiddos/ui/layout.hpp
+include/kiddos/ui/list_view.hpp
+include/kiddos/ui/panel.hpp
+include/kiddos/ui/progress_bar.hpp
+include/kiddos/ui/radio_group.hpp
+include/kiddos/ui/renderer.hpp
+include/kiddos/ui/screen.hpp
+include/kiddos/ui/screen_manager.hpp
+include/kiddos/ui/select.hpp
+include/kiddos/ui/slider.hpp
+include/kiddos/ui/text.hpp
+include/kiddos/ui/text_input.hpp
+include/kiddos/ui/text_input_interaction.hpp
+include/kiddos/ui/texture.hpp
+include/kiddos/ui/theme.hpp
+include/kiddos/ui/toggle.hpp
+include/kiddos/ui/ui.hpp
+
+===== UI SOURCE FILES =====
+src/ui/button.cpp
+src/ui/checkbox.cpp
+src/ui/controller.cpp
+src/ui/focus.cpp
+src/ui/font.cpp
+src/ui/image.cpp
+src/ui/label.cpp
+src/ui/layout.cpp
+src/ui/list_view.cpp
+src/ui/panel.cpp
+src/ui/progress_bar.cpp
+src/ui/radio_group.cpp
+src/ui/renderer.cpp
+src/ui/screen.cpp
+src/ui/screen_manager.cpp
+src/ui/select.cpp
+src/ui/slider.cpp
+src/ui/text.cpp
+src/ui/text_input.cpp
+src/ui/text_input_interaction.cpp
+src/ui/texture.cpp
+src/ui/theme.cpp
+src/ui/toggle.cpp
+
+===== SCREEN HEADERS AND SOURCES =====
+include/kiddos/app/home_carousel_screen.hpp
+include/kiddos/app/selected_game_screen.hpp
+include/kiddos/ui/screen.hpp
+include/kiddos/ui/screen_manager.hpp
+src/app/home_carousel_screen.cpp
+src/app/selected_game_screen.cpp
+src/ui/screen.cpp
+src/ui/screen_manager.cpp
+
+===== COMPONENT AND CLASS DECLARATIONS =====
+include/kiddos/ui/renderer.hpp:13:class Renderer final {
+include/kiddos/ui/element.hpp:8:class Element {
+include/kiddos/ui/container.hpp:12:class Container : public Element {
+include/kiddos/ui/layout.hpp:19:class StackLayout final {
+include/kiddos/ui/focus.hpp:14:class FocusManager final {
+include/kiddos/ui/button.hpp:22:class Button final : public Element {
+include/kiddos/ui/text.hpp:9:class TextRenderer final {
+include/kiddos/ui/texture.hpp:8:class Texture final {
+include/kiddos/ui/image.hpp:10:enum class ImageFit {
+include/kiddos/ui/image.hpp:29:class Image final : public Element {
+include/kiddos/ui/label.hpp:10:enum class LabelAlignment {
+include/kiddos/ui/label.hpp:16:class Label final : public Element {
+include/kiddos/ui/panel.hpp:14:class Panel final : public Element {
+include/kiddos/ui/progress_bar.hpp:19:class ProgressBar final : public Element {
+include/kiddos/ui/toggle.hpp:16:class Toggle final : public Element {
+include/kiddos/ui/slider.hpp:16:class Slider final : public Element {
+include/kiddos/ui/theme.hpp:29:class Theme final {
+include/kiddos/ui/list_view.hpp:20:class ListView final : public Element {
+include/kiddos/ui/checkbox.hpp:21:class Checkbox final : public Element {
+include/kiddos/ui/radio_group.hpp:23:class RadioGroup final : public Element {
+include/kiddos/ui/select.hpp:21:class Select final : public Element {
+include/kiddos/ui/text_input.hpp:22:class TextInput final : public Element {
+include/kiddos/ui/text_input_interaction.hpp:9:enum class TextInputKey {
+include/kiddos/ui/text_input_interaction.hpp:18:class TextInputInteraction final {
+include/kiddos/ui/screen.hpp:8:class Screen {
+include/kiddos/ui/screen_manager.hpp:6:class ScreenManager final {
+
+===== APPROVED SCREEN IMPLEMENTATIONS =====
+
+===== UI TEST FILES =====
+tests/app_home_carousel_screen_test.cpp
+tests/app_selected_game_screen_test.cpp
+tests/app_ui_action_mapping_test.cpp
+tests/ui_button_test.cpp
+tests/ui_checkbox_test.cpp
+tests/ui_controller_test.cpp
+tests/ui_focus_test.cpp
+tests/ui_geometry_test.cpp
+tests/ui_image_test.cpp
+tests/ui_label_test.cpp
+tests/ui_layout_test.cpp
+tests/ui_list_view_test.cpp
+tests/ui_panel_test.cpp
+tests/ui_progress_bar_test.cpp
+tests/ui_radio_group_test.cpp
+tests/ui_renderer_test.cpp
+tests/ui_screen_manager_test.cpp
+tests/ui_select_test.cpp
+tests/ui_slider_test.cpp
+tests/ui_text_input_interaction_test.cpp
+tests/ui_text_input_test.cpp
+tests/ui_theme_test.cpp
+tests/ui_toggle_test.cpp
+
+===== END =====
