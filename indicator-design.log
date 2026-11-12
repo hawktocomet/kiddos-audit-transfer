@@ -1,0 +1,236 @@
+===== INDICATOR DESIGN AND RENDERING REVIEW =====
+Thu Nov 12 12:21:53 PM EST 2026
+
+===== FOOTER ARTWORK COLORS =====
+3:    <g fill="#8FA8CC">
+7:    <text x="30" y="23" font-family="DejaVu Sans" font-size="13" font-weight="bold" letter-spacing="1" fill="#8FA8CC">BROWSE</text>
+10:  <circle cx="633" cy="18" r="9" fill="none" stroke="#8FA8CC" stroke-width="2" />
+11:  <text x="633" y="22.5" text-anchor="middle" font-family="DejaVu Sans" font-size="11" font-weight="bold" fill="#8FA8CC">A</text>
+12:  <text x="649" y="23" font-family="DejaVu Sans" font-size="13" font-weight="bold" letter-spacing="1" fill="#8FA8CC">SELECT</text>
+
+===== UI ELEMENT INTERFACE =====
+     1	#pragma once
+     2	
+     3	#include "kiddos/ui/geometry.hpp"
+     4	#include "kiddos/ui/renderer.hpp"
+     5	
+     6	namespace kiddos::ui {
+     7	
+     8	class Element {
+     9	public:
+    10	    virtual ~Element() = default;
+    11	
+    12	    void set_bounds(Rect bounds) noexcept { bounds_ = bounds; }
+    13	    Rect bounds() const noexcept { return bounds_; }
+    14	
+    15	    void set_visible(bool visible) noexcept { visible_ = visible; }
+    16	    bool visible() const noexcept { return visible_; }
+    17	
+    18	    void set_enabled(bool enabled) noexcept { enabled_ = enabled; }
+    19	    bool enabled() const noexcept { return enabled_; }
+    20	
+    21	    void set_focusable(bool focusable) noexcept {
+    22	        focusable_ = focusable;
+    23	    }
+    24	
+    25	    bool focusable() const noexcept { return focusable_; }
+    26	
+    27	    void set_focused(bool focused) noexcept { focused_ = focused; }
+    28	    bool focused() const noexcept { return focused_; }
+    29	
+    30	    void render(Renderer& renderer) {
+    31	        if (visible_) draw(renderer);
+    32	    }
+    33	
+    34	protected:
+    35	    virtual void draw(Renderer& renderer) = 0;
+    36	
+    37	private:
+    38	    Rect bounds_{};
+    39	    bool visible_ = true;
+    40	    bool enabled_ = true;
+    41	    bool focusable_ = false;
+    42	    bool focused_ = false;
+    43	};
+    44	
+    45	} // namespace kiddos::ui
+
+===== UI RENDERER INTERFACE =====
+     1	#pragma once
+     2	
+     3	#include "kiddos/ui/color.hpp"
+     4	#include "kiddos/ui/geometry.hpp"
+     5	
+     6	#include <SDL.h>
+     7	#include <cstdint>
+     8	
+     9	namespace kiddos::ui {
+    10	
+    11	// Non-owning SDL2 renderer adapter.
+    12	// The SDLPlatform remains responsible for creating and destroying SDL_Renderer.
+    13	class Renderer final {
+    14	public:
+    15	    explicit Renderer(SDL_Renderer* renderer = nullptr) noexcept;
+    16	
+    17	    void attach(SDL_Renderer* renderer) noexcept;
+    18	    bool valid() const noexcept;
+    19	
+    20	    bool clear(Color color) const;
+    21	    bool fill_rect(Rect rect, Color color) const;
+    22	    bool outline_rect(Rect rect, Color color) const;
+    23	    bool draw_line(Point from, Point to, Color color) const;
+    24	    bool draw_point(Point point, Color color) const;
+    25	    bool draw_texture(SDL_Texture* texture, Rect source, Rect destination,
+    26	                      std::uint8_t opacity = 255) const;
+    27	    bool fill_rounded_rect(Rect rect, int radius, Color color) const;
+    28	    bool outline_rounded_rect(Rect rect, int radius, Color color) const;
+    29	
+    30	    bool set_clip(Rect rect) const;
+    31	    bool clear_clip() const;
+    32	
+    33	    void present() const;
+    34	
+    35	    SDL_Renderer* native() const noexcept;
+    36	
+    37	private:
+    38	    SDL_Renderer* renderer_ = nullptr;
+    39	
+    40	    bool set_color(Color color) const;
+    41	};
+    42	
+    43	} // namespace kiddos::ui
+
+===== EXISTING PROGRESS BAR COMPONENT =====
+     1	#pragma once
+     2	
+     3	#include "kiddos/ui/element.hpp"
+     4	
+     5	namespace kiddos::ui {
+     6	
+     7	enum class ProgressOrientation {
+     8	    horizontal,
+     9	    vertical
+    10	};
+    11	
+    12	struct ProgressBarStyle {
+    13	    Color background{15, 25, 45, 255};
+    14	    Color fill{45, 145, 245, 255};
+    15	    Color border{65, 100, 150, 255};
+    16	    int border_thickness = 1;
+    17	};
+    18	
+    19	class ProgressBar final : public Element {
+    20	public:
+    21	    explicit ProgressBar(int value = 0);
+    22	
+    23	    void set_value(int value) noexcept;
+    24	    int value() const noexcept;
+    25	
+    26	    void set_orientation(ProgressOrientation orientation) noexcept;
+    27	    ProgressOrientation orientation() const noexcept;
+    28	
+    29	    void set_style(ProgressBarStyle style) noexcept;
+    30	    const ProgressBarStyle& style() const noexcept;
+    31	
+    32	private:
+    33	    int value_ = 0;
+    34	    ProgressOrientation orientation_ = ProgressOrientation::horizontal;
+    35	    ProgressBarStyle style_{};
+    36	
+    37	    void draw(Renderer& renderer) override;
+    38	};
+    39	
+    40	}
+     1	#include "kiddos/ui/progress_bar.hpp"
+     2	
+     3	#include <algorithm>
+     4	
+     5	namespace kiddos::ui {
+     6	
+     7	ProgressBar::ProgressBar(int value) {
+     8	    set_value(value);
+     9	}
+    10	
+    11	void ProgressBar::set_value(int value) noexcept {
+    12	    value_ = std::clamp(value, 0, 100);
+    13	}
+    14	
+    15	int ProgressBar::value() const noexcept {
+    16	    return value_;
+    17	}
+    18	
+    19	void ProgressBar::set_orientation(ProgressOrientation orientation) noexcept {
+    20	    orientation_ = orientation;
+    21	}
+    22	
+    23	ProgressOrientation ProgressBar::orientation() const noexcept {
+    24	    return orientation_;
+    25	}
+    26	
+    27	void ProgressBar::set_style(ProgressBarStyle style) noexcept {
+    28	    style.border_thickness = std::max(0, style.border_thickness);
+    29	    style_ = style;
+    30	}
+    31	
+    32	const ProgressBarStyle& ProgressBar::style() const noexcept {
+    33	    return style_;
+    34	}
+    35	
+    36	void ProgressBar::draw(Renderer& renderer) {
+    37	    const Rect area = bounds();
+    38	    if (area.empty()) return;
+    39	
+    40	    renderer.fill_rect(area, style_.background);
+    41	
+    42	    const int border = std::min(
+    43	        style_.border_thickness,
+    44	        std::min(area.w, area.h) / 2
+    45	    );
+    46	
+    47	    if (border > 0) {
+    48	        renderer.outline_rect(area, style_.border);
+    49	    }
+    50	
+    51	    const Rect inner{
+    52	        area.x + border,
+    53	        area.y + border,
+    54	        area.w - border * 2,
+    55	        area.h - border * 2
+    56	    };
+    57	
+    58	    if (inner.empty() || value_ == 0) return;
+    59	
+    60	    Rect fill_area = inner;
+    61	
+    62	    if (orientation_ == ProgressOrientation::horizontal) {
+    63	        fill_area.w = inner.w * value_ / 100;
+    64	    } else {
+    65	        fill_area.h = inner.h * value_ / 100;
+    66	        fill_area.y = inner.y + inner.h - fill_area.h;
+    67	    }
+    68	
+    69	    if (!fill_area.empty()) {
+    70	        renderer.fill_rect(fill_area, style_.fill);
+    71	    }
+    72	}
+    73	
+    74	}
+
+===== WORKTREE STATUS =====
+ M CMakeLists.txt
+ M assets/artwork/generated/navigation-hints.png
+ M assets/artwork/source/branding/navigation-hints.svg
+ M include/kiddos/app/application.hpp
+ M include/kiddos/app/home_carousel_screen.hpp
+ M src/app/application.cpp
+ M src/app/home_carousel_screen.cpp
+ M src/platform/sdl_platform.cpp
+ M tests/app_home_carousel_screen_test.cpp
+?? assets/artwork/generated/cartridges/
+?? assets/artwork/generated/selected-game-hints.png
+?? assets/artwork/source/branding/selected-game-hints.svg
+?? include/kiddos/app/selected_game_screen.hpp
+?? include/kiddos/app/shared_shell.hpp
+?? src/app/selected_game_screen.cpp
+?? src/app/shared_shell.cpp
+?? tests/app_selected_game_screen_test.cpp
