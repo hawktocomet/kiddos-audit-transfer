@@ -1,0 +1,243 @@
+===== SOUND INDICATOR =====
+#include "kiddos/ui/sound_indicator.hpp"
+
+#include <algorithm>
+
+namespace kiddos::ui {
+
+SoundIndicator::SoundIndicator(int volume_level) {
+    set_volume_level(volume_level);
+}
+
+void SoundIndicator::set_volume_level(int level) noexcept {
+    volume_level_ = std::clamp(level, 0, 100);
+}
+
+int SoundIndicator::volume_level() const noexcept {
+    return volume_level_;
+}
+
+void SoundIndicator::set_muted(bool muted) noexcept {
+    muted_ = muted;
+}
+
+bool SoundIndicator::muted() const noexcept {
+    return muted_;
+}
+
+void SoundIndicator::set_accent_color(Color color) noexcept {
+    accent_color_ = color;
+}
+
+Color SoundIndicator::accent_color() const noexcept {
+    return accent_color_;
+}
+
+void SoundIndicator::draw(Renderer& renderer) {
+    const Rect area = bounds();
+    if (area.empty()) return;
+
+    const auto sx = [&area](int value) {
+        return area.x + value * area.w / 48;
+    };
+    const auto sy = [&area](int value) {
+        return area.y + value * area.h / 40;
+    };
+    const auto line = [&](int x1, int y1, int x2, int y2, Color color) {
+        renderer.draw_line({sx(x1), sy(y1)}, {sx(x2), sy(y2)}, color);
+    };
+
+    // Speaker cabinet and cone.
+    renderer.fill_rect(
+        {sx(2), sy(14), std::max(1, area.w * 8 / 48),
+         std::max(1, area.h * 12 / 40)},
+        accent_color_);
+
+    line(10, 14, 23, 4, accent_color_);
+    line(23, 4, 23, 36, accent_color_);
+    line(23, 36, 10, 26, accent_color_);
+
+    if (muted_ || volume_level_ == 0) {
+        // Muted: a clear X beside the speaker.
+        line(30, 14, 42, 26, accent_color_);
+        line(42, 14, 30, 26, accent_color_);
+        return;
+    }
+
+    // One, two, or three progressively larger sound waves.
+    const int wave_count =
+        volume_level_ <= 33 ? 1 :
+        volume_level_ <= 66 ? 2 : 3;
+
+    constexpr int starts[] = {27, 32, 37};
+    constexpr int ends[] = {31, 38, 45};
+
+    for (int wave = 0; wave < wave_count; ++wave) {
+        const int x1 = starts[wave];
+        const int x2 = ends[wave];
+        const int middle = (x1 + x2) / 2;
+
+        line(x1, 15, middle, 20, accent_color_);
+        line(middle, 20, x2, 25, accent_color_);
+        line(x2, 25, middle, 30, accent_color_);
+        line(middle, 30, x1, 35, accent_color_);
+    }
+}
+
+}
+
+===== BATTERY INDICATOR =====
+#include "kiddos/ui/battery_indicator.hpp"
+
+#include <algorithm>
+
+namespace kiddos::ui {
+
+BatteryIndicator::BatteryIndicator(int level) {
+    set_level(level);
+}
+
+void BatteryIndicator::set_level(int level) noexcept {
+    level_ = std::clamp(level, 0, 100);
+}
+
+int BatteryIndicator::level() const noexcept {
+    return level_;
+}
+
+void BatteryIndicator::set_charging(bool charging) noexcept {
+    charging_ = charging;
+}
+
+bool BatteryIndicator::charging() const noexcept {
+    return charging_;
+}
+
+void BatteryIndicator::set_accent_color(Color color) noexcept {
+    accent_color_ = color;
+}
+
+Color BatteryIndicator::accent_color() const noexcept {
+    return accent_color_;
+}
+
+void BatteryIndicator::draw(Renderer& renderer) {
+    const Rect area = bounds();
+    if (area.empty()) return;
+
+    // Scale the original 38 x 24 battery silhouette to the assigned bounds.
+    const auto sx = [&area](int value) {
+        return area.x + value * area.w / 38;
+    };
+    const auto sy = [&area](int value) {
+        return area.y + value * area.h / 24;
+    };
+
+    const Rect body{
+        sx(1), sy(2),
+        std::max(1, sx(34) - sx(1)),
+        std::max(1, sy(22) - sy(2))
+    };
+    const Rect terminal{
+        sx(34), sy(7),
+        std::max(1, sx(38) - sx(34)),
+        std::max(1, sy(17) - sy(7))
+    };
+
+    renderer.outline_rect(body, accent_color_);
+    renderer.fill_rect(terminal, accent_color_);
+
+    const int inner_x = sx(4);
+    const int inner_y = sy(5);
+    const int inner_width = std::max(0, sx(31) - inner_x);
+    const int inner_height = std::max(1, sy(19) - inner_y);
+    const int fill_width = inner_width * level_ / 100;
+
+    if (fill_width > 0) {
+        renderer.fill_rect(
+            {inner_x, inner_y, fill_width, inner_height},
+            accent_color_);
+    }
+
+    // A dark lightning bolt distinguishes charging without adding another color.
+    if (charging_ && inner_width >= area.w / 3) {
+        const int center_x = inner_x + inner_width / 2;
+        const int center_y = inner_y + inner_height / 2;
+        const Color cutout{8, 15, 35, 255};
+
+        renderer.draw_line(
+            {center_x + area.w / 12, center_y - area.h / 3},
+            {center_x - area.w / 16, center_y},
+            cutout);
+        renderer.draw_line(
+            {center_x - area.w / 16, center_y},
+            {center_x + area.w / 16, center_y},
+            cutout);
+        renderer.draw_line(
+            {center_x + area.w / 16, center_y},
+            {center_x - area.w / 12, center_y + area.h / 3},
+            cutout);
+    }
+}
+
+}
+
+===== SOUND HEADER =====
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+
+namespace kiddos::ui {
+
+class SoundIndicator final : public Element {
+public:
+    explicit SoundIndicator(int volume_level = 0);
+
+    void set_volume_level(int level) noexcept;
+    int volume_level() const noexcept;
+
+    void set_muted(bool muted) noexcept;
+    bool muted() const noexcept;
+
+    void set_accent_color(Color color) noexcept;
+    Color accent_color() const noexcept;
+
+private:
+    int volume_level_ = 0;
+    bool muted_ = false;
+    Color accent_color_{143, 168, 204, 255};
+
+    void draw(Renderer& renderer) override;
+};
+
+}
+
+===== BATTERY HEADER =====
+#pragma once
+
+#include "kiddos/ui/element.hpp"
+
+namespace kiddos::ui {
+
+class BatteryIndicator final : public Element {
+public:
+    explicit BatteryIndicator(int level = 0);
+
+    void set_level(int level) noexcept;
+    int level() const noexcept;
+
+    void set_charging(bool charging) noexcept;
+    bool charging() const noexcept;
+
+    void set_accent_color(Color color) noexcept;
+    Color accent_color() const noexcept;
+
+private:
+    int level_ = 0;
+    bool charging_ = false;
+    Color accent_color_{143, 168, 204, 255};
+
+    void draw(Renderer& renderer) override;
+};
+
+}
